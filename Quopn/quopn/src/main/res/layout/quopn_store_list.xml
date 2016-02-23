@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/store_list_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/pin_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/storepin_bg"
+        >
+        <ImageView
+            android:id="@+id/pin_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/storepin_ico"/>
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/distance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/pin_image"
+            android:textColor="@android:color/black"
+            android:textSize="11sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_desc_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
+        android:padding="5dp"
+        android:background="@color/white"
+        android:layout_toRightOf="@id/pin_layout" >
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/buissness_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/buissness_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buissness_name"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="10sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/heading_open_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buissness_address"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="10sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/opentext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buissness_address"
+            android:layout_toRightOf="@id/heading_open_hours"
+            android:inputType="text|textCapCharacters"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="10sp"
+            android:textStyle="bold" 
+           
+            />
+    </RelativeLayout>
+    <TextView android:id="@+id/googleplayServies"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+</RelativeLayout>

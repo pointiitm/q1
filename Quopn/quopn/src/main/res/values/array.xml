@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <array name="tour_sequence">
+        <item>@drawable/tour01</item>
+        <item>@drawable/tour02</item>
+        <item>@drawable/tour03</item>
+        <item>@drawable/tour04</item>
+        <item>@drawable/tour05</item>
+        <item>@drawable/tour06</item>
+        <item>@drawable/tour07</item>
+        <item>@drawable/tour08</item>
+        <item>@drawable/tour09</item>
+        <item>@drawable/tour10</item>
+    </array>
+    
+    <string-array name="main_menu_items">
+       <item>PROFILE</item>
+       <item>MY WALLET</item>
+       <item>CITRUS</item>
+       <item>UDIO</item>
+       <item>MY CART</item>
+       <item>SHOPS AROUND</item>
+       <item>PROMO CODE</item>
+       <item>NOTIFICATIONS</item>
+       <item>INVITE USER</item>
+       <item>MY HISTORY</item>
+       <item>RESET PIN</item>
+       <item>SIGN OUT</item>
+       <item>  </item>
+       <item>APP TOUR</item>
+       <item>FAQS</item>
+       <item>FEEDBACK</item>
+       <item>ABOUT US</item>
+       <item>CONTACT US</item>
+    </string-array>
+    
+    <integer-array name="menu_ids">
+        <item>@id/menu_item_profile</item>
+        <item>@id/menu_item_mywallet</item>
+        <item>@id/menu_item_citrus</item>
+        <item>@id/menu_item_shmart1</item>
+        <item>@id/menu_item_cart</item>
+        <item>@id/menu_item_shops</item>
+        <item>@id/menu_item_promo</item>
+        <item>@id/menu_item_notifications</item>
+        <item>@id/menu_item_invite</item>
+        <item>@id/menu_item_history</item>
+        <item>@id/menu_item_change_pin</item>
+        <item>@id/menu_item_logout</item>
+        <item>@id/menu_item_seperator</item>
+        <item>@id/menu_item_tour</item>
+        <item>@id/menu_item_faqs</item>
+        <item>@id/menu_item_feedback</item>
+        <item>@id/menu_item_about</item>
+        <item>@id/menu_item_contact</item>
+    </integer-array>
+    
+    <integer-array name="menu_icons">
+        <item>@drawable/menu_item_profile</item>
+        <item>@drawable/menu_item_wallet</item>
+        <item>@drawable/citrus_logo_colour</item>
+        <item>@drawable/udio_logo_colour</item>
+        <item>@drawable/menu_item_cart</item>
+        <item>@drawable/menu_item_shops</item>
+        <item>@drawable/menu_item_promo</item>
+        <item>@drawable/menu_item_notifications</item>
+        <item>@drawable/menu_item_invite</item>
+        <item>@drawable/menu_item_history</item>
+        <item>@drawable/menu_item_change_pin</item>
+        <item>@drawable/menu_item_logout</item>
+        <item>@drawable/menu_item_profile</item>
+        <item>@drawable/menu_item_tour</item>
+        <item>@drawable/menu_item_faqs</item>
+        <item>@drawable/menu_item_feedback</item>
+        <item>@drawable/menu_item_about</item>
+        <item>@drawable/menu_item_contact</item>
+       </integer-array>
+
+    <!--<string-array name="wallet_items">-->
+        <!--<item>SHMART</item>-->
+        <!--<item>CITRUS</item>-->
+    <!--</string-array>-->
+
+    <!--<integer-array name="wallet_ids">-->
+        <!--<item>@id/menu_item_shmart1</item>-->
+        <!--<item>@id/menu_item_citrus</item>-->
+    <!--</integer-array>-->
+
+    <!--<integer-array name="wallet_icons">-->
+        <!--<item>@drawable/shmart_logo_colour</item>-->
+        <!--<item>@drawable/citrus_logo_colour</item>-->
+    <!--</integer-array>-->
+    
+    <string-array name="settings_menu_items">
+       <item>CHANGE PIN"</item>
+       <item>FORGOT PIN</item>
+       <item>SIGN OUT</item>
+        
+     </string-array>
+     
+     
+</resources>

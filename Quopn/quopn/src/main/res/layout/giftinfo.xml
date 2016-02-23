@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/add_to_cart_bg_color"
+    android:fillViewport="true" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/downloadPersonalMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/downloadmsg_btn_blank"
+            android:drawableLeft="@drawable/downloadmsg_icon"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:padding="2dp"
+            android:text="@string/download_personal_message"
+            android:textColor="@android:color/white" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/playPersonalMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/downloadmsg_btn_blank"
+            android:drawableLeft="@drawable/downloadmsg_icon"
+            android:drawablePadding="15dp"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:padding="2dp"
+            android:text="@string/play_personal_message"
+            android:textColor="@android:color/white" 
+            android:visibility="gone"/>
+
+        <VideoView
+            android:id="@id/giftVideoPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/skipGiftVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:onClick="onClick"
+            android:text="@string/skip_text"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+        
+         <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/nextGiftVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:onClick="onClick"
+            android:text="@string/next_text"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/downloadPersonalMessage"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"
+            android:background="@drawable/downloadmsg_textbg"
+            android:padding="5dp" >
+
+            <ImageView
+                android:id="@+id/sender_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/downloadmsg_userphoto" />
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@id/giftHeaderMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/sender_image"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/gift_info_header_message"
+                android:textColor="@android:color/white" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>

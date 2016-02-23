@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+   <!--  <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_margin="0dp"/> -->
+    <ScrollView 
+       android:layout_width = "match_parent"
+       android:layout_height= "wrap_content"
+       android:orientation="vertical"
+       android:padding="0dp"
+       android:fillViewport="false">
+       
+       	<LinearLayout 
+       	    android:layout_width = "match_parent"
+       		android:layout_height= "wrap_content"
+       		android:orientation="vertical">
+		       <LinearLayout 
+		           android:layout_width = "match_parent"
+		           android:layout_height = "@dimen/common_header_height"
+		           android:background = "@color/common_header_bg_color"
+		           android:gravity="center">
+		           
+		           		<com.quopn.wallet.views.QuopnTextView 
+		           		    android:layout_width="wrap_content"
+		           		    android:layout_height="wrap_content"
+		           		    android:textColor="@color/white"
+		           		    android:textSize = "@dimen/common_header_textsize"
+		           		    android:text="@string/feedback_title"
+		           		    />
+		           				           
+		       </LinearLayout> 
+		       
+		      <!--  slider feedback container  -->  
+			   <LinearLayout 
+			       android:id="@+id/slider_feedbacks_container"
+			       android:layout_width = "match_parent"
+			       android:layout_height = "wrap_content"
+			       
+			       android:orientation="vertical"
+			       android:paddingTop="15dp"
+			       android:paddingLeft="5dp"
+			       android:paddingRight="10dp">
+			   	   		
+			       <com.quopn.wallet.views.QuopnTextView 
+			           android:id="@+id/feedback_title_description"
+			           android:layout_width = "fill_parent"
+			           android:layout_height ="wrap_content"
+			           android:textColor= "@color/black"
+			           android:textSize = "20sp"
+			           android:padding="10dp"
+			           android:text="@string/feedback_title_description"/>
+			       
+			   </LinearLayout>
+			   <!-- end -->
+			   
+			   <LinearLayout 
+			       android:id="@+id/feedback_will_you_recommend"
+			       android:layout_width = "match_parent"
+			       android:layout_height = "wrap_content"
+			       android:paddingTop="10dp"
+			       android:paddingLeft="10dp"
+			       android:orientation="vertical">
+			   	   		
+			       <com.quopn.wallet.views.QuopnTextView 
+			           android:layout_width = "fill_parent"
+			           android:layout_height ="wrap_content"
+			           android:textColor= "@color/black"
+			           android:textSize = "20sp"
+			           android:text="@string/feedback_recommend_description"/>
+			       
+			      
+               </LinearLayout> 
+			       
+			  <LinearLayout 
+			      	android:layout_width="wrap_content"
+			      	android:layout_height = "wrap_content"
+			      	android:orientation="vertical"
+			      	android:paddingTop="10dp"
+			      	android:paddingLeft="10dp">
+			       
+			        <ToggleButton
+						android:id="@+id/recommend_toggleButton1"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_centerHorizontal="true"
+						android:layout_centerVertical="true"
+						android:background="@drawable/recommend_bgtoggle"
+						android:button="@null"
+						android:textOff=""
+						android:textOn="" />
+	             
+                </LinearLayout>
+			   
+			  
+			  <!-- feedback option section -->
+			   <LinearLayout 
+			        android:id="@+id/fdbck_option_section"
+			      	android:layout_width="wrap_content"
+			      	android:layout_height = "wrap_content"
+			      	android:orientation="vertical"
+			      	android:paddingTop="10dp"
+			      	android:paddingLeft="10dp"
+			      	android:paddingRight="10dp">
+	           
+			        <com.quopn.wallet.views.QuopnTextView 
+			           android:layout_width = "fill_parent"
+			           android:layout_height ="wrap_content"
+			           android:textColor= "@color/black"
+			           android:textSize = "20sp"
+			           android:text="@string/feedback_select_category_description"
+			           android:paddingLeft="5dp"
+			           android:paddingRight="5dp"
+			           android:paddingBottom="10dp"/>
+			        
+			        <Spinner 
+			            android:id="@+id/spnr_select_option"
+			            android:layout_width="match_parent"
+			            android:layout_height="@dimen/feedback_category_spnr_height"
+			            style="?android:attr/spinnerItemStyle"
+			            android:paddingLeft="5dp"
+			            android:paddingRight="5dp"	           
+        				android:gravity="center"
+        				
+        				android:background="@drawable/feedback_spinner_borders"
+        				
+			            />
+			       
+			   </LinearLayout>
+			  <LinearLayout 
+			      android:layout_width="match_parent"
+			      android:layout_height = "wrap_content"
+			      android:orientation="vertical"
+			      android:paddingTop="50dp"
+			      android:paddingLeft="10dp"
+			      android:paddingRight="10dp">
+			        
+				   <EditText 
+				        android:id="@+id/fdbck_text"
+				      	android:layout_width="match_parent"
+				      	android:layout_height = "@dimen/feedback_text_box_height"
+				      	android:cursorVisible="true"
+				      	android:inputType="textMultiLine"
+				      	android:longClickable="false"
+    			      	android:paddingRight="10dp"
+    			      	android:paddingLeft="10dp"
+    			      	android:ellipsize="start"
+				      	android:hint="@string/feedback_text_hint"
+				      	android:background="@drawable/feedback_text_borders"
+				      	android:gravity="top"
+				      	android:maxLines="10"/>
+				   
+				   <RelativeLayout
+				       android:layout_width="match_parent"
+				       android:layout_height="wrap_content"
+				       android:paddingTop="15dp"
+				       android:paddingBottom="10dp">
+				       <Button 
+				           android:id="@+id/feedback_submit_btn"
+				           android:layout_width="match_parent"
+				           android:layout_height= "wrap_content"
+				           android:text="@string/fdbk_submit"
+				           android:gravity="center"
+				           android:padding="25dp">
+				           
+				       </Button>
+				       
+				       
+				   </RelativeLayout>
+			   </LinearLayout> 
+	   </LinearLayout>     
+	    
+	</ScrollView>  
+</RelativeLayout>

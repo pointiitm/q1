@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    
+    android:padding="32dp" >
+	<!-- android:background="#55000000" -->
+    <RelativeLayout
+        android:id="@+id/contentDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/dialog_circular_backgrnd"
+        android:padding="24dp" >
+        
+        <!-- android:layout_marginTop="70dp"  -->
+
+        <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+            android:id="@+id/progressBarCircularIndetermininate"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerInParent="true"
+            android:background="#FF0000" />
+
+        <!--Siv layout item added for project requirement circular parent view for progress dialog  -->
+        <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+            android:id="@+id/progressBarCircularIndetermininateQuopn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="#FF0000"
+         />
+          <!--android:background="#1E88E5"  -->
+        <!-- android:layout_width="32dp"
+            android:layout_height="32dp"
+         -->
+       <!--  <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/progressBarCircularIndetermininate"
+            android:layout_marginLeft="8dp"
+            android:text="Title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#000" /> -->
+    </RelativeLayout>
+
+</RelativeLayout>

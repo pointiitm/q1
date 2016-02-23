@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="add_to_cart_bg_color">#BF1E2E</color>
+    <color name="bg_shop_at_quopn_button">#3e3e3e</color>
+    <!--<color name="red">#900</color>-->
+    <color name="green">#090</color>
+    <color name="blue">#009</color>
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+    <color name="invite_text_color">#5c5c5c</color>
+    <color name="background_tab_pressed">#6633B5E5</color> 
+    <color name="gridview_bg_grey">#828282</color>
+    <!--<color name="gridview_bg_red">#C91F43</color>-->
+    <!--<color name="tabs_bg_red">#BF1E2E</color>-->
+    <color name="quopn_textview_bg">#cc4D4C53</color>
+    <color name="screen_bg">#E4E4E4</color>
+    <color name="termscondition_bg">#474747</color>
+    <color name="issue_share_close_bg">#cc575A64</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="enterstoreid_bg">#cc575757</color>
+    <color name="app_background">#eaeaea</color>
+    <color name="sliding_menu_Header_bg">#353535</color>
+    <!--<color name="alert">#CC0000</color>-->
+    <color name="confirm">#FF8800</color>
+    <!--<color name="info">#C91F43</color>-->
+   <!--  <color name="divider_color">#00000000</color> --> <!-- old color for divider  -->
+    <color name="divider_color">#b2b2b2</color>
+    <color name="dialog_btn_color">#2d2d2d</color>
+    <!--<color name="application_background">#BF1E2E</color>-->
+    <color name="black_translucent">#50000000</color>
+    <!--<color name="checkbox_red">#AF2339</color>-->
+    <color name="red_background">#bebebe</color>
+    <color name="detail_action_text_color">#FFF</color>
+    <color name="sliding_menu_text">#5c5c5c</color>
+    <color name="notification_text_color">#000000</color>
+    <color name="border_line_color">#e5e5e5</color>
+    <color name="mycart_header1_bg_color">#353535</color>
+    <color name="mycart_header2_bg_color">#5d5d5d</color>
+    <color name="common_header_bg_color">#404040</color>
+    <color name="store_pin_bg_color">#e2e2e2</color> 
+    
+    <!-- feedback -->
+    <color name="light_gray_header_color">#646663</color>
+    <color name="border_quopn_search_bar">#d6d6d6</color>
+    <color name="hint_quopn_search_bar">#c5c5c5</color>
+     <color name="search_bar_color">#FAFAFA</color>
+    <color name="lovely_row_bg1">#D6DFEC</color>
+    <color name="lovely_row_bg2">#fff</color>
+
+    <color name="appbg">#5c5c5c</color>
+    <color name="hintcolor">#929191</color>
+    <color name="homerequest">#58B2C8</color>
+    <color name="homesend">#299699</color>
+    <color name="homesplit">#538CCD</color>
+    <color name="homelend">#149972</color>
+    <color name="pressed_color">#e5e5e5</color>
+    <color name="firstSignInUp">#2FA5A9</color>
+    <color name="secondSignInUp">#68BFD2</color>
+    <color name="thirdSignInUp">#649FD7</color>
+    <color name="fourthSignInUp">#01A785</color>
+    <color name="toggleColor">#33B5E5</color>
+    <color name="profile_selected">#646663</color>
+</resources>

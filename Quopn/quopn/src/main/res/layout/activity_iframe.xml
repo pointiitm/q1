@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.quopn.wallet.shmart.IFrameActivity">
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/shmart_op_addmoney"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/common_header_textsize"
+        android:background="@color/common_header_bg_color" />
+    <WebView
+        android:id="@+id/wvIFrame"
+        android:layout_below="@id/title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

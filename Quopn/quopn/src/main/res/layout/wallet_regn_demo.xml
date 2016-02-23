@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/add_to_cart_bg_color"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/add_to_cart_bg_color">
+
+        <ImageView
+            android:id="@+id/imgWalletIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ico_wallet" />
+
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textRegn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgWalletIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/wallet_regn"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textRegn"
+            android:layout_centerHorizontal="true" />
+
+        <!--<com.quopn.wallet.views.AspectRatioImageView
+            android:id="@+id/imgDemo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/textRegn"
+            android:src="@drawable/wallet_demo" />-->
+    </RelativeLayout>
+</ScrollView>

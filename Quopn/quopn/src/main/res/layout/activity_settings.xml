@@ -1,0 +1,154 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.quopn.wallet.shmart.SettingsActivity">
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:layout_alignParentTop="true"
+        android:background="@color/common_header_bg_color"
+        android:gravity="center"
+        android:text="SETTINGS"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/common_header_textsize" />
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/textForgot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/shmart_setting_text"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textForgot"
+        android:fadeScrollbars="false">
+        <!--<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >-->
+        <LinearLayout
+            android:id="@+id/llTop"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btReset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/add_to_cart_bg_color"
+                android:text="RESET TRANSACTION PIN"
+                android:textColor="@color/white" />
+
+            <LinearLayout
+                android:id="@+id/llResetTxnPwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@+id/etResetOTP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/promocode_text_box"
+                    android:gravity="center"
+                    android:hint="ENTER OTP"
+                    android:inputType="number"
+                    android:maxLength="@integer/shmart_otp_length"
+                    android:padding="10dp" />
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@+id/etResetTxnPwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/promocode_text_box"
+                    android:gravity="center"
+                    android:hint="@string/trans_pass"
+                    android:inputType="numberPassword"
+                    android:maxLength="@integer/otpnumber_length"
+                    android:padding="10dp" />
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@+id/etResetRepeatTxnPwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/promocode_text_box"
+                    android:gravity="center"
+                    android:hint="@string/re_enter_trans_pass"
+                    android:imeOptions="actionGo"
+                    android:inputType="numberPassword"
+                    android:maxLength="@integer/otpnumber_length"
+                    android:padding="10dp" />
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@+id/editResendOtp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/transparent"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal"
+                    android:hint="@string/waiting_for_sms"
+                    android:inputType="phone"
+                    android:textColor="@color/add_to_cart_bg_color"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btResetConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/add_to_cart_bg_color"
+                    android:padding="10dp"
+                    android:text="SUBMIT"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/udio_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/poweredby_uido_logo"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="30dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/citrus_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:src="@drawable/poweredbycitruslogo"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!--</RelativeLayout>-->
+    </ScrollView>
+
+
+</RelativeLayout>

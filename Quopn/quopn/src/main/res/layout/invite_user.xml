@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarStyle="insideOverlay" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/inviteuser"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_header_height"
+            android:layout_alignParentTop="true"
+            android:background="@color/common_header_bg_color" 
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/invite_user"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/invite_user_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inviteuser"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/invite_text_color"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_below="@+id/invite_user_text"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@id/selectFromContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/blankbutton"
+                android:orientation="horizontal">	
+
+                <ImageView
+                    android:id="@+id/imgSelectContact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/phonebook_icon" />
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/sendInvitation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:singleLine="true"
+                    android:text="@string/select_from_contact"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <RelativeLayout style="@style/inviteUserRowStyle" >
+
+                <ImageView
+                    android:id="@id/inviteIcon"
+                    style="@style/inviteUserRowIcon"
+                    android:layout_marginLeft="17dp"
+                    android:clickable="true"
+                    android:src="@drawable/username" />
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@id/inviteName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/inviteIcon"
+                    android:hint="@string/yourname"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+                    android:singleLine="true"
+                    android:textColor="@color/invite_text_color"
+                    android:textSize="18sp"
+                    android:background="@color/transparent"
+                     />
+
+               <ImageView
+                    android:id="@id/sepline"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/inviteIcon"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/divider_color" /> 
+            </RelativeLayout>
+
+            <LinearLayout style="@style/inviteUserRowStyle" >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <ImageView
+                        android:id="@id/inviteMobileIcon"
+                        style="@style/inviteUserRowIcon"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginTop="2dp"
+                        android:clickable="true"
+                        android:src="@drawable/usermobnumber" />
+
+                    <com.quopn.wallet.views.QuopnEditTextView
+                        android:id="@id/inviteMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/inviteMobileIcon"
+                        android:imeOptions="normal"
+                        android:inputType="phone"
+                        android:maxLength="10"
+                        android:singleLine="true"
+                        android:textColor="@color/invite_text_color"
+                        android:background="@color/transparent"
+                        android:textSize="18sp" />
+
+                    <ProgressBar
+                        android:id="@id/mobileNoCheckProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/inviteMobileNumber"
+                        android:layout_alignRight="@id/inviteMobileNumber"
+                        android:layout_alignTop="@id/inviteMobileNumber"
+                        android:layout_marginRight="5dp"
+                        android:indeterminateDrawable="@drawable/rotation"
+                        android:indeterminateDuration="1500"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@id/sepline"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/inviteMobileIcon"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/divider_color" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout style="@style/inviteUserRowStyle" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp" >
+
+                    <ImageView
+                        android:id="@id/inviteGenderIcon"
+                        style="@style/inviteUserRowIcon"
+                        android:layout_marginLeft="17dp"
+                        android:src="@drawable/gender_icon" />
+
+                    <com.quopn.wallet.views.QuopnTextView
+                        android:id="@+id/selectGender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/inviteGenderIcon"
+                        android:text="GENDER"
+                        android:textColor="@color/invite_text_color"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/imgGender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/toggle_gender_male"
+                        android:tag="@string/gender_na" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--
+            <LinearLayout
+                android:id="@id/recordPersonalVideoMessage"
+                style="@style/inviteUserRowStyle"
+                android:background="@drawable/inviteuser_bg" >
+
+                <ImageView
+                    android:id="@id/recordPersonalIcon"
+                    style="@style/inviteUserRowIcon"
+                    android:src="@drawable/recpersonalmsg" 
+                    android:layout_marginLeft="21dp"/>
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/recordPersonalMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:singleLine="true"
+                    android:text="@string/rec_personal_msg"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="5dp" />
+            </LinearLayout>
+
+            -->
+
+            <LinearLayout
+                android:id="@+id/send_invite_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/blankbutton"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/imgSendInviteArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="13dp"
+                    android:background="@drawable/sendinvite_arrow" />
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/sendInvitation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:singleLine="true"
+                    android:text="@string/send_invite"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@id/leagelClause"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="bottom"
+                android:textColor="@color/invite_text_color"
+                android:textSize="@dimen/text_size_invite_legal" />
+        </LinearLayout>
+
+        <!-- android:text="@string/legal_clause" -->
+
+    </RelativeLayout>
+
+</ScrollView>

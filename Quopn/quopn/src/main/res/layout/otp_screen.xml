@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/add_to_cart_bg_color"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarStyle="insideOverlay" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_gravity="center_vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" >
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@+id/editOTP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/btn_login"
+                    android:layout_alignRight="@id/btn_login"
+                    android:layout_below="@id/label_note"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/textfield"
+                    android:ellipsize="start"
+                    android:ems="@integer/ems_length"
+                    android:focusable="true"
+    				android:focusableInTouchMode="true"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:hint="@string/otp_txt"
+                    android:imeOptions="actionGo"
+                    android:inputType="phone"
+                    android:maxLength="@integer/otpnumber_length"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white" />
+
+                <requestFocus />
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/btn_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/editOTP"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/button_transparent" 
+                    android:text="VERIFY"
+                    android:gravity="center"
+                    android:textColor="#FFF"/>
+
+                <ImageView
+                    android:id="@id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/quopn_logo_red" />
+
+              <!--   <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/imageView1"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/verifying_txt"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white" /> -->
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/label_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/imageView1"
+                    android:gravity="center_horizontal"
+                    android:padding="5dp"
+                    android:text="@string/otp_message"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white" 
+                    android:textSize="14sp"/>
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/resendotp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_login"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/resendpin_txt"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    android:textSize="14sp"/>
+
+                <LinearLayout
+                    android:id="@id/smswait_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_login"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible" >
+
+                    <!-- <com.quopn.wallet.views.QuopnTextView
+                        android:id="@id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" /> -->
+                    
+                    <com.quopn.wallet.views.QuopnTextView
+                        android:id="@id/progresstext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/white" 
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/smswait_progress"
+                    android:text="@string/caption_manual_entry"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+                <!--  <com.quopn.wallet.views.QuopnTextView
+                    android:id="@id/otp_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/label_note"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/otp_testing_txt"
+                    android:textColor="#000" /> -->
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

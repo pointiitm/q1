@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/add_to_cart_bg_color"
+    >
+
+    <RelativeLayout
+        android:id="@+id/relLayEmail"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/textfield">
+
+        <ImageView
+            android:id="@+id/imgEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ico_envelopeswhite" />
+
+        <ImageView
+            android:id="@+id/imgEmailInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ico_question" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/imgEmailInfo"
+            android:layout_toRightOf="@id/imgEmail"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
+            android:ems="@integer/ems_length"
+            android:imeOptions="actionGo"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="ENTER OTP"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/textSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relLayEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_transparent"
+        android:editable="false"
+        android:ellipsize="end"
+        android:ems="@integer/ems_length"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="center_horizontal|center_vertical"
+        android:hint="SUBMIT"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+</RelativeLayout>
+

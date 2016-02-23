@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="library-2.4.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/quopn/build/intermediates/exploded-aar/com.mcxiaoke.viewpagerindicator/library/2.4.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/quopn/build/intermediates/exploded-aar/com.mcxiaoke.viewpagerindicator/library/2.4.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.viewpagerindicator/library/2.4.1/6cd33e35ba843514f6b9e8ee0901e9f491efd5f5/library-2.4.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Quopn.iml" filepath="$PROJECT_DIR$/Quopn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androidbetterpickers/androidbetterpickers.iml" filepath="$PROJECT_DIR$/androidbetterpickers/androidbetterpickers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/floatingGroupExpandableListView/floatingGroupExpandableListView.iml" filepath="$PROJECT_DIR$/floatingGroupExpandableListView/floatingGroupExpandableListView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/materialDesign/materialDesign.iml" filepath="$PROJECT_DIR$/materialDesign/materialDesign.iml" />
+      <module fileurl="file://$PROJECT_DIR$/quopn/quopn.iml" filepath="$PROJECT_DIR$/quopn/quopn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simplecropimagelib/simplecropimagelib.iml" filepath="$PROJECT_DIR$/simplecropimagelib/simplecropimagelib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slidingLib/slidingLib.iml" filepath="$PROJECT_DIR$/slidingLib/slidingLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
+    </modules>
+  </component>
+</project>

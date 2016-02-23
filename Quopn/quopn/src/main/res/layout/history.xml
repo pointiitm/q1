@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myhistorylayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/productlist_bg" 
+    >
+
+    <ImageView
+        android:id="@+id/leftside_imageview_history"
+        android:layout_width="76dp"
+        android:layout_height="60dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/placeholder_myquopns" 
+        android:gravity="left"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp"/>
+
+    <RelativeLayout
+        android:id="@+id/alltext_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/leftside_imageview_history"
+        android:paddingLeft="4dp"
+        android:paddingBottom="4dp" 
+        android:layout_marginTop="-4dp"
+		android:layout_marginBottom="-4dp">
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/notification_text_color"
+            android:textSize="14sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:gravity="center_vertical"
+            android:textColor="@color/notification_text_color"
+            android:textSize="12sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView1"
+            android:gravity="center_vertical"
+            android:textColor="@color/notification_text_color"
+            android:textSize="12sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2"
+            android:gravity="center_vertical"
+            android:textColor="@color/notification_text_color"
+            android:textSize="12sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2"
+            android:layout_toRightOf="@+id/textView3"
+            android:gravity="center_vertical"
+            android:paddingBottom="4dp"
+            android:textColor="@color/notification_text_color"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/add_to_cart_bg_color"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarStyle="insideOverlay" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@id/greetingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="35dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingBottom="5dp"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/greetingText"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/quopn_logo_red" />
+
+            <com.quopn.imageloading.RoundedImageView
+                android:id="@id/userProfilePicture"
+                android:layout_width="83dp"
+                android:layout_height="85dp"
+                android:layout_below="@id/logo"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:padding="9dp"
+                android:background="@drawable/user_profile_bg"
+                android:src="@drawable/user_nophoto"
+                android:layout_marginTop="10dp" />
+
+            <ImageView
+                android:id="@id/pickupImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/userProfilePicture"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@color/divider_color"
+                android:onClick="onClick"
+                android:src="@drawable/user_takephoto"
+                android:visibility="gone" />
+
+            <com.quopn.wallet.views.QuopnEditTextView
+                android:id="@id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pickupImage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/textfield"
+                android:cursorVisible="true"
+                android:ems="@integer/ems_length"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="@string/yourname"
+                android:inputType="textCapWords"
+                android:maxLength="@integer/registration_name_length"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <com.quopn.wallet.views.QuopnEditTextView
+                android:id="@+id/userMobileNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/userName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/textfield"
+                android:ellipsize="start"
+                android:ems="@integer/ems_length"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="@string/yourmobileno"
+                android:imeActionLabel="Submit"
+                android:imeOptions="actionGo"
+                android:inputType="phone"
+                android:maxLength="@integer/registration_mobileno_length"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/userMobileNumber"
+                android:layout_alignRight="@+id/userMobileNumber"
+                android:layout_below="@id/userMobileNumber"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_transparent"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:padding="5dp"
+                android:text="SUBMIT"
+                android:textColor="#FFF" />
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@+id/terms_privacypolicy_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/submit"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:paddingBottom="2dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/terms_privacypolicy_text1"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal|center" >
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@+id/terms_privacypolicy_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
+                    android:text="@string/registration_terms_message"
+                    android:textColor="@color/white" 
+                    android:textSize="14sp"/>
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@+id/terms_privacypolicy_text3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/terms_privacypolicy_text2"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="3dp"
+                    android:textColor="@color/white" 
+                    android:textSize="14sp"/>
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@+id/terms_privacypolicy_text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/terms_privacypolicy_text3"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="3dp"
+                    android:text="@string/registration_policy_message"
+                    android:textColor="@color/white" 
+                    android:textSize="14sp"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

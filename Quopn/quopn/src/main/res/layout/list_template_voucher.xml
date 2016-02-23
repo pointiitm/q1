@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background" >
+
+    <RelativeLayout
+        android:id="@+id/voucher_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="3dp"
+        android:background="@drawable/bg_voucher">
+
+        <ImageView
+            android:id="@+id/row_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sample_voucher_img"
+            android:layout_marginTop="19dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp" />
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/issued_coupn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:background="@drawable/voucher_counter_circle"
+            />
+
+        <ImageButton
+            android:id="@+id/add_voucher"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/row_icon"
+            android:background="@drawable/btn_addvoucher"
+            />
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/issue_available"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:paddingTop="2dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/row_icon"
+            android:background="@drawable/addtocart_oval_count"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:layout_marginRight="5dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_gravity="center_horizontal|center_vertical"
+            />
+
+</RelativeLayout>
+
+</FrameLayout>

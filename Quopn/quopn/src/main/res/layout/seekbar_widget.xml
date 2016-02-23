@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_seekbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <com.quopn.wallet.views.QuopnTextView 
+        android:id="@+id/seekbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/seekbar_title_textsize"/>
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height ="wrap_content"
+        android:paddingTop = "0dp"
+        android:paddingLeft="10dp"
+        android:orientation="horizontal">
+        
+    <!--    <TableLayout
+		     android:layout_width="match_parent"
+		     android:layout_height="wrap_content"
+		     android:shrinkColumns="*"
+		     android:stretchColumns="*"
+		     
+		      > -->
+     
+		     <TableRow 
+		         android:layout_width="match_parent"
+		         android:layout_height="wrap_content"
+		         android:gravity="center" >
+            
+		        	<com.quopn.wallet.views.QuopnTextView 
+		        	    android:id="@+id/user_given_feedback"
+		        	    android:layout_width="wrap_content"
+		        	    android:layout_height="wrap_content"        	    
+		        	    android:background="@drawable/number_bg"
+		        	    android:textColor="@color/black"
+		        	    android:gravity="center"
+		        	    android:textSize="@dimen/seekbar_title_textsize"
+		        	    android:text=""
+		        	    />
+		        	<LinearLayout 
+		        	    android:layout_width="fill_parent"
+		        	    android:layout_height="wrap_content"
+		        	    android:layout_toRightOf="@id/user_given_feedback"
+		        	    android:layout_alignParentTop="true"
+		        	    android:paddingLeft="5dp"
+		        	    android:gravity="center_vertical">
+		        	    
+		        	    <SeekBar 
+			        	    android:id="@+id/custom_feedback_seekbar"	        	    
+			        	    android:layout_width="fill_parent"
+			        	    android:layout_height="wrap_content"   
+			        	    android:gravity = "center"        	   
+			        	    android:max="4"
+			        	    android:maxHeight="15dp"
+			        	    android:progress="1"
+			        	    android:background="@android:color/transparent"
+			        	    android:progressDrawable="@drawable/custom_progressbar"
+			        	    android:secondaryProgress="0"        	    
+			        	    android:thumb="@drawable/slider_circle"
+			        	    android:paddingTop="5dp"
+			        	    android:paddingLeft="20dp"
+			        	    android:paddingRight="20dp"
+			        	     
+			        	    />
+		        	    <!--  android:background="@android:color/transparent"
+		        	    android:thumb="@drawable/slider_circle"  -->
+		        	</LinearLayout>
+		      </TableRow>
+	<!-- 	 </TableLayout>      -->	
+    </RelativeLayout>
+
+</LinearLayout>

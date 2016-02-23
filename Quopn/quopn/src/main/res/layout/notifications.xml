@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlyNotifications"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background" >
+    
+    <RelativeLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:layout_alignParentTop="true"
+        android:background="@color/common_header_bg_color" >
+		<ImageView
+	        android:id="@+id/tut_switch"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_gravity="center_vertical"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:textColor="#FFF"
+	        android:src="@drawable/notify_on"/>
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/notification"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_header_textsize" 
+            android:layout_centerVertical="true"/>
+        
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/notification_list"
+        android:layout_below="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:divider="@color/app_background">
+    </ListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" 
+        android:gravity="center_vertical"
+        android:layout_below="@+id/header_layout">
+
+        <ImageView
+            android:id="@+id/img_no_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/no_notif" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/no_notify_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_no_notifications"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:text="@string/no_notifications"
+            android:textColor="@android:color/darker_gray"
+            android:visibility="gone" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/text_find_quopns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/no_notify_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/no_quopns_blankbutton"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/browse_current_categories"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+</RelativeLayout>

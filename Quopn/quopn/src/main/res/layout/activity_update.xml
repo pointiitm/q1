@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:background="@color/transparent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/alerttitle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        >
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/alerttile_success"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="UPGRADE"
+            />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/alerttitle"
+            android:layout_below="@+id/alerttile_success"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:paddingTop="8dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:text="@string/lable_app_upgrade"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/alerttitle_layout"
+        android:background="@color/white"
+        android:gravity="center" >
+
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/alertmessage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:typeface="serif" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/alertmessage"
+            android:background="@color/white"
+            android:orientation="horizontal" >
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@+id/btnUpgrade"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/white"
+                android:typeface="serif"
+                android:background="@color/add_to_cart_bg_color"/>
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@+id/btnQuit"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/white"
+                android:background="@color/add_to_cart_bg_color"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

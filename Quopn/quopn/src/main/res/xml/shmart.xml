@@ -1,0 +1,12 @@
+<shmart>
+    <op id="@id/shmart_op_loadwallet" icon="@drawable/icon_shmart_op_loadwallet" caption="@string/shmart_op_addmoney"/>
+    <op id="@id/shmart_op_shopatquopn" icon="@drawable/icon_shmart_op_shopatquopn" caption="@string/shmart_op_shopatquopn"/>
+    <op id="@id/shmart_op_sendmoney" icon="@drawable/icon_shmart_op_sendmoney" caption="@string/shmart_op_sendmoney"/>
+    <op id="@id/shmart_op_transfertobank" icon="@drawable/icon_shmart_op_transfertobank" caption="@string/shmart_op_transfertobank"/>
+    <op id="@id/shmart_op_mytransactions" icon="@drawable/icon_shmart_op_mytransactions" caption="@string/shmart_op_mytransactions"/>
+    <op id="@id/shmart_op_purchasevouchers" icon="@drawable/icon_shmart_op_purchasevouchers" caption="@string/shmart_op_purchasevouchers"/>
+    <op id="@id/shmart_op_settings" icon="@drawable/icon_shmart_op_settings" caption="@string/shmart_op_settings"/>
+    <op id="@id/shmart_op_terms" icon="@drawable/icon_shmart_op_terms" caption="@string/shmart_op_terms"/>
+    <op id="@id/shmart_op_faqs" icon="@drawable/icon_shmart_op_faqs" caption="@string/shmart_op_faqs"/>
+
+</shmart>

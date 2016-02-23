@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/add_to_cart_bg_color">
+    <!--<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <ImageView
+            android:id="@+id/imgWalletIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ico_wallet" />
+
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textRegn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgWalletIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/my_wallet"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/text_my_wallet_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textRegn"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="@string/shmart_registration_otp_hurray"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+
+        <!--<com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/textPleaseEnterOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textRegn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/wallet_otp"
+            android:textColor="@color/white"
+            android:textSize="15sp" />-->
+
+        <RelativeLayout
+            android:id="@+id/relLayEnterOTP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_my_wallet_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/textfield">
+
+            <ImageView
+                android:id="@+id/imgEnterOtp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ico_otp" />
+
+            <!--<ImageView
+                android:id="@+id/imgEnterOtpError"
+                android:layout_width="30dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@android:drawable/ic_dialog_alert"
+                android:visibility="invisible" />-->
+
+            <com.quopn.wallet.views.QuopnEditTextView
+                android:id="@+id/editEnterOTP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp"
+                android:layout_toRightOf="@id/imgEnterOtp"
+                android:background="@color/transparent"
+                android:cursorVisible="true"
+                android:ems="@integer/ems_length"
+                android:imeOptions="actionNext"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="@string/enter_otp"
+                android:inputType="number"
+                android:maxLength="@integer/shmart_otp_length"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relLayTransPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/relLayEnterOTP"
+            android:layout_alignRight="@id/relLayEnterOTP"
+            android:layout_below="@id/relLayEnterOTP"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/textfield">
+
+            <ImageView
+                android:id="@+id/imgTransPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ico_txn" />
+
+            <!--<ImageView
+                android:id="@+id/imgTransPassError"
+                android:layout_width="30dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@android:drawable/ic_dialog_alert"
+                android:visibility="gone" />-->
+
+            <ImageView
+                android:id="@+id/imgTransPassInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ico_question" />
+
+            <com.quopn.wallet.views.QuopnEditTextView
+                android:id="@+id/editTransPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/imgTransPassInfo"
+                android:layout_toRightOf="@id/imgTransPass"
+                android:background="@color/transparent"
+                android:cursorVisible="true"
+                android:ems="@integer/ems_length"
+                android:imeOptions="actionNext"
+                android:textSize="16sp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="@string/trans_pass"
+                android:inputType="numberPassword"
+                android:maxLength="@integer/otpnumber_length"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relLayReEnterTransPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/relLayEnterOTP"
+            android:layout_alignRight="@id/relLayEnterOTP"
+            android:layout_below="@id/relLayTransPass"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/textfield">
+
+            <ImageView
+                android:id="@+id/imgReEnterTransPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ico_txn" />
+
+            <!--<ImageView
+                android:id="@+id/imgReEnterTransPassError"
+                android:layout_width="30dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@android:drawable/ic_dialog_alert"
+                android:visibility="invisible" />-->
+
+            <com.quopn.wallet.views.QuopnEditTextView
+                android:id="@+id/editReEnterTransPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/imgReEnterTransPass"
+                android:background="@color/transparent"
+                android:cursorVisible="true"
+                android:ellipsize="end"
+                android:ems="@integer/ems_length"
+                android:imeOptions="actionGo"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="@string/re_enter_trans_pass"
+                android:inputType="numberPassword"
+                android:maxLength="@integer/otpnumber_length"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+        </RelativeLayout>
+
+        <com.quopn.wallet.views.QuopnEditTextView
+            android:id="@+id/editResendOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/editOTP"
+            android:layout_alignRight="@id/editOTP"
+            android:layout_below="@id/relLayReEnterTransPass"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@color/transparent"
+            android:editable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="@string/waiting_for_sms"
+            android:inputType="phone"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <com.quopn.wallet.views.QuopnEditTextView
+            android:id="@+id/editSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/relLayEnterOTP"
+            android:layout_alignRight="@id/relLayEnterOTP"
+            android:layout_below="@id/editResendOtp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_transparent"
+            android:ellipsize="end"
+            android:ems="@integer/ems_length"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:gravity="center_horizontal|center_vertical"
+            android:hint="@string/btn_submit"
+            android:inputType="phone"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+
+
+
+        <!--<ImageView
+            android:id="@+id/imgPullUp"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/textPoweredBy"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/icon_addlocation" />-->
+
+    </RelativeLayout>
+    <!--</ScrollView>-->
+    <LinearLayout
+        android:id="@+id/textPoweredBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/issuedbyrblbwlogo"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/poweredbyshmartlogo"/>
+    </LinearLayout>
+
+</RelativeLayout>

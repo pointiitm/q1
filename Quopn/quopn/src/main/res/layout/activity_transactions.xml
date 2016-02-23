@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.quopn.wallet.shmart.TransactionsActivity">
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/shmart_op_mytransactions"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/common_header_textsize"
+        android:background="@color/common_header_bg_color"/>
+
+    <RelativeLayout android:id="@+id/transactions_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:background="#CACACA"
+        android:layout_below="@+id/title">
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center|center_vertical"
+            android:text="TRANSACTION"
+            android:layout_marginLeft="10dp"
+            android:textColor="#636363"
+            android:textSize="@dimen/common_header_textsize"
+            />
+        <com.quopn.wallet.views.QuopnTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center|center_vertical"
+            android:text="AMOUNT"
+            android:layout_marginRight="10dp"
+            android:textColor="#636363"
+            android:textSize="@dimen/common_header_textsize"
+            />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/header_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#636363"
+        android:layout_below="@+id/transactions_header"/>
+    <ListView
+        android:id="@+id/lvTransactions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header_line"
+        android:divider="#636363"
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="20dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/shmart_footer"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+        <ImageView
+            android:id="@+id/udio_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/poweredby_uido_logo"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/citrus_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:src="@drawable/poweredbycitruslogo"/>
+
+</RelativeLayout>

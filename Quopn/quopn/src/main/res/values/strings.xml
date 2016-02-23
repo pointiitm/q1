@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+    <string name="google_maps_key">AIzaSyDtQGwWsJLbhl20BYcL0NH7nzddUzpLWlk</string>
+    <string name="google_maps_key_demo">AIzaSyD8E3980HszFQXWP_zAYcjEnsDXX25FleE</string>
+    <!-- Not used starts -->
+    <string name="enter_dob_small_case">Enter DOB</string>
+    <string name="storeid_txt">PLEASE ENTER YOUR STORE ID</string> 
+    <string name="my_badges">MY BADGES</string>
+    <string name="crop">CROP</string>
+    <string name="end_text">ENDING ON XX.XX.XXXX</string>
+    <string name="header_text">HEADER</string>
+    <string name="cart">CART</string>
+     <string name="mycart_header_text">MY CART</string>
+    <string name="my_quopns">MY QUOPNS</string>
+    <string name="history">MY HISTORY</string>
+    <string name="email_id_text">Email ID</string>
+    <string name="name_text">Name</string>
+    <string name="next_text">NEXT</string>
+    <string name="skip_regn"><u>SKIP</u></string>
+    <string name="skip_regn_msg"><u>Skipping, please wait</u></string>
+    <string name="progress_registering_txt">Registering User</string>
+    <string name="blank_mobilenumber_validation">Enter your friend\'s mobile number so that we can send them an invite</string>
+    <string name="inviteuser_gender_validation">Kindly indicate gender so that we can send your friend personalized offers</string>
+    <string name="please_connect_to_internet">Please check your internet connection and try again</string>
+    <string name="image_capture_failed">Oops! Image Not Captured. Please try again</string>
+    <string name="dialog_title_notification_status">Notification Status</string>
+    <string name="error_unable_to_download">Unable to download personal message</string>
+    <string name="message_is_not_available">Message is not available</string>
+    <string name="video_is_not_available">Video is not available</string>
+    <string name="store_id_is_pressed">Store id is pressed</string>
+    <string name="lable_app_upgrade">Upgrade to the new app and\nearn Cashback...</string>
+    <string name="message_forcefully_upgrade">All our Quopns have moved to the newer version. You need to upgrade your app to access them</string>
+    <string name="message_not_forcefully_upgrade">Our Quopns eagerly want you to try out the new version. Don\'t leave them hanging</string>
+     <string name="caption_button_upgrade">Update</string>
+    <string name="caption_button_quit">Exit</string>
+    <string name="caption_button_continue">Continue</string>
+     <string name="caption_savings_approx">MINIMUM SAVINGS</string>
+    <string name="caption_savings">SAVINGS</string>
+    <!-- Not used ends --> 
+    
+    <string name="app_name">Quopn</string>
+    <string name="otp_message">We have sent you a PIN via SMS. You will need your Wallet ID and PIN to redeem your Quopns</string>
+    <string name="yourname">NAME</string>
+    <string name="yourmobileno">MOBILE NUMBER</string>
+    <string name="otp_txt">PIN</string>
+    <string name="enter_otp">ENTER OTP</string>
+    <string name="trans_pass">SET TRANSACTION PIN</string>
+    <string name="re_enter_trans_pass">RE-ENTER TRANSACTION PIN</string>
+    <string name="enter_dob">DATE OF BIRTH</string>
+    <string name="enter_email">EMAIL*</string>
+    <string name="verifying_txt">VERIFYING USER</string>
+    <string name="enter_trans_pass">ENTER TRANSACTION PIN</string>
+    <string name="resendotp_txt"><u>RESEND OTP</u></string>
+    <string name="resendpin_txt"><u>RESEND PIN</u></string>
+    <string name="resendotp">RESEND OTP</string>
+    <string name="confirmotp">CONFIRM OTP</string>
+    <string name="please_enter_otp">PLEASE ENTER YOUR OTP</string>
+    <string name="shmart_registration_tnc_1">"I agree to My Wallet"</string>
+    <string name="i_agree_to_terms_and_conditions"><u>Terms of Use</u></string>
+    <string name="ucn_txt">Please enter UCN to redeem your Quopn</string>
+    <string name="call_txt">Please ensure that the mobile number you are using is the same one you have registered with</string>
+    <string name="new_quopns_soon">YOUR PATIENCE SHALL BE REWARDED!\r\nFOR NOW CHOOSE FROM OUR\r\n CURRENT OFFERS\r\n PULL DOWN TO REFRESH</string>
+    <string name="expiring_quopns_soon">PHEW! YOU HAVE NO QUOPNS\r\n EXPIRING ANYTIME SOON\r\n PULL DOWN TO REFRESH</string>
+    <string name="search_quopns">NO SEARCH RESULTS\r\n PLEASE TRY A DIFFERENT KEYWORD</string>
+    <string name="no_notifications">YOU\'VE NO UNREAD NOTIFICATIONS \r\n HOW ABOUT BROWSING THROUGH \r\n SOME QUOPNS IN THE MEANTIME?</string>
+    <string name="browse_current_categories">BROWSE CURRENT QUOPNS</string>
+    <string name="search_now">SEARCH NOW</string>
+    <string name="grab_a_quopn">GRAB A QUOPN</string>
+    <string name="add_to_cart">ADD TO CART</string>
+    <string name="share_txt">SHARE</string>
+     <string name="close_txt">CLOSE</string>
+     <string name="terms_and_condition_txt">TERMS &amp; CONDITION</string>
+    <string name="new_myquopns_soon">NO QUOPNS AVAILABLE</string>
+    <string name="text_empty_my_quopns">OUR QUOPNS ARE EXTREMELY EXCITED\r\n TO GET ISSUED BY YOU.\r\n PLEASE DON\'T DISAPPOINT THEM</string>
+    <string name="text_empty_my_cart">YOUR CART IS EMPTY!\r\n FILL IT UP QUICKLY BY ADDING YOUR FAVOURITE QUOPNS\r\n PULL DOWN TO REFRESH</string>
+    <string name="text_empty_history">NOT SHOPPED YET ?\r\n START BY REDEEMING \r\n YOUR FAVOURITE QUOPNS \r\n &amp; SHOP NOW!</string>
+    <string name="loading_myquopns">LOADING QUOPNS...</string>
+    <string name="new_history_soon">YOU HAVE NOT REDEEMED ANY QUOPNS IN THE LAST 6 MONTHS</string>
+    <string name="new_cart_soon">CART EMPTY</string>
+    <string name="select_interest">SELECT INTERESTS</string>
+    <string name="select_location">LOCATION</string>
+    <string name="btn_submit">SUBMIT</string>
+    <string name="btn_save">SAVE</string>
+    <string name="take_photo">CLICK NEW</string>
+    <string name="choose_photo">SELECT FROM GALLERY</string>
+    <string name="cancel">CANCEL</string>
+    <string name="main_menu">MAIN MENU</string>
+    <string name="mysettings">PROFILE SETTINGS</string>
+    <string name="notification">NOTIFICATIONS</string>
+    <string name="aboutus">ABOUT US</string>
+    <string name="faq">FAQS</string>
+    <string name="tnc">TNCS</string>
+    <string name="change_pin">GENERATE PIN</string>
+    <string name="promo_code">PROMO CODE</string>
+    <string name="change_num">CHANGE NUMBER</string>
+    <string name="waiting_for_sms">Auto verification of PIN in progress %1$d secs</string>
+    <string name="caption_manual_entry">Or else, upon receipt of SMS, enter it in the field above</string>
+    <string name="skip_text">SKIP</string>
+    <string name="shmart_registration_desc">"Register in 2 easy steps"</string>
+    <string name="shmart_registration_otp_hurray">"Hurray! You are 1 step away from Cashback"</string>
+    <string name="register_now">REGISTER NOW</string>
+    <string name="current_bal"><b>CURRENT BALANCE</b></string>
+    <string name="selec_interests">SELECT INTERESTS</string>
+    <string name="personal_message">PLAY VIDEO</string>
+    <string name="download_message">DOWNLOAD VIDEO</string>
+    <string name="skip_message">SKIP</string>
+    <string name="registration_bottom_first_text">By using this app, you agree to Quopn\'s</string>
+    <string name="registration_bottom_third_text">&amp;</string>
+    <string name="registration_terms_message"><u>Terms of Use</u></string>
+    <string name="registration_policy_message"><u>Privacy Policy</u></string>
+    <string name="invite_user">INVITE USER</string>
+    <string name="invite_user_text">Gift your friends a new Quopn Wallet loaded with goodies! Fill in their details and send them an SMS with a link to download the Quopn Wallet. It\'s that Simple!!</string>
+    <string name="promo_text">Enter your promo code and unleash the offers inside</string>
+    <string name="invite_user_name">NAME</string>
+     <string name="select_from_contact">SELECT FROM CONTACTS</string>
+    <string name="gen_male_text">MALE</string>
+    <string name="gen_female_text">FEMALE</string>
+    <string name="rec_personal_msg">RECORD VIDEO</string><!-- RECORD A PERSONAL MESSAGE -->
+    <string name="send_invite">SEND INVITE</string>
+    <string name="legal_clause">**Standard text messaging charges as designated by your telecom operator for your rate plan shall apply, when you send an Invite SMS</string>
+    <string name="oldpin_txt">EXISTING PIN</string>
+    <string name="newpin_txt">NEW PIN</string>
+    <string name="newpinconfirm_txt">RE-ENTER NEW PIN</string>
+    <string name="enter_promo_txt">ENTER PROMO CODE</string>
+    <string name="newnum_txt">NEW NUMBER</string>
+    <string name="profile_settings">PROFILE SETTINGS</string>
+    <string name="error_campaign_detials">Error fetching campaign details</string>
+    
+    <!-- Errror Messages -->
+    <!--<string name="blank_name_validation_invite">Please enter your name</string>-->
+    <string name="blank_txnpin_validation">Please enter transaction PIN</string>
+    <string name="set_txnpin_validation">Please set your transaction PIN</string>
+    <string name="blank_pin_validation">Please enter PIN</string>
+    <string name="blank_otp_validation">Please enter OTP sent via SMS to confirm</string>
+    <string name="blank_name_validation">Please enter your name</string>
+    <string name="blank_mobile_no">Please enter a 10 digit mobile number</string>
+    <string name="name_validation">Please enter a valid name</string>
+    <string name="name_validation_invite">Please enter name</string>
+    <string name="mobileno_validation">Please enter a valid 10 digit mobile number</string>
+    <string name="shmart_email_info">Your monthly transaction history will be mailed to this email ID</string>
+    <string name="shmart_trans_pwd_info">You will need this PIN to transact through your wallet</string>
+    <string name="otp_validation">Please enter the correct PIN</string>
+    <string name="pin_validation">Please enter the correct PIN</string>
+    <string name="resend_otp_morethan_3times_validation">A few deep breaths and you shall receive your PIN via SMS</string>
+    <string name="emailid_validation">Please enter your e-mail; we promise not to spam you</string>
+    <string name="entered_emailid_validation">Please check again; there\'s something wrong with that email ID you entered</string>
+    <string name="location_validation">Enter your location so we can show Quopn enabled stores around you</string>
+    <string name="interest_validation">Tell us your interests so we can try to craft exclusive Quopns for you</string>
+    <string name="gender_validation">Please select your gender so we can craft exclusive Quopns for you</string>
+    <string name="dob_validation">Please enter your Date of Birth</string>
+    <string name="age_validation">You should be above %1$s years</string>
+    <string name="oldpin_validation">Please enter a valid PIN</string>
+    <string name="promo_validation">Oops! It seems like you forgot to enter the promo code</string>
+    <string name="newpin_validation">Please enter a valid PIN</string>
+    <string name="newnumber_validation">Please enter a valid mobile number</string>
+    <string name="retrypin_validation">Please enter a valid PIN</string>
+    <string name="newpin_retrypin_validation">Oops! The PINs do not match. Please check and give it another try</string>
+    <string name="trans_pwd_validation">The transaction PIN is incorrect</string>
+    <string name="error_no_camera_support">Oops! Your device doesn\'t support the crop action!</string>
+    <string name="logout_confirm">Are you sure you want to sign out?</string>
+    <string name="image_capture_cancelled">Image Capture Cancelled</string>
+    <string name="image_selection_cancelled">Image Selection Cancelled</string>
+    <string name="camera_unsupported">Oops! Your device does not support this feature</string>
+    <string name="empty_string"></string>
+    <string name="sign_in_as_another_user"><u>Sign in as another user</u></string>
+    <string name="sign_in_message">Are you sure you want to sign out?</string>
+    <string name="tell_us_a_bit_about_yourself">Tell us a bit about yourself!</string>
+    <string name="alert_if_user_send_invitemsg_without_videomsg">Hey! How about recording a video to personalize this invite for your friend?</string>
+    <string name="error_invite_notsenttoownmobieno">Oops! You just entered your own number. How about inviting some friends instead?</string>
+    <string name="title_exception">Oops!</string>
+    <string name="desc_exception">There was an unexpected error. If the problem persists, please restart the Quopn Wallet application</string>
+    <string name="invite_user_suuceesfull_sms_txt">Hey! I would like to gift you a new Quopn Wallet loaded with goodies. Happy Shopping! \nClick</string>
+    <string name="to_download">to download</string>
+    
+
+    <!-- Cart text -->
+    <string name="removecart_txt">REMOVE FROM CART</string>
+    <string name="view_quopns">VIEW</string>
+    <string name="apply_promo">APPLY PROMO</string>
+
+    <!-- Strings for Gift -->
+    <string name="gift_info_header_message">has sent you a personal video message. Download to view!</string>
+    <string name="download_personal_message">DOWNLOAD VIDEO</string>
+    <string name="play_personal_message">PLAY VIDEO</string>
+    <!-- Strings for Gift End here -->
+    <!-- <string name="error_no_internet_connectivity">Please try again, No Internet connection</string> -->
+    <string-array name="loading">
+        <item>Loading...</item>
+    </string-array>
+
+    <!-- Alert Message String -->
+    <string name="dialog_title">QUOPN</string>
+    <string name="dialog_title_termsandcontion_form">QUOPN</string> <!-- Feedback Form -->
+    <string name="dialog_title_no_internet">QUOPN</string><!-- No Internet-->
+    <string name="dialog_title_error">QUOPN</string>
+    <string name="dialog_title_registration">QUOPN</string>
+    <string name="dialog_title_resend_pin">QUOPN</string><!-- Resend PIN -->
+    <string name="dialog_title_feedback_form">QUOPN</string> <!-- Feedback Form -->
+    <string name="dialog_title_download_failed">QUOPN</string> <!-- Download Failed  -->
+    <string name="dialog_title_campaign_validation">QUOPN</string> <!-- Campaign Validation -->
+    <string name="dialog_title_UCN">QUOPN</string>
+    <string name="dialog_title_Logout">QUOPN</string>
+    <string name="signin">QUOPN</string>
+    <string name="dialog_campaign_validation">QUOPN</string> <!-- Campaign Validation -->
+    <string name="dialog_title_shopsaround">QUOPN</string> <!-- ShopsAround -->
+    <string name="dialog_title_no_video">QUOPN</string> <!-- No Video -->
+    <string name="dialog_title_remove_from_cart">QUOPN</string>
+    <string name="dialog_title_add_from_cart">QUOPN</string>
+    <string name="dialog_title_change_pin">QUOPN</string>
+    <string name="dialog_title_promocode">QUOPN</string>
+    <string name="Rs">\u20B9</string>
+    <string name="dialog_title_store_search">QUOPN</string>
+    <string name="dialog_title_profile">QUOPN</string>
+    <string name="dialog_title_store_id">QUOPN</string>
+    <string name="dialog_title_change_number">QUOPN</string>
+    <string name="dialog_title_invite_user">QUOPN</string>
+    <string name="dialog_title_gender_validation">QUOPN</string><!-- Gender Validation -->
+    <string name="dialog_title_success">QUOPN</string>
+    <string name="dialog_title_send_invite">QUOPN</string>
+    <string name="dialog_button_title_record">QUOPN</string>
+    <string name="dialog_button_title_continue">CONTINUE</string>
+    <string name="dialog_message_video_issue">WATCH VIDEO?</string>
+    <string name="dialog_message_campaignid_not_present">This Quopn campaign is currently unavailable</string>
+     <string name="slow_internet_connection_title">QUOPN</string>
+     <string name="slow_internet_connection">Please check your internet connection and try again</string>
+    
+     <string name="dialog_message_invite_success">Wohoo! Your invite has been sent. Thank you for spreading the word!</string>
+   
+    <string name="error_termsandcondition_form_loading">Please try again!</string>
+    <string name="error_feedback_form_loading">Please try again!</string>
+    <string name="server_error"> Oops! There was an unexpected error. If the problem persists, please restart the Quopn Wallet application</string>
+    <string name="server_error_title">QUOPN</string>
+    
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    
+    <!-- Page Titles -->
+    <string name="gift_page_title">YOUR GIFT QUOPNS!</string>
+    <string name="all_page_title">QUOPNS ACROSS ALL CATEGORIES</string>
+    <string name="expiring_page_title">QUOPNS EXPIRING SOON</string>
+ 
+<!--     Invite User -->
+    <string name="record_video">RECORD VIDEO</string>
+    <string name="change_video">CHANGE VIDEO</string>
+    <string name = "timer_start_text">00:00</string>
+    <string name = "cart_remove_all_confirmation">Are you sure you want to remove all Quopns from \"My Cart\"?</string>
+    <string name = "myquopns_add_all_confirmation">Are you sure you want to add all Quopns to \"My Cart\"?</string>
+    
+    <string name = "copyright_text" >Copyright &#169; 2015, The Quopn Company Pvt. Ltd</string>
+    <string name = "version_text" >Copyright &#169; 2015, The Quopn Company Pvt. Ltd</string>
+    
+    <string name="id">ID</string>
+     <string name="pin">PIN</string>
+    <string name="caption_dismiss_error">SEND ERROR REPORT</string>
+    <string name="location_service">Please enable Location Based Services for better results! We promise to keep your location private</string>
+    <string name="error_camera_not_found">Oops! Your device does not support this feature</string>
+     
+    <string name="text_selectLocation">Select Location</string>
+    <string name="select_state">Please select a state</string>
+    <string name="select_city">Please select a city</string>
+    
+    <string name="no_notification">YOU HAVE NO NOTIFICATIONS</string>
+    <string name="search">Search</string>
+    <string name="quopns_redeemed">Quopns in your cart have been successfully redeemed</string>
+    <string name="gender_na">N/A</string>
+   
+    <!-- Feedback -->
+    <string name="feedback_title">FEEDBACK</string>
+    <string name="feedback_title_description">Hello! We would love to hear what you think about the Quopn Wallet!!</string>
+    <string name= "feedback_recommend_description">Would you recommend the Quopn Wallet to your friends and family?</string>
+    <string name = "ease_of_use_feedback_description">Easy to Use</string>
+    <string name = "simple_to_understand_feedback_description">Simple to Understand</string>
+    <string name = "cool_design_feedback_description">Cool Design</string>
+    <string name = "great_value_feedback_description">Great Value</string>
+    <string name = "overall_feedback_description">Overall</string>
+    <string name = "feedback_select_category_description">If you have specific feedback, please indicate a category below</string>
+    <string name = "feedback_text_hint">Please write your feedback or comment here and click on Submit</string>
+    <string name = "fdbk_submit">Submit</string>
+    
+   <!--  <string name="select_option_prompt">Select Option</string>
+ -->  
+    <string-array name="select_option">
+        <item>Select Option</item>
+        <item>Compliment</item>
+        <item>Suggestion</item>
+        <item>Grievance</item>
+        <item>Other</item>
+                
+    </string-array>
+    
+    
+    <!-- slide menu  -->
+    <string name="wallet_id">WALLET ID - </string>
+    <string name="pin_no">PIN NUMBER - </string>
+    
+    <string name="hint_search_quopns">SEARCH QUOPNS</string>
+    <string name="hint_search_shops">SEARCH SHOPS</string>
+    <string name="arrow_tag_right">Right</string>
+    <string name="arrow_tag_down">Down</string>
+    <string name="t_and_c_load_error">Please allow the content to load</string>
+    <string name="priv_poli_load_error">Please allow the content to load</string>
+    <string name="faq_contact_us">MORE QUESTIONS ? CALL US</string>
+    <string name="title_activity_annoucement">AnnoucementActivity</string>
+    <string name="title_activity_shmart_home">ShmartHomeActivity</string>
+
+    <string name="wallet_regn">MY WALLET \r\n REGISTRATION</string>
+    <string name="my_wallet">MY WALLET</string>
+    <string name="congratulations">CONGRATULATIONS!</string>
+    <string name="shmart_regn_success_msg">CONGRATULATIONS!\nYour Wallet is now Cashback ready. Visit your nearest Quopn store and start shopping</string>
+    <string name="wallet_otp">PLEASE ENTER YOUR OTP</string>
+    <string name="trans_pass_mismatch">Oops! The PINs do not match. Please check and give it another try</string>
+
+    <!-- Shmart -->
+    <string name="shmart_op_addmoney">ADD MONEY</string>
+    <string name="shmart_op_sendmoney">SEND MONEY</string>
+    <string name="shmart_op_transfertobank">TRANSFER TO BANK</string>
+    <string name="shmart_op_purchasevouchers">BUY VOUCHERS</string>
+    <string name="shmart_op_shopatquopn">SHOP AT STORES</string>
+    <string name="shmart_op_mytransactions">MY TRANSACTIONS</string>
+    <string name="shmart_op_faqs">FAQs</string>
+    <string name="shmart_op_terms">TERMS OF USE</string>
+    <string name="shmart_op_settings">SETTINGS</string>
+    <string name="title_activity_load_wallet">LoadWalletActivity</string>
+    <string name="title_activity_iframe">IFrameActivity</string>
+    <string name="title_activity_send_money">SendMoneyActivity</string>
+    <string name="title_activity_bank">TRANSFER TO BANK</string>
+    <string name="title_activity_bank_account">ADD NEW BANK ACCOUNT</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="load_wallet_desc_text">Enter your promo code and unleash the offers inside</string>
+    <string name="t_and_c_promos">For detailed Terms &amp; Conditions, visit our website http://www.quopn.com/promos/</string>
+    <string name="add_money_desc_text">Enter the amount you want to load in your Quopn Wallet. You will be re-directed to our payment gateway to complete your transaction</string>
+    <string name="shop_at_quopn_text">"You can now use your Wallet balance while shopping at a Quopn enabled store nearby. Decide how to use your balance by picking one of the options below."</string>
+    <string name="rupee_symbol">\u20B9</string>
+    <string name="shmart_setting_text">Forgot your transaction PIN?\nNo worries! Click below to setup a new PIN</string>
+
+    <string name="title_activity_use_quopn">UseQuopnActivity</string>
+    <string name="title_activity_transactions">TransactionsActivity</string>
+    <string name="title_activity_shmart__faq_">Shmart_Faq_Activity</string>
+    <string name="title_activity_shmart__tnc_">Shmart_Tnc_Activity</string>
+    <string name="validation_bank_account_holder">Please enter the account holder name as per bank records</string>
+    <string name="validation_shmart_mobile">Please enter a valid mobile Number</string>
+    <string name="validation_mobile_with_contact_picker">Please select a contact or enter a valid 10 digit mobile number</string>
+    <string name="validation_bank_account_number">Please enter a valid account number</string>
+    <string name="validation_bank_arcount_number_repeat">Account numbers do not match. Please check again</string>
+    <string name="validation_bank_account_ifsc">Please enter a valid IFSC code</string>
+    <string name="validation_bank_account_branch">Please enter your branch name</string>
+    <string name="validation_invalid_txn_pwd">Please enter your 4 digit transaction PIN</string>
+    <string name="validation_shmart_amount">Please enter amount</string>
+    <string name="validation_send_money_to_self">You cannot transfer money to self</string>
+    <string name="validation_shmart_amount_bank">Amount to be transferred cannot exceed 5000 in a day</string>
+    <string name="validation_insufficient_balance">You cannot transfer more than your current balance</string>
+    <string name="validation_invalid_otp">Please enter OTP sent via SMS to confirm</string>
+    <string name="validation_excessive_amount">Wallet balance cannot exceed Rs.10000</string>
+    <string name="validation_send_money_message">Message cannot be empty</string>
+    <string name="validation_repeat_txn_pwd">Oops! The PINs do not match. Please check and give it another try</string>
+    <string name="title_activity_deep_link">DeepLinkActivity</string>
+    <string name="prompt_existing_beneficiary">You can only have one active account. Do you want to change the existing account?</string>
+    <string name="session_logout_message">You have been signed out because your session is invalid. Please sign in again</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="card_number_hint">Enter card number</string>
+    <string name="card_name_hint">Enter card holder name</string>
+    <string name="card_nick_name_hint">Enter nick name</string>
+    <string name="sign_in_btn_text">Sign In</string>
+    <string name="resend_btn_text">Resend</string>
+
+    <!-- added for version 3.4 -->
+    <string name="citrus_email_alreadyRegistered">Email already registered. Please change</string>
+    <string name="citrus_email_updated">Please enter OTP sent via SMS to confirm. We have updated your email as registered with citrus to</string>
+    <string name="citrus_sendmoney_success">Yay! Your money transfer request has been initiated</string>
+    <string name="citrus_loadwallet_failure">Oops! The Quopn Add money request has failed. Please try again</string>
+    <string name="txnpin_incorrect">Oops! Your transaction pin is incorrect. Please re-enter the correct pin and try again</string>
+    <string name="dialog_otp_validation">Please enter OTP sent\nvia SMS to confirm</string>
+    <string name="citrus_dialog_otp_validation">Oh no! The OTP is invalid Please check again and re-enter</string>
+    <string name="citrus_tranfer_to_bank_success">Yay! Your transfer request has been initiated</string>
+    <string name="citrus_wallet_default_message">The money from your selected wallet will be redeemed the next time you shop at a Quopn store. For more information visit FAQs</string>
+    <string name="cvv_incorrect">Please enter a valid CVV</string>
+    <string name="txnpin_changed_successfully_citrus_udio">Transaction PIN changed successfully for both CITRUS and UDIO</string>
+    <string name="quopn_merchant_redemption_updated">Payment settings changed successfully</string>
+    <string name="quopn_merchant_redemption_updated_citrus">Your Citrus Wallet will be debited the next time you make a purchase at a Quopn store</string>
+    <string name="quopn_merchant_redemption_updated_udio">Your Udio Wallet will be debited the next time you make a purchase at a Quopn store</string>
+    <string name="quopn_merchant_redemption_updated_noselection">Payment setting has been turned off. Kindly activate an option to pay through your wallet at a Quopn store</string>
+    <string name="citrus_registration_error">Your Citrus Wallet registration failed. Please try again</string>
+</resources>

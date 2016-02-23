@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:text="@string/main_menu"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" /> -->
+        
+    <RelativeLayout 
+        android:id="@+id/title"
+        android:layout_width = "match_parent"
+        android:layout_height="@dimen/slidemenu_profile_height"
+        android:layout_alignParentTop="true"
+        android:background="@color/sliding_menu_Header_bg">
+        
+        <ImageView 
+            android:id="@+id/slidemenu_profile_img"
+            android:layout_width="@dimen/slidemenu_profile_width"
+            android:layout_height="@dimen/slidemenu_profile_height"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:background="@drawable/user_nophoto_square">         
+        </ImageView>
+        
+        <RelativeLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/slidemenu_profile_img"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true">
+        <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/slidemenu_wallet_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wallet_id"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sildemenu_header_font_size" 
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:layout_gravity="center"/> 
+        
+        <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/slidemenu_pin_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/slidemenu_wallet_id"
+        android:text="@string/pin_no"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sildemenu_header_font_size" 
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:layout_gravity="center"/> "
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <include 
+        android:id="@+id/divider01"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/title"
+        layout="@layout/profile_divider"/>
+    
+    <ListView
+        android:id="@+id/main_menu_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider01"
+        
+        android:divider="@color/divider_color"
+        android:dividerHeight="1dp" >
+    </ListView>
+
+    <ImageView
+        android:id="@+id/progressBar_mainmenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/qprogress"
+        android:visibility="gone"
+        android:indeterminateDuration="3000"/>
+
+<!--     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_menu_list"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/listitems_bg"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/row_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/tutorial_icon" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/row_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="TUTORIAL"
+            android:textColor="@color/white" />
+
+        <Switch                  
+            android:id="@+id/tut_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#FFF" 
+            android:visibility="visible"/>
+    </LinearLayout>
+ -->
+</RelativeLayout>

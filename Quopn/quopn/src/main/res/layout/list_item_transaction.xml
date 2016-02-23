@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    >
+
+    <TextView
+        android:id="@+id/tvTransactionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:textColor="#636363"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:text="TRANSACTION NAME"
+        />
+
+    <TextView
+        android:id="@+id/tvTransactionTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTransactionName"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:textColor="#636363"
+        android:textSize="12dp"
+        android:text="TRANSACTION TIMESTAMP"/>
+
+    <TextView
+        android:id="@+id/tvTransactionAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="100"
+        android:textColor="#bf1e2e"
+        android:textSize="16dp"/>
+
+
+</RelativeLayout>

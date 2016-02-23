@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="payment-sdk-3.2.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/quopn/build/intermediates/exploded-aar/com.citrus.sdk/payment-sdk/3.2.0/retrofitnewRelease/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/quopn/build/intermediates/exploded-aar/com.citrus.sdk/payment-sdk/3.2.0/retrofitnewRelease/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

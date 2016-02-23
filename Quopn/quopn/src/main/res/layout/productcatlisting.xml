@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/app_background">
+
+    <com.quopn.wallet.views.PagerSlidingTabStrip
+        xmlns:app="http://schemas.android.com/apk/res/com.quopn.wallet"
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/upper_tabbar_bg"
+        app:pstsDividerColor="#00000000"
+        app:pstsIndicatorColor="#FFF"
+        app:pstsTextAllCaps="true"
+        app:tabTextColor="#FFF"
+        app:tabTextSize="13sp" 
+        app:pstsIndicatorHeight="2dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabs"
+        android:background="@color/app_background"/>
+</RelativeLayout>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background" >   
+    
+    
+    <!--
+     The following view has not functionality except to swallow the default autofocus behaviour,
+     i.e, the default focus being set on the search box.
+    -->
+    <View
+        android:id="@+id/vwSwallowAutoFocus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+    <!-- End of autofocus swallowing block -->
+	
+    <RelativeLayout
+        android:id="@+id/rlSearchQuopns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_bottom_vertical_quopn_search_bar"
+        android:layout_marginLeft="@dimen/margin_horizontal_quopn_search_bar"
+        android:layout_marginRight="@dimen/margin_horizontal_quopn_search_bar"
+        android:layout_marginTop="@dimen/margin_top_vertical_quopn_search_bar"
+        android:gravity="center"
+        android:background="@drawable/borders_quopn_search_bar"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_quopn_search_bar" >
+
+        <ImageView
+            android:id="@+id/ivSearchQuopns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:hint="@string/hint_search_quopns"
+            android:src="@drawable/cmn_search_btn"
+            tools:ignore="ContentDescription" />
+        
+        <EditText
+            android:id="@+id/etSearchQuopns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/ivSearchQuopns"
+            android:layout_toStartOf="@id/ivSearchQuopns"
+            android:imeOptions="actionDone"
+            android:background="@color/search_bar_color"
+            android:singleLine="true"
+            android:hint="@string/hint_search_quopns"
+            android:textColorHint="@color/hint_quopn_search_bar" />
+    </RelativeLayout>
+
+   <android.support.v4.widget.SwipeRefreshLayout
+        android:id = "@+id/swipeRefresh_empty_content"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/transparent"
+        android:layout_below="@id/rlSearchQuopns"
+        android:orientation="vertical" >
+        
+	 <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:fillViewport="true">
+	    <RelativeLayout
+	        android:id="@+id/rellay_no_new_quopns"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center" 
+	        android:background="@color/app_background" >
+	
+	        <ImageView
+	            android:id="@+id/img_no_new_quopns"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:src="@drawable/no_new_quopns"
+	            tools:ignore="ContentDescription" />
+	
+	        <com.quopn.wallet.views.QuopnTextView
+	            android:id="@+id/no_quopn_text"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/img_no_new_quopns"
+	            android:layout_marginTop="15dp"
+	            android:gravity="center_horizontal"
+	            android:text="@string/new_quopns_soon"
+	            android:textColor="@android:color/darker_gray" />
+	
+	        <com.quopn.wallet.views.QuopnTextView
+	            android:id="@+id/img_no_new_quopns_text"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/no_quopn_text"
+	            android:layout_centerHorizontal="true"
+	            android:layout_marginTop="15dp"
+	            android:background="@drawable/no_quopns_blankbutton"
+	            android:gravity="center"
+	            android:padding="10dp"
+	            android:textColor="@color/white"
+	            android:visibility="visible" />
+	    </RelativeLayout>
+    </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id = "@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:layout_below="@id/rlSearchQuopns"
+        android:orientation="vertical" >
+    
+	    <com.quopn.wallet.views.RefreshableListView
+	        android:id="@+id/items"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_below="@id/rlSearchQuopns"
+	        android:layout_gravity="center"
+	        android:background="@color/app_background"
+	        android:divider="@color/app_background"
+	        android:padding="2dp"
+	        android:scrollbars="none"
+	        android:visibility="visible"
+            >
+	    </com.quopn.wallet.views.RefreshableListView>
+	</android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

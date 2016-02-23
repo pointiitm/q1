@@ -1,0 +1,54 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="slidingmenu_offset">60dp</dimen>
+    <dimen name="list_padding">10dp</dimen>
+    <dimen name="shadow_width">15dp</dimen>
+    <dimen name="common_header_height">40dp</dimen>
+     <dimen name="common_header_textsize">15sp</dimen>
+      <!-- <dimen name="mycart_header1_height">39dp</dimen> -->
+       <dimen name="mycart_header2_height">40dp</dimen>
+     <dimen name="mycart_header1_2_textsize">12sp</dimen>
+    
+     <dimen name="myquopn_cart_history_textsize">12sp</dimen>
+
+    <!-- Registration parameter -->
+    <integer name="ems_length">10</integer>
+    <integer name="registration_name_length">30</integer>
+    <integer name="shmart_regn_name_length">20</integer>
+    <integer name="registration_mobileno_length">10</integer>
+    
+    <!-- OTP screen parameter -->
+     <integer name="otpnumber_length">4</integer>
+    <integer name="shmart_otp_length">8</integer>
+    
+    <integer name="num_cols">1</integer>
+    <integer name="gridview_num_cols">2</integer>
+    
+    <!-- Profile parameter -->
+    <integer name="profile_name_length">30</integer>
+    <integer name="profile_emialid_length">40</integer>
+     <integer name="profile_mobno_length">10</integer>
+     
+     
+    <integer name="promo_code_length">20</integer>
+    
+    <!-- Feedback -->
+    
+    <dimen name="feedback_title_bar_height">40dp</dimen>
+    <dimen name="seekbar_container_height">470dp</dimen>
+    <dimen name="seekbar_title_textsize">20sp</dimen>
+    <dimen name ="feedback_text_box_height">250dp</dimen>
+    <dimen name = "feedback_category_spnr_height">38dp</dimen>
+    <!-- sliding menu  -->
+    <dimen name="slidemenu_profile_width">94dp</dimen>
+    <dimen name="slidemenu_profile_height">94dp</dimen>
+    <dimen name="sildemenu_header_font_size">16sp</dimen>
+    <dimen name="padding_quopn_search_bar">10dp</dimen>
+    <dimen name="margin_bottom_vertical_quopn_search_bar">0dp</dimen>
+    <dimen name="margin_top_vertical_quopn_search_bar">5dp</dimen>
+    <dimen name="margin_horizontal_quopn_search_bar">6dp</dimen>
+    <dimen name="border_quopn_search_bar_stroke_width">2dp</dimen>
+</resources>

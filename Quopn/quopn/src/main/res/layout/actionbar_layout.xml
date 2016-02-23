@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent" >
+
+    <ImageView
+        android:id="@+id/slider"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/menu"
+        android:paddingRight="10dp" />
+
+    <ImageView
+        android:id="@+id/home_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/quopn_logo" 
+        android:paddingRight="10dp"/>
+
+    
+    <ImageView
+        android:id="@+id/cmn_cart_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="17dp"
+        android:src="@drawable/cmn_cart_btn"
+        android:visibility="visible" />
+    
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/notification_counter_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/oval_count_actionbar"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="10sp" 
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"/>
+
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/addtocard_counter_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="6dp"
+		android:layout_marginTop="10dp"
+        android:background="@drawable/oval_count_actionbar"
+        android:layout_alignRight="@id/cmn_cart_btn"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="10sp" 
+        android:gravity="center"/>
+    
+        <android.support.v7.widget.SearchView
+        android:id="@+id/fragment_address_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="10dp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

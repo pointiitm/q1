@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/add_to_cart_bg_color"
+    tools:context=".MainActivity" >
+
+    <ImageView
+        android:id="@+id/imvIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/icon_crash" />
+    
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/tvwErrorTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imvIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/title_exception"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/tvwErrorDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvwErrorTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:text="@string/desc_exception"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp" />
+    
+    <Button
+        android:id="@+id/btnDismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvwErrorDesc"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/caption_dismiss_error"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/rect_button_bg"
+        android:padding="16dp"
+        android:textSize="14sp" />
+
+</RelativeLayout>

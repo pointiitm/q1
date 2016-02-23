@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="5dp"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.quopn.wallet.views.AspectRatioImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/placeholder_myquopns" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/scrollview_layout" >
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:padding="5dp" />
+    </ScrollView>
+    
+    <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/view_quopns_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scrollview_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/no_quopns_blankbutton"
+            android:gravity="center|center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/view_quopns"
+            android:textColor="@color/white" 
+            android:visibility="gone"/>
+
+</LinearLayout>

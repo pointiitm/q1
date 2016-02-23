@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:text="@string/change_pin"
+        android:textColor="@android:color/black"
+        android:textSize="20dp" /> -->
+        
+        <RelativeLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:background="@color/common_header_bg_color" >
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="CHANGE PIN"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_header_textsize" 
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_layout"
+        android:layout_marginTop="10dp" >
+
+        <com.quopn.wallet.views.QuopnEditTextView
+            android:id="@+id/mEditOldPin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/profile_list_bg"
+            android:cursorVisible="true"
+            android:ems="@integer/ems_length"
+            android:gravity="center_vertical"
+            android:hint="@string/oldpin_txt"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            android:maxLength="@integer/otpnumber_length"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" 
+            android:password="true"
+            android:drawableLeft="@drawable/icon_enteroldpin"
+            android:drawablePadding="10dp"
+            android:textSize="16sp">
+
+            <requestFocus />
+        </com.quopn.wallet.views.QuopnEditTextView>
+        
+        <include 
+            android:id="@+id/divider01"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/mEditOldPin"
+            layout="@layout/profile_divider"/>
+        
+        <com.quopn.wallet.views.QuopnEditTextView
+            android:id="@+id/mEditNewPin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/divider01"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/profile_list_bg"
+            android:cursorVisible="true"
+            android:ems="@integer/ems_length"
+            android:gravity="center_vertical"
+            android:hint="@string/newpin_txt"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            android:maxLength="@integer/otpnumber_length"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" 
+            android:password="true"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/icon_enternewpin"
+            android:textSize="16sp"/>
+        
+        <include 
+            android:id="@+id/divider02"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/mEditNewPin"
+            layout="@layout/profile_divider"/>
+
+        <com.quopn.wallet.views.QuopnEditTextView
+            android:id="@+id/mEditNewConfirmPin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mEditNewPin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/profile_list_bg"
+            android:cursorVisible="true"
+            android:ems="@integer/ems_length"
+            android:gravity="center_vertical"
+            android:hint="@string/newpinconfirm_txt"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            android:maxLength="@integer/otpnumber_length"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" 
+            android:password="true"
+            android:drawableLeft="@drawable/icon_enternewpin"
+            android:drawablePadding="10dp"
+            android:textSize="16sp"/>
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/mButtonSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mEditNewConfirmPin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:background="#505050"
+            android:gravity="center"
+            android:text="SAVE"
+            android:textColor="#FFF"
+            android:textSize="18sp" 
+            android:padding="10dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

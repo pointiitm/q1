@@ -1,0 +1,231 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.quopn.wallet.shmart.SendMoneyActivity"
+    android:background="@color/app_background"
+    android:orientation="vertical"
+    >
+
+    <com.quopn.wallet.views.QuopnTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_header_height"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/shmart_op_sendmoney"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/common_header_textsize"
+        android:background="@color/common_header_bg_color" />
+
+   <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+       >
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+
+            >
+
+            <RelativeLayout
+                android:id="@+id/rlSendMoneyBalance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingLeft="14dp"
+                android:paddingBottom="14dp"
+                android:paddingRight="14dp"
+                android:background="@drawable/ewallet_borders"
+                >
+
+                <TextView
+                    android:id="@+id/rupee_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/rupee_symbol"
+                    android:textColor="@color/common_header_bg_color"
+                    android:textSize="40sp"
+                />
+                <com.quopn.wallet.views.QuopnTextView
+                    android:id="@+id/tvSendMoneyBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="0.0"
+                    android:layout_toRightOf="@id/rupee_img"
+                    android:textColor="@color/common_header_bg_color"
+                    android:textSize="40sp"/>
+
+                <com.quopn.wallet.views.QuopnTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_below="@id/tvSendMoneyBalance"
+                    android:text="CURRENT BALANCE"
+                    android:textColor="@color/common_header_bg_color"
+                    android:textSize="15sp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/send_money_bg"
+                android:layout_below="@id/rlSendMoneyBalance"
+                android:layout_marginTop="20dp"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/textfield"
+                    >
+
+                    <ImageButton
+                        android:id="@+id/ibSendMoneyContacts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:paddingLeft="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/transparent"
+                        android:src="@drawable/phonebook_icon"/>
+
+                    <com.quopn.wallet.views.QuopnEditTextView
+                        android:id="@+id/etSendMoneyMobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/ibSendMoneyContacts"
+                        android:layout_marginRight="10dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="15sp"
+                        android:hint="ENTER CONTACT"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/white"
+                        android:background="@color/transparent"
+                        android:textColorHint="@color/white"
+                        android:inputType="number"
+                        android:maxLength="10"/>
+
+                </RelativeLayout>
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@+id/etSendMoneyAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:hint="ENTER AMOUNT"
+                    android:textColorHint="@color/white"
+                    android:background="@drawable/textfield"
+                    android:src="@color/transparent"
+                    android:inputType="number"
+                    android:maxLength="5"/>
+
+                <com.quopn.wallet.views.QuopnEditTextView
+                    android:id="@+id/etSendMoneyMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:imeOptions="actionGo"
+                    android:textSize="15sp"
+                    android:gravity="left"
+                    android:background="@drawable/textfield"
+                    android:src="@color/transparent"
+                    android:hint="YOUR MESSAGE"
+                    android:textColorHint="@color/white"
+                    android:lines="3"
+                    android:maxLength="150"/>
+
+                <Button
+                    android:id="@+id/btSendMoney"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="#33ffffff"
+                    android:textColor="@color/white"
+                    android:text="SEND MONEY"/>
+
+                <RelativeLayout
+                    android:id="@+id/rlSendMoneyTxnPwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btSendMoneyConfirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="17dp"
+                        android:text="CONFIRM"
+                        android:textSize="15sp"
+                        android:background="#33ffffff"
+                        android:textColor="@color/white"/>
+                    
+                    <com.quopn.wallet.views.QuopnEditTextView
+                        android:id="@+id/etSendMoneyTxnPwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/btSendMoneyConfirm"
+                        android:gravity="center"
+                        android:padding="18dp"
+                        android:layout_marginRight="2dp"
+                        android:inputType="numberPassword"
+                        android:imeOptions="actionGo"
+                        android:maxLength="@integer/otpnumber_length"
+                        android:hint="@string/enter_trans_pass"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textColorHint="@color/white"
+                        android:background="@drawable/textfield"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/shmart_footer"
+               android:layout_gravity="center_horizontal|center_vertical"
+               android:layout_marginTop="20dp"
+               >
+               <ImageView
+                   android:id="@+id/udio_logo"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginRight="10dp"
+                   android:visibility="gone"
+                   android:src="@drawable/poweredby_uido_logo"/>
+
+               <ImageView
+                   android:id="@+id/citrus_logo"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:visibility="gone"
+                   android:src="@drawable/poweredbycitruslogo"/>
+
+           </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

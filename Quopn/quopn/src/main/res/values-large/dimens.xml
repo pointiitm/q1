@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_invite_header_title">18sp</dimen>
+    <dimen name="text_size_invite_description">18sp</dimen>
+    <dimen name="text_size_invite_legal">10sp</dimen>
+    <dimen name="category_image_width">85dp</dimen>
+    <dimen name="category_image_height">85dp</dimen>
+    
+</resources>

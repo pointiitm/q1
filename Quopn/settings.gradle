@@ -1,0 +1,7 @@
+include ':floatingGroupExpandableListView'
+include ':materialDesign'
+include ':volley'
+include ':androidbetterpickers'
+include ':simplecropimagelib'
+include ':slidingLib'
+include ':quopn'

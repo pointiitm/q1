@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/app_background">
+    
+    <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/promobottomtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="20dp"
+            android:autoLink="web"
+            android:text="@string/t_and_c_promos"
+            android:textColor="@color/black" />
+
+    <ScrollView
+        android:layout_above="@id/promobottomtext"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent">
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/common_header_height"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:text="@string/promo_code"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/common_header_textsize"
+            android:background="@color/common_header_bg_color" />
+
+        <ImageView
+            android:id="@+id/crackers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:src="@drawable/crackers" />
+
+        <com.quopn.wallet.views.QuopnTextView
+            android:id="@+id/promotext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crackers"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/promo_text"
+            android:textColor="@color/black" />
+        
+       
+
+        <RelativeLayout
+            android:id="@+id/rellayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/promotext"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp" >
+            
+            <ImageView 
+                android:id="@+id/imgBalloons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/decorbaloons"/>
+
+            <com.quopn.wallet.views.QuopnEditTextView
+                android:id="@+id/mEditPromoCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/promocode_text_box"
+                android:cursorVisible="true"
+                android:ems="@integer/ems_length"
+                android:layout_below="@id/imgBalloons"
+                android:gravity="center_vertical"
+                android:hint="@string/enter_promo_txt"
+                android:imeOptions="actionGo"
+                android:inputType="text|textCapCharacters"
+                android:maxLength="@integer/promo_code_length"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
+
+            <com.quopn.wallet.views.QuopnTextView
+                android:id="@+id/mButtonApply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mEditPromoCode"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/promocode_btn"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="#FFF"
+                android:textSize="18sp" />
+        </RelativeLayout>
+        
+         
+        </RelativeLayout>
+    </ScrollView>
+		
+</RelativeLayout>

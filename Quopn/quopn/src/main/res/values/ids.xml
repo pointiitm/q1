@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+      <item name="pickupImage" type="id"/>
+      <item name="userName" type="id"/>
+      <item name="userMobileNumber" type="id"/>
+      <item name="submit" type="id"/>
+      <item name="logo" type="id"/>
+      <item name="greetingText" type="id"/>
+      <item name="userProfilePicture" type="id"/>
+      <item name="giftHeaderMessage" type="id"/>
+      <item name="giftVideoPlayer" type="id"/>
+      <item name="downloadGiftVideo" type="id"/>
+      <item name="skipGiftVideo" type="id"/>
+      <item name="downloadPersonalMessage" type="id"/>
+      <!-- Added id by sandeep -->
+      <item name="editOTP" type="id"/>
+      <item name="btn_login" type="id"/>
+      <item name="imageView1" type="id"/>
+      <item name="textView1" type="id"/>
+      <item name="label_note" type="id"/>
+      <item name="resendotp" type="id"/>
+      <item name="smswait_progress" type="id"/>
+      <item name="textView2" type="id"/>
+      <item name="progresstext" type="id"/>
+      <item name="otp_text" type="id"/>
+       <!-- End Sandeep ids -->
+       
+       <!-- Added id by Ravishankar -->
+      <item name="inviteIcon" type="id"/>
+      <item name="inviteName" type="id"/>
+      <item name="selectFromContact" type="id"/>
+      <item name="sepline" type="id"/>
+      <item name="inviteGenderIcon" type="id"/>
+      <item name="inviteMobileIcon" type="id"/>
+      <item name="inviteMobileNumber" type="id"/>
+      <item name="genderGroup" type="id"/>
+      <item name="recordPersonalMessage" type="id"/>
+      <item name="sendInvitation" type="id"/>
+      <item name="male" type="id"/>
+      <item name="female" type="id"/>
+      <item name="recordPersonalIcon" type="id"/>
+      <item name="recordPersonalVideoMessage" type="id"/>
+         <item name="mobileNoCheckProgress" type="id"/>
+          <item name="leagelClause" type="id"/> 
+       <!-- End Ravishankar ids -->
+
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+<!--       <item name="" type="id"/> -->
+
+    <!-- Menu item IDs -->
+    <item type="id" name="menu_item_profile"/>
+    <item type="id" name="menu_item_mywallet"/>
+    <item type="id" name="menu_item_cart"/>
+    <item type="id" name="menu_item_shops"/>
+    <item type="id" name="menu_item_promo"/>
+    <item type="id" name="menu_item_notifications"/>
+    <item type="id" name="menu_item_invite"/>
+    <item type="id" name="menu_item_history"/>
+    <item type="id" name="menu_item_change_pin"/>
+    <item type="id" name="menu_item_logout"/>
+    <item type="id" name="menu_item_seperator"/>
+    <item type="id" name="menu_item_tour"/>
+    <item type="id" name="menu_item_faqs"/>
+    <item type="id" name="menu_item_feedback"/>
+    <item type="id" name="menu_item_about"/>
+    <item type="id" name="menu_item_contact"/>
+    <item type="id" name="menu_item_citrus"/>
+    <item type="id" name="menu_item_shmart1"/>
+
+    <!-- Shmart operations IDs -->
+    <item type="id" name="shmart_op_loadwallet"/>
+    <item type="id" name="shmart_op_sendmoney"/>
+    <item type="id" name="shmart_op_transfertobank"/>
+    <item type="id" name="shmart_op_purchasevouchers"/>
+    <item type="id" name="shmart_op_shopatquopn"/>
+    <item type="id" name="shmart_op_mytransactions"/>
+    <item type="id" name="shmart_op_faqs"/>
+    <item type="id" name="shmart_op_terms"/>
+    <item type="id" name="shmart_op_settings"/>
+
+</resources>

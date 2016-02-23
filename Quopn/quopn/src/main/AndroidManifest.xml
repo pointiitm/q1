@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.quopn.wallet"
+    android:installLocation="auto"
+    android:versionCode="39"
+    android:versionName="3.4 beta" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="22" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <!-- Accessing camera hardware -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission
+        android:name="android.permission.CAMERA"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- Need to check start -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- Need to check End -->
+
+    <permission
+        android:name="com.quopn.wallet.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <!-- Required permissions -->
+    <permission
+        android:name="com.quopn.wallet.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <!-- Allows the API to access Google web-based services: -->
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
+    <application
+        android:name=".QuopnApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme" >
+
+        <!-- com.quopn.wallet.MainSplashScreen -->
+        <activity
+            android:name=".MainSplashScreen"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!--<intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data
+                android:host="app.quo.pn"
+                android:path="/"
+                android:scheme="http" />
+        </intent-filter>-->
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data
+                android:host="app.quo.pn"
+                android:scheme="http" />
+        </intent-filter>
+        <!--<intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data
+                android:host="app.quo.pn"
+                android:path="/"
+                android:scheme="https" />
+        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.quo.pn"
+                    android:scheme="https" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".UpdateScreen"
+            android:theme="@style/Theme.Transparent" >
+        </activity>
+        <activity
+            android:name=".RegistrationScreen"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize" >
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name=".OTPScreen"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".ProfileCompletionScreen"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+
+        <provider
+            android:name=".data.ConProvider"
+            android:authorities="quopn.wallet.contentprovider" >
+        </provider>
+
+        <activity
+            android:name=".VideoPlayerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+
+            <!-- android:theme="@style/Theme.Transparent" -->
+
+        </activity>
+        <activity
+            android:name=".QuopnDetailsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.quo.pn"
+                    android:pathPattern="/dl/campaign/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="campaign"
+                    android:pathPrefix="/"
+                    android:scheme="quopn" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".GiftDetailsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".ShopsAroundMap"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name=".QuopnStoreList"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name="com.quopn.errorhandling.ShowExceptionActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".GiftInfo"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".TourActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".FeedBackActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <!-- siv invite user activity -->
+        <activity
+            android:name=".InviteUserActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.quo.pn"
+                    android:path="/invite"
+                    android:scheme="http" />
+                <data
+                    android:host="invite"
+                    android:pathPrefix="/"
+                    android:scheme="quopn" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".WebViewActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+
+        <!-- android:parentActivityName="com.quopn.wallet.MainActivity" -->
+        <activity
+            android:name=".NotificationActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.quopn.wallet.MainActivity" />
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name=".ChangePinActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".PromoCodeActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.quo.pn"
+                    android:pathPattern="/dl/promo/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="promo"
+                    android:pathPrefix="/"
+                    android:scheme="quopn" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".AboutUsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".FAQActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name="eu.janmuller.android.simplecropimage.CropImage"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.javapapers.android" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".GCMNotificationIntentService" />
+
+        <!-- Analysis:Start         Added by Ravi for Analysis -->
+        <receiver android:name=".analysis.scheduler.AlarmReceiver" >
+        </receiver>
+        <receiver
+            android:name=".analysis.scheduler.BootReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".analysis.scheduler.SchedulingService" />
+        <!-- Analysis:End -->
+
+
+        <!-- Used for Google Play Store Campaign Measurement -->
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+        <!-- <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.android.vending.INSTALL_REFERRER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
+
+        <receiver
+            android:name=".CustomReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Campaign Measurement:End -->
+        <activity
+            android:name=".ListingByCategoryActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.quo.pn"
+                    android:pathPattern="/dl/category/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="category"
+                    android:pathPrefix="/"
+                    android:scheme="quopn" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".AnnoucementActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent" >
+        </activity>
+        <activity
+            android:name=".shmart.ShmartHomeActivity"
+            android:label="@string/title_activity_shmart_home"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.quopn.wallet.MainActivity" />
+        </activity>
+        <activity
+            android:name=".shmart.LoadWalletActivity"
+            android:label="@string/title_activity_load_wallet"
+            android:parentActivityName=".shmart.ShmartHomeActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.quopn.wallet.shmart.ShmartHomeActivity" />
+        </activity>
+        <activity
+            android:name=".shmart.IFrameActivity"
+            android:label="@string/title_activity_iframe"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name=".shmart.SendMoneyActivity"
+            android:label="@string/title_activity_send_money"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name=".shmart.BankActivity"
+            android:label="@string/title_activity_bank"
+            android:parentActivityName=".shmart.ShmartHomeActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.quopn.wallet.shmart.ShmartHomeActivity" />
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name=".shmart.BankAccountActivity"
+            android:label="@string/title_activity_bank_account"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".walletshmart.ShmartRegnDemo"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name=".walletshmart.ShmartRegn"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name=".walletshmart.ShmartOtp"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+            <style android:name="@style/AppTheme">
+                <item android:name="android:windowBackground">@null</item>
+            </style>
+        </activity>
+        <activity
+            android:name=".walletshmart.ShmartRegnSuccess"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".shmart.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".shmart.UseQuopnActivity"
+            android:label="@string/title_activity_use_quopn"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".shmart.TransactionsActivity"
+            android:label="@string/title_activity_transactions"
+            android:parentActivityName=".shmart.ShmartHomeActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.quopn.wallet.shmart.ShmartHomeActivity" />
+        </activity>
+        <activity
+            android:name=".shmart.Shmart_Faq_Activity"
+            android:label="@string/title_activity_shmart__faq_"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".shmart.Shmart_Tnc_Activity"
+            android:label="@string/title_activity_shmart__tnc_"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+
+        <activity
+            android:name=".citrus.CitrusRegn"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+
+        <activity
+            android:name=".shmart.DeepLinkActivity"
+            android:theme="@android:style/Theme.DeviceDefault.Panel" >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.quo.pn"
+                    android:pathPattern="/dl/wallet"
+                    android:scheme="http" />
+                <data
+                    android:host="wallet"
+                    android:path="/"
+                    android:scheme="quopn" />
+                <data
+                    android:host="register"
+                    android:pathPrefix="/"
+                    android:scheme="quopn" />
+                <data
+                    android:host="activate"
+                    android:pathPrefix="/"
+                    android:scheme="quopn" />
+                <data
+                    android:host="transaction_pwd"
+                    android:pathPrefix="/"
+                    android:scheme="quopn" />
+
+            </intent-f>-->
+        </activity>
+    </application>
+
+</manifest>
