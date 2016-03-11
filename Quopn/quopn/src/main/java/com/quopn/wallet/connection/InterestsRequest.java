@@ -44,9 +44,9 @@ public class InterestsRequest extends ConnectRequest implements Connector,Reques
 		requestTimer = new RequestTimer();
 		requestTimer.setListener(this);
 		this.mHeaderParams  = new HashMap<String, String>();
-		this.mHeaderParams.put(QuopnApi.ParamKey.AUTHORIZATION, PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
+		this.mHeaderParams.put(QuopnApi.ParamKey.AUTHORIZATION, PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
 //		this.mHeaderParams.put(QuopnApi.ParamKey.x_session, QuopnApplication.getInstance().getSessionId());
-		this.mHeaderParams.put(QuopnApi.ParamKey.x_session, PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
+		this.mHeaderParams.put(QuopnApi.ParamKey.x_session, PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
 	}
 
 	@Override
@@ -128,6 +128,16 @@ public class InterestsRequest extends ConnectRequest implements Connector,Reques
 			@Override
 			public Map<String, String> getHeaders() throws AuthFailureError {
 				return mHeaderParams;
+			}
+
+			// ankur
+			@Override
+			protected Map<String, String> getParams() {
+				if (mPostParams == null) {
+					return null;
+				} else {
+					return mPostParams;
+				}
 			}
 
 		};

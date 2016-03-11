@@ -257,9 +257,9 @@ public class GCMNotificationIntentService extends IntentService {
 		if (!isQuopnActivityOnTop()) {
 
 			try {
-				QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(this).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
+				QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
 				if(QuopnConstants.NOTIFICATION_COUNT<=20) {
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, QuopnConstants.NOTIFICATION_COUNT);
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, QuopnConstants.NOTIFICATION_COUNT);
 				}
 				sendBroadCast(this);
 				
@@ -350,7 +350,7 @@ public class GCMNotificationIntentService extends IntentService {
 				
 
 				int mId = 1;
-				String walledId = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY);
+				String walledId = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY);
 				if (!TextUtils.isEmpty(walledId)) {
 					getNotificationManager(mBuilder, MainSplashScreen.class, argIntent).notify(mId, mBuilder.build());
 				}else{
@@ -363,7 +363,7 @@ public class GCMNotificationIntentService extends IntentService {
 
 		} else {
 			// not to show push
-			QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(this).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
+			QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
 			if(QuopnConstants.NOTIFICATION_COUNT<=20)
 				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, QuopnConstants.NOTIFICATION_COUNT);
 			sendBroadCast(this);
@@ -373,9 +373,9 @@ public class GCMNotificationIntentService extends IntentService {
 	private void sendNotificationWithPic(String title, String url, String alt, Intent argIntent) {
 		if (!isQuopnActivityOnTop()) {
 			try {
-				QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(this).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
+				QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
 				if(QuopnConstants.NOTIFICATION_COUNT<=20)
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, QuopnConstants.NOTIFICATION_COUNT);
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, QuopnConstants.NOTIFICATION_COUNT);
 				sendBroadCast(this);
 				
 				NotificationCompat.BigPictureStyle notify_style = new BigPictureStyle();
@@ -392,7 +392,7 @@ public class GCMNotificationIntentService extends IntentService {
 
 				notify_style.setSummaryText(alt);
 				int mId = 2;
-				String walledId = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY);
+				String walledId = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY);
 				if (!TextUtils.isEmpty(walledId)) {
 					getNotificationManager(mBuilder, MainSplashScreen.class, argIntent).notify(mId, mBuilder.build());
 				}else{
@@ -405,9 +405,9 @@ public class GCMNotificationIntentService extends IntentService {
 			}
 		} else {
 			// not to show push
-			QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(this).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
+			QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT)+1;
 			if(QuopnConstants.NOTIFICATION_COUNT<=20)
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, QuopnConstants.NOTIFICATION_COUNT);
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, QuopnConstants.NOTIFICATION_COUNT);
 			sendBroadCast(this);
 		}
 	}

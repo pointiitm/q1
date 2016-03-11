@@ -40,7 +40,7 @@ public interface QuopnApi {
 		public String getBranch() { return branch; }
 	}
 
-	Mode currentMode = Mode.STAGING;
+	Mode currentMode = Mode.PROD;
 
 	interface ParamKey{
 		String WALLETID="walletid"; 
@@ -90,6 +90,8 @@ public interface QuopnApi {
 
 		// generic
 		String TRANSACTION_PIN="transaction_pin";
+		String APP_VERSION="app_version";
+		String APP_VERSION_NAME="app_version_name";
 	}
 	 
 	static final String BASE_PATH = ".quopn.com/quopnwallet/v2/";
@@ -391,5 +393,10 @@ public interface QuopnApi {
 		public final String TRANSACTIONDATETIME = "transactionDateTime";
 		public final String TRANSACTIONSTATUS = "transactionStatus";
 		public final String MESSAGE = "message";
+		public final String LINKUSEREMAIL="linkUserEmail";
+		public final String LINKUSERMOBILE="linkUserMobile";
+		public final String REQUESTEDEMAIL="requestedEmail";
+		public final String ERRORSTATUS="error_status";
+		public final String ERRORMESSAGE="error_message";
 	}
 }

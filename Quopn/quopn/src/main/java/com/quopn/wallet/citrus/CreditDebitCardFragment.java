@@ -202,8 +202,6 @@ public class CreditDebitCardFragment extends Fragment implements View.OnClickLis
                 }
             } catch (CitrusException e) {
                 e.printStackTrace();
-                // todo
-                QuopnConstants.showToast(getActivity(), e.getMessage());
             }
         }
     }
@@ -212,12 +210,12 @@ public class CreditDebitCardFragment extends Fragment implements View.OnClickLis
         citrusClient.savePaymentOption(paymentOption, new Callback<CitrusResponse>() {
             @Override
             public void success(CitrusResponse citrusResponse) {
-                QuopnConstants.showToast(getActivity(), citrusResponse.getMessage());
+//                QuopnConstants.showToast(getActivity(), citrusResponse.getMessage());
             }
 
             @Override
             public void error(CitrusError error) {
-                QuopnConstants.showToast(getActivity(), error.getMessage());
+//                QuopnConstants.showToast(getActivity(), error.getMessage());
             }
         });
     }

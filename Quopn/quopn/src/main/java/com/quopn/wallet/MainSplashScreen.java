@@ -32,12 +32,14 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.gc.materialdesign.widgets.Dialog;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.orhanobut.logger.Logger;
 import com.quopn.errorhandling.ExceptionHandler;
 import com.quopn.wallet.QuopnApplication.TrackerName;
 import com.quopn.wallet.connection.ConnectRequest;
@@ -77,6 +79,7 @@ public class MainSplashScreen extends Activity implements
 
     private ConnectionFactory mConnectionFactory;
     private Map<String, String> params;
+	private Map<String, String> postParams;
     private String stateId;
     private String cityId;
 
@@ -104,8 +107,9 @@ public class MainSplashScreen extends Activity implements
 
 		PackageInfo packageInfo = null;
 		try {
-			packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			packageInfo = getApplicationContext().getPackageManager().getPackageInfo(getPackageName(), 0);
 		} catch (NameNotFoundException e2) {
+			Logger.e("null context");
 		}
 
 		BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -126,7 +130,7 @@ public class MainSplashScreen extends Activity implements
 		}
 
 		googleAnalyticTracker = ((QuopnApplication) getApplication()).getTracker(TrackerName.APP_TRACKER);
-		QuopnConstants.android_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+		QuopnConstants.android_id = Secure.getString(getContentResolver(), Secure.ANDROID_ID) + "p08031";
 
 		if (QuopnConstants.android_id == null
 				|| QuopnConstants.android_id.length() <= 0
@@ -175,12 +179,12 @@ public class MainSplashScreen extends Activity implements
 			version_txt.append(QuopnConstants.versionName + " ");
 			version_txt.append(QuopnApi.currentMode.getSplashCaption());
 
-			String splashScreenLocalFilePath = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH);
+			String splashScreenLocalFilePath = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH);
 //		String splashScreenUrl = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_URL);
 //		String splashScreenName = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME);
-			String splashScreenType = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_TYPE);
-			String splashScreenStartDate = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_START_DATE);
-			String splashScreenEndDate = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_END_DATE);
+			String splashScreenType = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_TYPE);
+			String splashScreenStartDate = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_START_DATE);
+			String splashScreenEndDate = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SPLASH_SCREEN_END_DATE);
 
 
 			if (splashScreenStartDate != null && enddate != null) {
@@ -232,7 +236,7 @@ public class MainSplashScreen extends Activity implements
 
 			if (QuopnUtils.isInternetAvailable(MainSplashScreen.this)) {
 
-				if (!PreferenceUtil.getInstance(MainSplashScreen.this)
+				if (!PreferenceUtil.getInstance(getApplicationContext())
 						.hasContainedPreferenceKey(PreferenceUtil.SHARED_PREF_KEYS.API_KEY)) {
 					//Log.d("statecity", "oncreate==starttimeredirect==");
 					startTimerAndRedirect();
@@ -251,7 +255,7 @@ public class MainSplashScreen extends Activity implements
 		}
 
 	private void setStaticLogo(){
-        type_of_user = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.TYPE_OF_USER);
+        type_of_user = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.TYPE_OF_USER);
         if(type_of_user == null || type_of_user.equalsIgnoreCase("quopn")){
             imageview.setImageResource(R.drawable.quopn_logo_red);
            }else{
@@ -306,8 +310,8 @@ public class MainSplashScreen extends Activity implements
 				 * Create an Intent that will start the Next Activity. After 3
 				 * seconds redirect to another intent
 				 */
-				if (PreferenceUtil.getInstance(MainSplashScreen.this)
-						.hasContainedPreferenceKey(PreferenceUtil.SHARED_PREF_KEYS.API_KEY) && PreferenceUtil.getInstance(MainSplashScreen.this)
+				if (PreferenceUtil.getInstance(getApplicationContext())
+						.hasContainedPreferenceKey(PreferenceUtil.SHARED_PREF_KEYS.API_KEY) && PreferenceUtil.getInstance(getApplicationContext())
 						.getPreference(QuopnConstants.PROFILE_COMPLETE_KEY) != null) {
 
 					mRedirectToMainActivity = new Intent(MainSplashScreen.this,MainActivity.class);
@@ -338,14 +342,18 @@ public class MainSplashScreen extends Activity implements
 	
 	private void getProfile() {
 //		Log.v(TAG, "*****Getting User Profile Data*****");
-		String api_key = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
+		String api_key = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
 		Log.d(TAG, "api key: " + api_key);
 		//Log.d("statecity", "GetprofileApifire");
 		if (!TextUtils.isEmpty(api_key)) {
 			params = new HashMap<String, String>();
 			params.put(QuopnApi.ParamKey.AUTHORIZATION, api_key);
+			postParams = new HashMap<String, String>();
+			postParams.put(QuopnApi.ParamKey.APP_VERSION, Integer.toString(QuopnUtils.getAppVersionCode()));
+			postParams.put(QuopnApi.ParamKey.APP_VERSION_NAME, QuopnUtils.getAppVersionCode_Name());
 			mConnectionFactory = new ConnectionFactory(this, this);
 			mConnectionFactory.setHeaderParams(params);
+			mConnectionFactory.setPostParams(postParams);
 			mConnectionFactory.createConnection(QuopnConstants.PROFILE_GET_CODE); // auth api
 		} else {
 			// show error
@@ -363,7 +371,7 @@ public class MainSplashScreen extends Activity implements
 
 	private void getCityList(String argStateIndex) {
 		//Log.d("statecity", "GetCityListApiFire");
-		String apiKey = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
+		String apiKey = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
 		if (!TextUtils.isEmpty(apiKey)) {
 			Map<String, String> headerParams = new HashMap<String, String>();
 			Map<String, String> params = new HashMap<String, String>();
@@ -399,10 +407,10 @@ public class MainSplashScreen extends Activity implements
 			} else {
 				//Log.v("statecity", "Response : InterestsData=> Successful Response");
 
-				String apiKey = PreferenceUtil.getInstance(this).getPreference(
+				String apiKey = PreferenceUtil.getInstance(getApplicationContext()).getPreference(
 						PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
 				if (apiKey == null) {
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY,
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY,
 							registerResponse.getUser().getApi_key());
 
 				}
@@ -415,12 +423,12 @@ public class MainSplashScreen extends Activity implements
 					cityId = registerResponse.getUser().getCity();
 				}
 				//Log.d("statecity", "registerResponse");
-				PreferenceUtil.getInstance(this).saveProfileIfNull(QuopnConstants.PROFILE_DATA);
+				PreferenceUtil.getInstance(getApplicationContext()).saveProfileIfNull(QuopnConstants.PROFILE_DATA);
 				String gender = registerResponse.getUser().getGender();
 				String dob = registerResponse.getUser().getDob();
 				String email = registerResponse.getUser().getEmailid();
                 //String type_of_user = registerResponse.getUser().getType_of_user();
-                PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.TYPE_OF_USER, registerResponse.getUser().getType_of_user());
+                PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.TYPE_OF_USER, registerResponse.getUser().getType_of_user());
 				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_WALLETS_KEY, registerResponse.getUser().getMobile_wallets());
 				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.ACCESS_TOKEN_KEY, registerResponse.getUser().getAccess_token());
 				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.REFRESH_TOEKN_KEY, registerResponse.getUser().getRefresh_token());
@@ -454,7 +462,7 @@ public class MainSplashScreen extends Activity implements
 					}
 					startActivity(intent);
 					finish();
-					PreferenceUtil.getInstance(MainSplashScreen.this)
+					PreferenceUtil.getInstance(getApplicationContext())
 							.setPreference(QuopnConstants.PROFILE_COMPLETE_KEY,
 									"YES");
 				}

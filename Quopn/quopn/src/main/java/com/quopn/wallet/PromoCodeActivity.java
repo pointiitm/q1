@@ -106,8 +106,8 @@ public class PromoCodeActivity extends ActionBarActivity implements
 	private void initUI() {
 
         String promo_from_notification=getIntent().getStringExtra(QuopnConstants.INTENT_KEYS.promo);
-        String promo_text  =PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROMO_TOP_MESSAGE);
-		String promo_bottom_text  =PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROMO_BOTTOM_MESSAGE);
+        String promo_text  =PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROMO_TOP_MESSAGE);
+		String promo_bottom_text  =PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROMO_BOTTOM_MESSAGE);
 		
 		mPromotext = (QuopnTextView) findViewById(R.id.promotext);
 		mPromoBottomtext=(QuopnTextView)findViewById(R.id.promobottomtext);
@@ -251,7 +251,7 @@ public class PromoCodeActivity extends ActionBarActivity implements
 		if (QuopnUtils.isInternetAvailable(this)) {
 			mCustomProgressDialog.show();
 			Map<String, String> params = new HashMap<String, String>();
-			params.put(QuopnApi.ParamKey.WALLETID, PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+			params.put(QuopnApi.ParamKey.WALLETID, PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
 			params.put(QuopnApi.ParamKey.PROMOCODE, mEditPromoCode.getText().toString().trim());
 
 			ConnectionFactory connectionFactory = new ConnectionFactory(

@@ -85,7 +85,7 @@ public class ExceptionHandler implements
 		intent.putExtra("version_code", "" + QuopnConstants.versionCode);
 		intent.putExtra("version_name", QuopnConstants.versionName);
 		intent.putExtra("user_id"
-			, PreferenceUtil.getInstance(myContext).getPreference(
+			, PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                 PreferenceUtil.SHARED_PREF_KEYS.USER_ID));
 		myContext.startActivity(intent);
 		

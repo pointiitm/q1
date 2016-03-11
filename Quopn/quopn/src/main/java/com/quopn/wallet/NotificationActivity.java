@@ -5,9 +5,7 @@ package com.quopn.wallet;
  *
  */
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
@@ -96,7 +94,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 		setContentView(R.layout.notifications);
 		notification_switch = (ImageView) findViewById(R.id.tut_switch);
 
-		String pref = PreferenceUtil.getInstance(NotificationActivity.this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY);
+		String pref = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY);
 		NOTIFY_STATUS = pref;
 
 		if (NOTIFY_STATUS != null && NOTIFY_STATUS.equals(NOTIFY_OFF)) {
@@ -180,7 +178,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 
 			@Override
 			public void onClick(View v) {
-				PreferenceUtil.getInstance(NotificationActivity.this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
 				sendBroadCast(NotificationActivity.this);
 //				updateNewBandImage();
 				setResult(RESULT_OK);
@@ -295,7 +293,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 	}
 	@Override
 	protected void onResume() {
-		PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
 		sendBroadCast(this);
 		//Cancel all existing notifications
 		NotificationManager nManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -314,7 +312,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 			mCustomProgressDialog.show();
 //			String userid=PreferenceUtil.getInstance(this).getPreference(QuopnConstants.USER_ID);
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("userid", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_ID));
+			params.put("userid", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_ID));
 			if(NOTIFY_STATUS!=null && NOTIFY_STATUS.equals(NOTIFY_ON)){
 				params.put("status", NOTIFY_OFF);
 			}else if(NOTIFY_STATUS!=null && NOTIFY_STATUS.equals(NOTIFY_OFF)){
@@ -343,7 +341,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 		}else{
 			notification_switch.setImageResource(R.drawable.notify_on);
 		}
-		PreferenceUtil.getInstance(NotificationActivity.this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, argStatus);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, argStatus);
 	}
 
 
@@ -470,6 +468,8 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 					mImageLoaderNotification.displayImage(iconURL, icon, mDisplayImageOptionsNotification, null);
 				}
 
+			final String notificationID = cursor.getString(cursor.getColumnIndex(ITableData.TABLE_NOTIFICATIONS.COLUMN_NOTIFICATION_ID));
+
 				TextView textViewTimeStamp = (TextView) view.findViewById(R.id.row_datetime);
 				String dateTime = cursor.getString(cursor.getColumnIndex(ITableData.TABLE_NOTIFICATIONS.COLUMN_DATE_TIME));
 				textViewTimeStamp.setText(dateTime);
@@ -538,12 +538,14 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 								textViewButton.setOnClickListener(new OnClickListener() {
 									@Override
 									public void onClick(View v) {
+										sendNotificationForNotID(notificationID,screen);
 										Dialog dialog = new Dialog(NotificationActivity.this, R.string.dialog_title_error, R.string.dialog_message_campaignid_not_present);
 										dialog.setOnAcceptButtonClickListener(new OnClickListener() {
 
 											@Override
 											public void onClick(View v) {
-												PreferenceUtil.getInstance(context).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
+
+												PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
 												sendBroadCast(context);
 												//										alertDialog.dismiss();
 											}
@@ -558,6 +560,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 
 									@Override
 									public void onClick(View v) {
+										sendNotificationForNotID(notificationID,screen);
 										Intent quopIntent = new Intent(getApplicationContext(), QuopnDetailsActivity.class);
 										quopIntent.putExtra("tag", value);
 										QuopnDetailsActivity.launch((Activity) context, quopIntent, null, /*text1,text2,*/null, false);
@@ -584,6 +587,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 
 									@Override
 									public void onClick(View v) {
+										sendNotificationForNotID(notificationID,screen);
 										Intent quopIntent = new Intent(NotificationActivity.this, GiftDetailsActivity.class);
 										quopIntent.putExtra("id", id);
 										quopIntent.putExtra("giftscomapignname", giftscamapaignname);
@@ -615,6 +619,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 
 							@Override
 							public void onClick(View v) {
+								sendNotificationForNotID(notificationID,screen);
 								Intent promoIntent = new Intent(getApplicationContext(),PromoCodeActivity.class);
 								promoIntent.putExtra(QuopnConstants.INTENT_KEYS.promo, value);
 								startActivity(promoIntent);
@@ -623,12 +628,12 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 							}
 						});
 					} else if(screen.equals(QuopnConstants.GCM_DEEP_LINK.invite)){
-						mAnalysisManager.send(AnalysisEvents.INVITE);
 						textViewButton.setVisibility(View.VISIBLE);
 						textViewButton.setOnClickListener(new OnClickListener() {
 
 							@Override
 							public void onClick(View v) {
+								sendNotificationForNotID(notificationID, screen);
 								Intent inviteUser = new Intent(getApplicationContext(), InviteUserActivity.class);
 								startActivityForResult(inviteUser, QuopnConstants.HOME_PRESS);
 								finish();
@@ -643,7 +648,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 							@Override
 							public void onClick(View v) {
 								if(!TextUtils.isEmpty(value)) {
-									mAnalysisManager.send(AnalysisEvents.CATEGORY, value);
+									sendNotificationForNotID(notificationID, screen);
 									ProductCatFragment.QUOPN_CATEGORY_ID = value;
 									Cursor cursor = getApplicationContext().getContentResolver().query(ConProvider.CONTENT_URI_CATEGORY, new String[]{ITableData.TABLE_CATEGORY.COLUMN_CATEGORY}, ITableData.TABLE_CATEGORY.COLUMN_CATEGORY_ID + " = ? ", new String[]{value}, null);
 									if (cursor.getCount() > 0) {
@@ -667,6 +672,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 
 							@Override
 							public void onClick(View v) {
+								sendNotificationForNotID(notificationID, screen);
 								Intent intent = new Intent(QuopnConstants.BROADCAST_SHOW_TAB);
 								intent.putExtra("value", value);
 								LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -681,6 +687,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 							public void onClick(View v) {
 								/*Intent intent = new Intent(QuopnConstants.BROADCAST_SHOW_GIFT_TAB);//apptour
 								LocalBroadcastManager.getInstance(context).sendBroadcast(intent);*/
+								sendNotificationForNotID(notificationID, screen);
 								LocalBroadcastManager localBrdcastMgr = LocalBroadcastManager.getInstance(getApplicationContext());
 								Intent intent = new Intent(QuopnConstants.BROADCAST_PARSE_NOTIF_ACTIVITY_DEEP_LINKS);
 								intent.putExtra(QuopnConstants.NOTIF_INTENT_DATA.screen, screen);
@@ -697,6 +704,7 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 							public void onClick(View v) {
 								/*Intent intent = new Intent(QuopnConstants.BROADCAST_SHOW_CART);//wallet
 								LocalBroadcastManager.getInstance(context).sendBroadcast(intent);*/
+								sendNotificationForNotID(notificationID,screen);
 								LocalBroadcastManager localBrdcastMgr = LocalBroadcastManager.getInstance(getApplicationContext());
 								Intent intent = new Intent(QuopnConstants.BROADCAST_PARSE_NOTIF_ACTIVITY_DEEP_LINKS);
 								intent.putExtra(QuopnConstants.NOTIF_INTENT_DATA.screen, screen);
@@ -826,142 +834,142 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 		myCursorAdapter.notifyDataSetChanged();
 	}
 
-	 AlertDialog.Builder builder;
-	 AlertDialog alertDialog;
-	@SuppressLint("InflateParams")
-	public void popInstructionsDialog(final SampleItem sampleItem,final Context context, final AdapterView<?> argParent, final View argView, final int argPosition){
-
-	    LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    View layout=null;
-	    if(layout==null){
-	    	layout = inflater.inflate(R.layout.notification_detail_popup, null);
-	    }
-
-	    final TextView text1 = (TextView) layout.findViewById(R.id.text1);
-	    text1.setText(sampleItem.tag);
-
-	    AspectRatioImageView image = (AspectRatioImageView) layout.findViewById(R.id.image);
-
-	    if(null != sampleItem.iconRes && !TextUtils.isEmpty(sampleItem.iconRes)){
-	    mImageLoaderNotification.displayImage(
-	    		sampleItem.iconRes, image,
-				mDisplayImageOptionsNotification, null);
-	    }else{
-
-	    }
-
-	    final TextView text2 = (TextView) layout.findViewById(R.id.text2);
-	    text2.setText(sampleItem.desc);
-
-	    TextView tvViewQuopns = (TextView) layout.findViewById(R.id.view_quopns_txt);
-	    if(sampleItem.campaign_id!=null && !sampleItem.campaign_id.matches("")){
-            tvViewQuopns.setText(R.string.view_quopns);
-	    	tvViewQuopns.setVisibility(View.VISIBLE);
-	    	Cursor cursor = getApplicationContext().getContentResolver().query(ConProvider.CONTENT_URI_QUOPN,new String[]{ITableData.TABLE_QUOPNS.COLUMN_QUOPN_ID},ITableData.TABLE_QUOPNS.COLUMN_QUOPN_ID + " = ? ",	new String[] { sampleItem.campaign_id },null);
-			Cursor cursor_gift = getApplicationContext().getContentResolver().query(ConProvider.CONTENT_URI_GIFTS,null,ITableData.TABLE_GIFTS.COLUMN_GIFT_ID + " = ? ",	new String[] { sampleItem.campaign_id },null);
-			if(cursor.getCount()==0 && cursor_gift.getCount()==0){
-				cursor.moveToFirst();
-				 tvViewQuopns.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Dialog dialog=new Dialog(NotificationActivity.this, R.string.dialog_title_error, R.string.dialog_message_campaignid_not_present);
-						dialog.setOnAcceptButtonClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								PreferenceUtil.getInstance(context).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
-								sendBroadCast(context);
-								alertDialog.dismiss();
-							}
-						});
-						dialog.show();
-					}
-				});
-
-			}else if(cursor.getCount()>0){
-				cursor.moveToFirst();
-		 	    tvViewQuopns.setOnClickListener(new OnClickListener() {
-
-		 			@Override
-		 			public void onClick(View v) {
-		 				Intent quopIntent = new Intent(getApplicationContext(),QuopnDetailsActivity.class);
-	 					quopIntent.putExtra("tag", sampleItem.campaign_id);
-	 					QuopnDetailsActivity.launch((Activity) context,quopIntent, null, /*text1,text2,*/null,false);
-		 				alertDialog.dismiss();
-		 			}
-		 		});
-			}else if(cursor_gift.getCount()>0){
-				cursor_gift.moveToFirst();
-				final String id=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.COLUMN_GIFT_ID));
-				final String giftscamapaignname=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CAMPAIGN_NAME));
-				final String giftsbigImage=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.BIG_IMAGE));
-				final String giftslongdesc=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.LONG_DESC));
-				final String giftstermsncondition=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.TERMS_COND));
-				final String giftsctatext=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CTA_TEXT));
-				final String giftsctavalue=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CTA_VALUE));
-				final String giftssource=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CALL_TO_ACTION));
-				final String giftsmastertag=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.MASTER_TAG_IMAGE));
-				final String productname=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.PRODUCT_NAME));
-				final String gifttype=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.GIFT_TYPE));
-				final String termscondition=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.TERMS_COND));
-				final String giftpartnercode=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.PARTNER_CODE));
-		 	    tvViewQuopns.setOnClickListener(new OnClickListener() {
-
-		 			@Override
-		 			public void onClick(View v) {
-		 				Intent quopIntent = new Intent(NotificationActivity.this,GiftDetailsActivity.class);
-						quopIntent.putExtra("id", id);
-						quopIntent.putExtra("giftscomapignname", giftscamapaignname);
-						quopIntent.putExtra("giftsbigImage", giftsbigImage);
-						quopIntent.putExtra("giftslongdesc", giftslongdesc);
-						quopIntent.putExtra("giftstermsncondition", giftstermsncondition);
-						quopIntent.putExtra("giftsctatext", giftsctatext);
-						quopIntent.putExtra("giftsctavalue", giftsctavalue);
-						quopIntent.putExtra("giftssource", giftssource);
-						quopIntent.putExtra("giftsmastertag", giftsmastertag);
-						quopIntent.putExtra("productname", productname);
-						quopIntent.putExtra("gifttype", gifttype);
-						quopIntent.putExtra("termscondition", termscondition);
-						if(gifttype.equals("E")){
-							quopIntent.putExtra("giftpartnercode", giftpartnercode);
-						}else{
-							quopIntent.putExtra("giftpartnercode", "");
-						}
-
-						GiftDetailsActivity.launch((Activity) context,quopIntent, null, /*text1,*/null,false);
-						alertDialog.dismiss();
-		 			}
-		 		});
-			}
-
-
-	    }else if(sampleItem.promo!=null && !sampleItem.promo.matches("")){
-            tvViewQuopns.setText(R.string.apply_promo);
-            tvViewQuopns.setVisibility(View.VISIBLE);
-            tvViewQuopns.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Intent promoIntent = new Intent(getApplicationContext(),PromoCodeActivity.class);
-                    promoIntent.putExtra(QuopnConstants.INTENT_KEYS.promo, sampleItem.promo);
-                    startActivity(promoIntent);
-                    alertDialog.dismiss();
-                }
-            });
-        }else{
-	    	tvViewQuopns.setVisibility(View.GONE);
-	    	tvViewQuopns.setOnClickListener(null);
-	    }
-
-
-	    builder = new AlertDialog.Builder(this);
-	    builder.setView(layout);
-	    alertDialog = builder.create();
-	    alertDialog.setCanceledOnTouchOutside(true);
-	    alertDialog.show();
-
-
-	}
+//	 AlertDialog.Builder builder;
+//	 AlertDialog alertDialog;
+//	@SuppressLint("InflateParams")
+//	public void popInstructionsDialog(final SampleItem sampleItem,final Context context, final AdapterView<?> argParent, final View argView, final int argPosition){
+//
+//	    LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//	    View layout=null;
+//	    if(layout==null){
+//	    	layout = inflater.inflate(R.layout.notification_detail_popup, null);
+//	    }
+//
+//	    final TextView text1 = (TextView) layout.findViewById(R.id.text1);
+//	    text1.setText(sampleItem.tag);
+//
+//	    AspectRatioImageView image = (AspectRatioImageView) layout.findViewById(R.id.image);
+//
+//	    if(null != sampleItem.iconRes && !TextUtils.isEmpty(sampleItem.iconRes)){
+//	    mImageLoaderNotification.displayImage(
+//	    		sampleItem.iconRes, image,
+//				mDisplayImageOptionsNotification, null);
+//	    }else{
+//
+//	    }
+//
+//	    final TextView text2 = (TextView) layout.findViewById(R.id.text2);
+//	    text2.setText(sampleItem.desc);
+//
+//	    TextView tvViewQuopns = (TextView) layout.findViewById(R.id.view_quopns_txt);
+//	    if(sampleItem.campaign_id!=null && !sampleItem.campaign_id.matches("")){
+//            tvViewQuopns.setText(R.string.view_quopns);
+//	    	tvViewQuopns.setVisibility(View.VISIBLE);
+//	    	Cursor cursor = getApplicationContext().getContentResolver().query(ConProvider.CONTENT_URI_QUOPN,new String[]{ITableData.TABLE_QUOPNS.COLUMN_QUOPN_ID},ITableData.TABLE_QUOPNS.COLUMN_QUOPN_ID + " = ? ",	new String[] { sampleItem.campaign_id },null);
+//			Cursor cursor_gift = getApplicationContext().getContentResolver().query(ConProvider.CONTENT_URI_GIFTS,null,ITableData.TABLE_GIFTS.COLUMN_GIFT_ID + " = ? ",	new String[] { sampleItem.campaign_id },null);
+//			if(cursor.getCount()==0 && cursor_gift.getCount()==0){
+//				cursor.moveToFirst();
+//				 tvViewQuopns.setOnClickListener(new OnClickListener() {
+//					@Override
+//					public void onClick(View v) {
+//						Dialog dialog=new Dialog(NotificationActivity.this, R.string.dialog_title_error, R.string.dialog_message_campaignid_not_present);
+//						dialog.setOnAcceptButtonClickListener(new OnClickListener() {
+//
+//							@Override
+//							public void onClick(View v) {
+//								PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTIFICATIONCOUNT, 0); //reset the notification counter
+//								sendBroadCast(context);
+//								alertDialog.dismiss();
+//							}
+//						});
+//						dialog.show();
+//					}
+//				});
+//
+//			}else if(cursor.getCount()>0){
+//				cursor.moveToFirst();
+//		 	    tvViewQuopns.setOnClickListener(new OnClickListener() {
+//
+//		 			@Override
+//		 			public void onClick(View v) {
+//		 				Intent quopIntent = new Intent(getApplicationContext(),QuopnDetailsActivity.class);
+//	 					quopIntent.putExtra("tag", sampleItem.campaign_id);
+//	 					QuopnDetailsActivity.launch((Activity) context,quopIntent, null, /*text1,text2,*/null,false);
+//		 				alertDialog.dismiss();
+//		 			}
+//		 		});
+//			}else if(cursor_gift.getCount()>0){
+//				cursor_gift.moveToFirst();
+//				final String id=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.COLUMN_GIFT_ID));
+//				final String giftscamapaignname=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CAMPAIGN_NAME));
+//				final String giftsbigImage=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.BIG_IMAGE));
+//				final String giftslongdesc=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.LONG_DESC));
+//				final String giftstermsncondition=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.TERMS_COND));
+//				final String giftsctatext=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CTA_TEXT));
+//				final String giftsctavalue=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CTA_VALUE));
+//				final String giftssource=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.CALL_TO_ACTION));
+//				final String giftsmastertag=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.MASTER_TAG_IMAGE));
+//				final String productname=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.PRODUCT_NAME));
+//				final String gifttype=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.GIFT_TYPE));
+//				final String termscondition=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.TERMS_COND));
+//				final String giftpartnercode=cursor_gift.getString(cursor_gift.getColumnIndex(ITableData.TABLE_GIFTS.PARTNER_CODE));
+//		 	    tvViewQuopns.setOnClickListener(new OnClickListener() {
+//
+//		 			@Override
+//		 			public void onClick(View v) {
+//		 				Intent quopIntent = new Intent(NotificationActivity.this,GiftDetailsActivity.class);
+//						quopIntent.putExtra("id", id);
+//						quopIntent.putExtra("giftscomapignname", giftscamapaignname);
+//						quopIntent.putExtra("giftsbigImage", giftsbigImage);
+//						quopIntent.putExtra("giftslongdesc", giftslongdesc);
+//						quopIntent.putExtra("giftstermsncondition", giftstermsncondition);
+//						quopIntent.putExtra("giftsctatext", giftsctatext);
+//						quopIntent.putExtra("giftsctavalue", giftsctavalue);
+//						quopIntent.putExtra("giftssource", giftssource);
+//						quopIntent.putExtra("giftsmastertag", giftsmastertag);
+//						quopIntent.putExtra("productname", productname);
+//						quopIntent.putExtra("gifttype", gifttype);
+//						quopIntent.putExtra("termscondition", termscondition);
+//						if(gifttype.equals("E")){
+//							quopIntent.putExtra("giftpartnercode", giftpartnercode);
+//						}else{
+//							quopIntent.putExtra("giftpartnercode", "");
+//						}
+//
+//						GiftDetailsActivity.launch((Activity) context,quopIntent, null, /*text1,*/null,false);
+//						alertDialog.dismiss();
+//		 			}
+//		 		});
+//			}
+//
+//
+//	    }else if(sampleItem.promo!=null && !sampleItem.promo.matches("")){
+//            tvViewQuopns.setText(R.string.apply_promo);
+//            tvViewQuopns.setVisibility(View.VISIBLE);
+//            tvViewQuopns.setOnClickListener(new OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    Intent promoIntent = new Intent(getApplicationContext(),PromoCodeActivity.class);
+//                    promoIntent.putExtra(QuopnConstants.INTENT_KEYS.promo, sampleItem.promo);
+//                    startActivity(promoIntent);
+//                    alertDialog.dismiss();
+//                }
+//            });
+//        }else{
+//	    	tvViewQuopns.setVisibility(View.GONE);
+//	    	tvViewQuopns.setOnClickListener(null);
+//	    }
+//
+//
+//	    builder = new AlertDialog.Builder(this);
+//	    builder.setView(layout);
+//	    alertDialog = builder.create();
+//	    alertDialog.setCanceledOnTouchOutside(true);
+//	    alertDialog.show();
+//
+//
+//	}
 
 	@Override
 	public void onResponse(int responseResult, Response response) {
@@ -1003,74 +1011,74 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 		}
 	}
 
-	private void setOnTutorialSetting() {
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_DETAILS,
-				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_LISTING,
-				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_MYQUOPNS,
-				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_GIFTING,
-				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.PREF_ALL_TUTS_SEEN, "N");
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.PREF_ALL_TUTS_COUNT, "0");
-		PreferenceUtil.getInstance(this).setPreference(
-				PreferenceUtil.SHARED_PREF_KEYS.IS_GiftTutShown, false);
-		PreferenceUtil.getInstance(this).setPreference(
-				PreferenceUtil.SHARED_PREF_KEYS.IS_CatTutShown, false);
-		PreferenceUtil.getInstance(this).setPreference(
-				PreferenceUtil.SHARED_PREF_KEYS.IS_TutShown, false);
-		PreferenceUtil.getInstance(this).setPreference(
-				PreferenceUtil.SHARED_PREF_KEYS.IS_ANY_TUT_ON, false);
-	}
-
-	private void setOffTutorialSetting() {
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_DETAILS,
-				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_LISTING,
-				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_MYQUOPNS,
-				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_GIFTING,
-				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(
-				QuopnConstants.PREF_ALL_TUTS_SEEN, "Y");
-		PreferenceUtil.getInstance(this).setPreference(
-				PreferenceUtil.SHARED_PREF_KEYS.IS_GiftTutShown, true);
-		PreferenceUtil.getInstance(this).setPreference(
-				PreferenceUtil.SHARED_PREF_KEYS.IS_CatTutShown, true);
-		PreferenceUtil.getInstance(this).setPreference(
-				PreferenceUtil.SHARED_PREF_KEYS.IS_TutShown, true);
-	}
-
-	private void updateNewBandImage(){
-		//Update all Notifications as Read
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(ITableData.TABLE_NOTIFICATIONS.COLUMN_NEW_FLAG, QuopnConstants.BOOL_FALSE);
-		getContentResolver().update(ConProvider.CONTENT_URI_NOTIFICATION,contentValues, null,null);
-	}
+//	private void setOnTutorialSetting() {
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_ON);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_DETAILS,
+//				QuopnConstants.TUTORIAL_ON);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_LISTING,
+//				QuopnConstants.TUTORIAL_ON);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_ON);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_MYQUOPNS,
+//				QuopnConstants.TUTORIAL_ON);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_GIFTING,
+//				QuopnConstants.TUTORIAL_ON);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_ON);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.PREF_ALL_TUTS_SEEN, "N");
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.PREF_ALL_TUTS_COUNT, "0");
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				PreferenceUtil.SHARED_PREF_KEYS.IS_GiftTutShown, false);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				PreferenceUtil.SHARED_PREF_KEYS.IS_CatTutShown, false);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				PreferenceUtil.SHARED_PREF_KEYS.IS_TutShown, false);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				PreferenceUtil.SHARED_PREF_KEYS.IS_ANY_TUT_ON, false);
+//	}
+//
+//	private void setOffTutorialSetting() {
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_OFF);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_DETAILS,
+//				QuopnConstants.TUTORIAL_OFF);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_LISTING,
+//				QuopnConstants.TUTORIAL_OFF);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_OFF);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_MYQUOPNS,
+//				QuopnConstants.TUTORIAL_OFF);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_GIFTING,
+//				QuopnConstants.TUTORIAL_OFF);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_OFF);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				QuopnConstants.PREF_ALL_TUTS_SEEN, "Y");
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				PreferenceUtil.SHARED_PREF_KEYS.IS_GiftTutShown, true);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				PreferenceUtil.SHARED_PREF_KEYS.IS_CatTutShown, true);
+//		PreferenceUtil.getInstance(getApplicationContext()).setPreference(
+//				PreferenceUtil.SHARED_PREF_KEYS.IS_TutShown, true);
+//	}
+//
+//	private void updateNewBandImage(){
+//		//Update all Notifications as Read
+//		ContentValues contentValues = new ContentValues();
+//		contentValues.put(ITableData.TABLE_NOTIFICATIONS.COLUMN_NEW_FLAG, QuopnConstants.BOOL_FALSE);
+//		getContentResolver().update(ConProvider.CONTENT_URI_NOTIFICATION,contentValues, null,null);
+//	}
 
 	@Override
 	public void onTimeout(ConnectRequest request) {
@@ -1078,9 +1086,9 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 
 			@Override
 			public void run() {
-				if(mCustomProgressDialog!=null && mCustomProgressDialog.isShowing()){
+				if (mCustomProgressDialog != null && mCustomProgressDialog.isShowing()) {
 					mCustomProgressDialog.dismiss();
-					Dialog dialog=new Dialog(NotificationActivity.this, R.string.slow_internet_connection_title,R.string.slow_internet_connection);
+					Dialog dialog = new Dialog(NotificationActivity.this, R.string.slow_internet_connection_title, R.string.slow_internet_connection);
 					dialog.show();
 				}
 
@@ -1094,5 +1102,13 @@ public class NotificationActivity extends ActionBarActivity implements OnItemCli
 	@Override
 	public void myTimeout(String requestTag) {
 
+	}
+
+	private void sendNotificationForNotID(String notificationID, String screenName) {
+		if (notificationID != null) {
+			mAnalysisManager.send(AnalysisEvents.NOTIFICATION_CALL_TO_ACTION, notificationID+"||"+screenName);
+		} else {
+			mAnalysisManager.send(AnalysisEvents.NOTIFICATION_CALL_TO_ACTION, "||"+screenName);
+		}
 	}
 }

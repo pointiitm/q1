@@ -86,7 +86,9 @@ public class HistoryAdapter extends ArrayAdapter<HistoryListData> {
 		viewHolder.textbusinessname.setSingleLine(true);
 		viewHolder.textbusinessname.setMarqueeRepeatLimit(-1);
 		viewHolder.textbusinessname.setSelected(true);*/
-		viewHolder.textbusinessname.setText(item.getBusiness_name().toUpperCase()); 
+		if (item.getBusiness_name() != null && !item.getBusiness_name().isEmpty()) {
+			viewHolder.textbusinessname.setText(item.getBusiness_name().toUpperCase());
+		}
 		return convertView;
 	}
 

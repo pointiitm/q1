@@ -24,11 +24,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
+import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -113,6 +116,9 @@ import com.quopn.wallet.views.CustomProgressDialog;
 import com.quopn.wallet.walletshmart.ShmartOtp;
 import com.quopn.wallet.walletshmart.ShmartRegn;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -128,7 +134,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 public class MainActivity extends BaseActivity implements ConnectionListener, QuopnOperationsListener {
 	private static final String TAG = "MainActivity";
@@ -183,7 +188,12 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	private CitrusClient mCitrusClient = null;
 	private Context mContext = this;
 	private LinkUserExtendedResponse linkUserExtended;
+	private android.app.Dialog citrusOTPDialog;
 	String editOtpText;
+	private SmsListener mSmsListener = new SmsListener();
+	private boolean isSMSLISTNERREGISTERED = false;
+	private final int RESPONSE_SUCCESS_MESSAGE = 100;
+	private EditText dialogEditOtpText;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Logger.d("");
@@ -202,8 +212,8 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 		 * user has come to this activity means profile completion screen is completed
 		 * */
 //    String session_uuid = UUID.randomUUID().toString();
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PROFILE_COMPLETE_KEY, "YES");
-//    PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID,session_uuid);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PROFILE_COMPLETE_KEY, "YES");
+//    PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID,session_uuid);
 
 
 		context = getApplicationContext();
@@ -242,7 +252,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 		m_decreaseAnimation = AnimationUtils.loadAnimation(this, R.anim.decrease);
 
 
-		QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT);
+		QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT);
 		Log.i(TAG, "In Oncreate" + QuopnConstants.NOTIFICATION_COUNT);
 		if (QuopnConstants.NOTIFICATION_COUNT <= 0) {
 			mNotification_Counter_tv.setVisibility(View.INVISIBLE);
@@ -251,7 +261,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			mNotification_Counter_tv.setText("" + QuopnConstants.NOTIFICATION_COUNT);
 		}
 
-		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 		mAddtoCard_Counter_tv.setText("" + (QuopnConstants.MY_CART_COUNT));
 		if (QuopnConstants.MY_CART_COUNT <= 0) {
 			mAddtoCard_Counter_tv.setVisibility(View.INVISIBLE);
@@ -265,7 +275,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			@Override
 			public void onClick(View v) {
 				getSlidingMenu().toggle();
-				QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+				QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 			}
 		});
 
@@ -334,11 +344,13 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 				mAnalysisManager.send(AnalysisEvents.SEARCH_WORD, arg0);
 				mProdCatFragment.notifySearchTextChanged(
 						searchText, MainActivity.this);
+//				System.out.println("===QueryTextSubmit=111111==" + searchText);
 				return true;
 			}
 
 			@Override
 			public boolean onQueryTextChange(String arg0) {
+//				System.out.println("===QueryTextChange=222222=="+searchText);
 				return false;
 			}
 		});
@@ -393,21 +405,23 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			if (cursor != null && cursor.getCount() >= 1) {
 
 				isShownFromCache = true;
-				String strFooter = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.FOOTER_TAGS);
+				String strFooter = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.FOOTER_TAGS);
 				if (strFooter != null) {
 					QuopnConstants.MAIN_BOTTOM_BAR = strFooter.split(",");
 				}
 
 				showGiftSection();
 			} else {
-				getAuthKeyVerify();
+				getCategoryListing();
 			}
-			getProfile();
+
+			// todo ankur - commented to avoid repeating
+//			getProfile();
 
 
 		} else {
 
-			String strFooter = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.FOOTER_TAGS);
+			String strFooter = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.FOOTER_TAGS);
 			if (strFooter != null) {
 				QuopnConstants.MAIN_BOTTOM_BAR = strFooter.split(",");
 			}
@@ -442,6 +456,82 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	@Override
 	public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
 		super.onPostCreate(savedInstanceState, persistentState);
+	}
+
+
+	private Handler messagehandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+				case RESPONSE_SUCCESS_MESSAGE:
+					dialogEditOtpText.setText(msg.getData().getString("message"));
+					//countDownTimer.cancel();
+					//editResendOtp.setText(getResources().getString(R.string.resendotp_txt));
+					//underlineText();
+//                    editResendOtp.setVisibility(View.GONE);
+					break;
+
+				default:
+					break;
+			}
+
+		}
+	};
+
+	class SmsListener extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equals(
+					"android.provider.Telephony.SMS_RECEIVED")) {
+				Bundle bundle = intent.getExtras(); // ---get the SMS
+				// message passed
+				SmsMessage[] msgs = null;
+				String msg_from;
+				if (bundle != null) {
+					// ---retrieve the SMS message received---
+					try {
+						Object[] pdus = (Object[]) bundle.get("pdus");
+						msgs = new SmsMessage[pdus.length];
+						for (int i = 0; i < msgs.length; i++) {
+							msgs[i] = SmsMessage
+									.createFromPdu((byte[]) pdus[i]);
+							msg_from = msgs[i].getOriginatingAddress();
+							if (msg_from.contains("mQUOPN")) {
+								String msgBody = msgs[i].getMessageBody();
+								Message msg = Message.obtain();
+								msgBody = msgBody.replaceAll("[^-?0-9]+", "");
+								if (msgBody.length() > 3) {
+									msg.what = RESPONSE_SUCCESS_MESSAGE;
+									Bundle b = new Bundle();
+									b.putString("message", msgBody);
+									msg.setData(b);
+									messagehandler.sendMessage(msg);
+									break;
+								}
+							} else if (msg_from.contains("CITRUS")) {
+								String msgBody = msgs[i].getMessageBody();
+								Message msg = Message.obtain();
+								String citrusOTP = Validations.getCitrusOTPFromString(msgBody);
+//								msgBody = msgBody.replaceAll("[^-?0-9]+", "");
+								if (citrusOTP != null && citrusOTP.length()>0) {
+									msg.what = RESPONSE_SUCCESS_MESSAGE;
+									Bundle b = new Bundle();
+									b.putString("message", citrusOTP);
+									msg.setData(b);
+									messagehandler.sendMessage(msg);
+									break;
+								}
+//								if (msgBody.length() > 3) {
+//								}
+							}
+						}
+					} catch (Exception e) {
+						// Log.d("Exception caught",e.getMessage());
+					}
+				}
+			}
+		}
+
 	}
 
 	public void parseNotifDeepLinks(Intent argIntent) {
@@ -643,16 +733,17 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 		}
 	}
 
-	public void checkShmartWalletShown() {
-		if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
-			//sendCheckWalletStatus();
-			walletCitrusStatus();
-		}
-	}
+//	public void checkShmartWalletShown() {
+//		if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
+//			//sendCheckWalletStatus();
+//			walletCitrusStatus();
+//		}
+//	}
 
 	private void versionCheck() {
 		//Log.v(TAG, "*****Version check****");
-		String api_key = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY);
+		PreferenceUtil preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
+		String api_key = preferenceUtil.getPreference(SHARED_PREF_KEYS.API_KEY);
 		if (QuopnUtils.isInternetAvailable(this)) {
 			if (!TextUtils.isEmpty(api_key)) {
 				Map<String, String> headerParams = new HashMap<String, String>();
@@ -662,8 +753,27 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 				postparams.put("device_os", Build.BRAND);
 				postparams.put("os_version", Build.VERSION.RELEASE);
 				postparams.put("notification_id", regId);
+
+				if (preferenceUtil.hasContainedPreferenceKey(SHARED_PREF_KEYS.MOBILE_KEY) && preferenceUtil.getPreference(SHARED_PREF_KEYS.MOBILE_KEY) != null) {
+					postparams.put(QuopnApi.ParamKey.MOBILE_NO, preferenceUtil.getPreference(SHARED_PREF_KEYS.MOBILE_KEY));
+				} else {
+					postparams.put(QuopnApi.ParamKey.MOBILE_NO,"");
+				}
 				try {
-					postparams.put("app_version", Integer.toString(QuopnConstants.versionCode));
+//					if (QuopnConstants.versionCode == -1) {
+//						PackageInfo packageInfo = null;
+//						try {
+//							packageInfo = getApplicationContext().getPackageManager().getPackageInfo(getPackageName(), 0);
+//						} catch (NameNotFoundException e2) {
+//							Logger.e("null context");
+//						}
+//						if (packageInfo != null) {
+//							QuopnConstants.versionCode = packageInfo.versionCode;
+//							QuopnConstants.versionName = packageInfo.versionName;
+//						}
+//					}
+					postparams.put(QuopnApi.ParamKey.APP_VERSION, Integer.toString(QuopnUtils.getAppVersionCode()));
+					postparams.put(QuopnApi.ParamKey.APP_VERSION_NAME, QuopnUtils.getAppVersionCode_Name());
 				} catch (Exception ex) {
 					Log.e(TAG, "app version issue in versionCheck, ex.getLocalizedMessage: " + ex.getLocalizedMessage());
 				}
@@ -689,7 +799,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 		Cursor gifts = getContentResolver().query(ConProvider.CONTENT_URI_GIFTS, null, null, null, ITableData.TABLE_GIFTS.SORT_INDEX + " desc");
 
 		if (gifts != null && gifts.getCount() >= 1) {
-			GIFT_TITLE = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.GIFT_TITLE);
+			GIFT_TITLE = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.GIFT_TITLE);
 			mProdCatFragment.isAttached();
 			mProdCatFragment.setGiftAvailable(true);
 		} else {
@@ -698,34 +808,34 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 		}
 	}
 
-	public void getProfile() {
-		Log.v(TAG, "*****Getting User Profile Data*****");
-
-		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(
-				SHARED_PREF_KEYS.API_KEY))) {
-
-			params = new HashMap<String, String>();
-			params.put("Authorization", PreferenceUtil.getInstance(this).getPreference(
-					SHARED_PREF_KEYS.API_KEY));
-			mConnectionFactory = new ConnectionFactory(this, this);
-			mConnectionFactory.setHeaderParams(params);
-			mConnectionFactory.createConnection(QuopnConstants.PROFILE_GET_CODE);
-		} else {
-			// show error
-		}
-	}
+//	public void getProfile() {
+//		Log.v(TAG, "*****Getting User Profile Data*****");
+//
+//		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(
+//				SHARED_PREF_KEYS.API_KEY))) {
+//
+//			params = new HashMap<String, String>();
+//			params.put("Authorization", PreferenceUtil.getInstance(getApplicationContext()).getPreference(
+//					SHARED_PREF_KEYS.API_KEY));
+//			mConnectionFactory = new ConnectionFactory(this, this);
+//			mConnectionFactory.setHeaderParams(params);
+//			mConnectionFactory.createConnection(QuopnConstants.PROFILE_GET_CODE);
+//		} else {
+//			// show error
+//		}
+//	}
 
 	public void getAnnouncmentUrl() {
 		Log.v(TAG, "*****Getting User Profile Data*****");
 		//ProfileData profileData = (ProfileData) gson.fromJson(QuopnConstants.PROFILE_DATA, ProfileData.class);
 		//User user = profileData.getUser();
 		//String walletId = user.getWalletid();
-		String walletId = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY);
-		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(
+		String walletId = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY);
+		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(
 				SHARED_PREF_KEYS.API_KEY))) {
 
 			//params= new HashMap<String, String>();
-			//params.put("Authorization", PreferenceUtil.getInstance(this).getPreference(
+			//params.put("Authorization", PreferenceUtil.getInstance(getApplicationContext()).getPreference(
 			//        PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
 			mConnectionFactory = new ConnectionFactory(this, this);
 			//mConnectionFactory.setHeaderParams(params);
@@ -736,13 +846,13 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	}
 
 
-	public void getAuthKeyVerify() {
+	public void getCategoryListing() {
 		//Log.v(TAG,"*****Getting Auth Key*****");
 		if (QuopnUtils.isInternetAvailable(this)) {
-			if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY))) {
+			if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY))) {
 				headerParams = new HashMap<String, String>();
-				headerParams.put("Authorization", PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY));
-				Log.v(TAG, "*****Getting Auth Key*****" + PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY));
+				headerParams.put("Authorization", PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY));
+				Log.v(TAG, "*****Getting Auth Key*****" + PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY));
 				params = new HashMap<String, String>();
 
 				ConnectionFactory mConnectionFactory = new ConnectionFactory(this, this);
@@ -760,9 +870,9 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 //        Log.v(TAG, "*****Getting NewCapaignListing*****");
 		if (QuopnUtils.isInternetAvailable(this)) {
 			//showCustomProgress();
-			if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY))) {
+			if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY))) {
 				headerParams = new HashMap<String, String>();
-				headerParams.put("Authorization", PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY));
+				headerParams.put("Authorization", PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY));
 //            params=new HashMap<String, String>();
 //            params.put(QuopnApi.ParamKey.CATEGORYID,categoryid);
 				mConnectionFactory = new ConnectionFactory(this, this);
@@ -779,11 +889,11 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 //	public void getVoucherListing() {
 //		Log.v(TAG, "*****Getting VoucherListing*****");
 //
-//		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY))) {
+//		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY))) {
 //			headerParams = new HashMap<String, String>();
-//			headerParams.put("Authorization", PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY));
+//			headerParams.put("Authorization", PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY));
 //			params = new HashMap<String, String>();
-//			params.put(QuopnConstants.CONN_PARAMS.walletId, PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY));
+//			params.put(QuopnConstants.CONN_PARAMS.walletId, PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY));
 //			mConnectionFactory = new ConnectionFactory(this, this);
 //			mConnectionFactory.setHeaderParams(headerParams);
 //			mConnectionFactory.setPostParams(params);
@@ -830,7 +940,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 				}
 				
 				footerPref.substring(0, footerPref.length() - 1);
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.FOOTER_TAGS, footerPref);
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.FOOTER_TAGS, footerPref);
 				QuopnConstants.MAIN_BOTTOM_BAR = arrFooter;
 				
 				
@@ -839,7 +949,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 				if(gift != null){
 					
 					GIFT_TITLE = gift.getTitle();
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.GIFT_TITLE, gift.getTitle()); //for getting title for gift newly added in json
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.GIFT_TITLE, gift.getTitle()); //for getting title for gift newly added in json
 					for (GiftsContainer gifts: gift.getList()) {
 						populateGiftsDB(gifts);
 					}
@@ -866,74 +976,75 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			}
 			
 		} */
-		if (response instanceof NewCategoryData) {
-			NewCategoryData newCategoryData = (NewCategoryData) response;
-			stopCustomProgress();
-			if (newCategoryData.isError() == true) {
-				//Dialog dialog=new Dialog(context, R.string.dialog_title_error,newCategoryData.getMessage());
-				//dialog.show();
+		if (response != null) {
+			if (response instanceof NewCategoryData) {
+				NewCategoryData newCategoryData = (NewCategoryData) response;
+				stopCustomProgress();
+				if (newCategoryData.isError() == true) {
+					//Dialog dialog=new Dialog(context, R.string.dialog_title_error,newCategoryData.getMessage());
+					//dialog.show();
 
-				Log.v(TAG, "Response : NewCategoryData=> Error occur");
-			} else {
-				Log.v(TAG, "Response : NewCategoryData=> Successful Response");
-				getContentResolver().delete(ConProvider.CONTENT_URI_CATEGORY, null, null);
-				getContentResolver().delete(ConProvider.CONTENT_URI_QUOPN, null, null);
-				getContentResolver().delete(ConProvider.CONTENT_URI_GIFTS, null, null);
-				boolean isFirst = true;
-				for (NewCategoryList category : newCategoryData.getCategorylist()) {
-					if (isFirst) {
-						showCustomProgress();
-					} else {
-						stopCustomProgress();
-					}
-					Log.d(TAG, "category.getName" + category.getCategoryid());
-					populateCategoriesDB(category);
+					Log.v(TAG, "Response : NewCategoryData=> Error occur");
+				} else {
+					Log.v(TAG, "Response : NewCategoryData=> Successful Response");
+					getContentResolver().delete(ConProvider.CONTENT_URI_CATEGORY, null, null);
+					getContentResolver().delete(ConProvider.CONTENT_URI_QUOPN, null, null);
+					getContentResolver().delete(ConProvider.CONTENT_URI_GIFTS, null, null);
+					boolean isFirst = true;
+					for (NewCategoryList category : newCategoryData.getCategorylist()) {
+						if (isFirst) {
+							showCustomProgress();
+						} else {
+							stopCustomProgress();
+						}
+						Log.d(TAG, "category.getName" + category.getCategoryid());
+						populateCategoriesDB(category);
 //                    // Quopns data
 //                    for (QuopnList quopn : category.getList()) {
 //                        populateQuopnsDB(quopn);
 //                    }
-					getNewCapaignListing(category.getCategoryid());
+						getNewCapaignListing(category.getCategoryid());
 
+					}
 				}
-			}
 
-			List<FooterTag> footerList = newCategoryData.getFooter();
-			System.out.println("MainActivity.onResponse 594");
-			String[] arrFooter = new String[footerList.size()];
-			String footerPref = "";
-			for (int i = 0; i < footerList.size(); i++) {
-				FooterTag footerName = footerList.get(i);
-				arrFooter[i] = footerName.getFooter();
-				footerPref = footerPref + footerName.getFooter() + ",";
-			}
+				List<FooterTag> footerList = newCategoryData.getFooter();
+				System.out.println("MainActivity.onResponse 594");
+				String[] arrFooter = new String[footerList.size()];
+				String footerPref = "";
+				for (int i = 0; i < footerList.size(); i++) {
+					FooterTag footerName = footerList.get(i);
+					arrFooter[i] = footerName.getFooter();
+					footerPref = footerPref + footerName.getFooter() + ",";
+				}
 
-			footerPref.substring(0, footerPref.length() - 1);
-			PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.FOOTER_TAGS, footerPref);
-			QuopnConstants.MAIN_BOTTOM_BAR = arrFooter;
+				footerPref.substring(0, footerPref.length() - 1);
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.FOOTER_TAGS, footerPref);
+				QuopnConstants.MAIN_BOTTOM_BAR = arrFooter;
 
-			mProdCatFragment.quopnLoaded();
+				mProdCatFragment.quopnLoaded();
 //            progress.setVisibility(View.GONE);
-			stopCustomProgress();
-
-
-		} else if (response instanceof CategoryQuopnData) {
-			CategoryQuopnData categoryquopnresponse = (CategoryQuopnData) response;
-			if (categoryquopnresponse.isError() == true) {
 				stopCustomProgress();
-				Dialog dialog = new Dialog(context, R.string.dialog_title_error, R.string.slow_internet_connection);
-				dialog.show();
-
-				Log.v(TAG, "Response : CategoryQuopnData=> Error occur");
-			} else {
-				System.out.println("MainActivity.onResponse 622");
-				Log.v(TAG, "Response : CategoryQuopnData=> Successful Response" + categoryquopnresponse.getQuopns().size());
 
 
-				List<QuopnList> quopnList = categoryquopnresponse.getQuopns();
-				for (QuopnList quopn : quopnList) {
-					populateQuopnsDB(quopn);
+			} else if (response instanceof CategoryQuopnData) {
+				CategoryQuopnData categoryquopnresponse = (CategoryQuopnData) response;
+				if (categoryquopnresponse.isError() == true) {
+					stopCustomProgress();
+					Dialog dialog = new Dialog(context, R.string.dialog_title_error, R.string.slow_internet_connection);
+					dialog.show();
 
-				}
+					Log.v(TAG, "Response : CategoryQuopnData=> Error occur");
+				} else {
+					System.out.println("MainActivity.onResponse 622");
+					Log.v(TAG, "Response : CategoryQuopnData=> Successful Response" + categoryquopnresponse.getQuopns().size());
+
+
+					List<QuopnList> quopnList = categoryquopnresponse.getQuopns();
+					for (QuopnList quopn : quopnList) {
+						populateQuopnsDB(quopn);
+
+					}
 
 
 //                List<FooterTag> footerList = categoryquopnresponse.getFooter();
@@ -946,172 +1057,172 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 //                }
 //
 //                footerPref.substring(0, footerPref.length() - 1);
-//                PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.FOOTER_TAGS, footerPref);
+//                PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.FOOTER_TAGS, footerPref);
 //                QuopnConstants.MAIN_BOTTOM_BAR = arrFooter;
 
 
-				Gift gift = categoryquopnresponse.getGift();
-				//mGiftsContainer.clear();
-				if (gift != null) {
+					Gift gift = categoryquopnresponse.getGift();
+					//mGiftsContainer.clear();
+					if (gift != null) {
 
-					GIFT_TITLE = gift.getTitle();
-					PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.GIFT_TITLE, gift.getTitle()); //for getting title for gift newly added in json
-					for (GiftsContainer gifts : gift.getList()) {
-						populateGiftsDB(gifts);
-					}
-					System.out.println("MainActivity.onResponse 657");
-					if (gift.getList().size() >= 1) {
-						if (isNotFromBroadCast && !isShownFromCache)
-							mProdCatFragment.setViewPagerAdapter(true);
+						GIFT_TITLE = gift.getTitle();
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.GIFT_TITLE, gift.getTitle()); //for getting title for gift newly added in json
+						for (GiftsContainer gifts : gift.getList()) {
+							populateGiftsDB(gifts);
+						}
+						System.out.println("MainActivity.onResponse 657");
+						if (gift.getList().size() >= 1) {
+							if (isNotFromBroadCast && !isShownFromCache)
+								mProdCatFragment.setViewPagerAdapter(true);
+						} else {
+							if (isNotFromBroadCast && !isShownFromCache)
+								mProdCatFragment.setViewPagerAdapter(false);
+						}
 					} else {
 						if (isNotFromBroadCast && !isShownFromCache)
 							mProdCatFragment.setViewPagerAdapter(false);
 					}
-				} else {
-					if (isNotFromBroadCast && !isShownFromCache)
-						mProdCatFragment.setViewPagerAdapter(false);
 				}
 
-			}
-
-			mProdCatFragment.quopnLoaded();
+				mProdCatFragment.quopnLoaded();
 //            progress.setVisibility(View.GONE);
-			stopCustomProgress();
-		} else if (response instanceof UCNNumberData) {
-			UCNNumberData ucnNumberData = (UCNNumberData) response;
+				stopCustomProgress();
+			} else if (response instanceof UCNNumberData) {
+				UCNNumberData ucnNumberData = (UCNNumberData) response;
 
-			if (ucnNumberData.isError() == true) {
-				Dialog dialog = new Dialog(context, R.string.dialog_title_error, ucnNumberData.getMessage());
-				dialog.show();
-			} else {
-				Dialog dialog = new Dialog(context, R.string.dialog_title_success, ucnNumberData.getMessage());
-				dialog.show();
-			}
+				if (ucnNumberData.isError() == true) {
+					Dialog dialog = new Dialog(context, R.string.dialog_title_error, ucnNumberData.getMessage());
+					dialog.show();
+				} else {
+					Dialog dialog = new Dialog(context, R.string.dialog_title_success, ucnNumberData.getMessage());
+					dialog.show();
+				}
 //			 Log.v(TAG,"Response : UCNNumberData ");
-		} else if (response instanceof ProfileData) {
-			Logger.d("");
-			ProfileData interestsData = (ProfileData) response;
+			} else if (response instanceof ProfileData) {
+				Logger.d("");
+				ProfileData interestsData = (ProfileData) response;
 //			Log.v(TAG,"Response : InterestsData");
 
-			if (interestsData.isError() == true) {
-				stopCustomProgress();
-				Dialog dialog = new Dialog(context, R.string.dialog_title_error, interestsData.getMessage());
-				dialog.show();
+				if (interestsData.isError() == true) {
+					stopCustomProgress();
+					Dialog dialog = new Dialog(context, R.string.dialog_title_error, interestsData.getMessage());
+					dialog.show();
 //				Log.v(TAG,"Response : InterestsData=> Error occur");
-			} else {
+				} else {
 //				Log.v(TAG,"Response : InterestsData=> Successful Response");
-				stateId = interestsData.getUser().getState();
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.WALLET_ID_KEY, interestsData.getUser().getWalletid());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.USERNAME_KEY, interestsData.getUser().getUsername());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.MOBILE_KEY, interestsData.getUser().getMobile());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.INVITE_MESSAGE, interestsData.getUser().getInvite_message());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.INVITE_TOP_MESSAGE, interestsData.getUser().getInvite_top_message());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.INVITE_SMS, interestsData.getUser().getInvite_sms());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.PROMO_MESSAGE, interestsData.getUser().getPromo_message());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.PROMO_TOP_MESSAGE, interestsData.getUser().getPromo_top_message());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.PROMO_BOTTOM_MESSAGE, interestsData.getUser().getPromo_bottom_message());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.EMAIL_KEY, interestsData.getUser().getEmailid());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.USER_STATE, interestsData.getUser().getState()); //commented 11022015
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.USER_CITY, interestsData.getUser().getCity());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.PIN_KEY, interestsData.getUser().getPIN());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.INVITE_COUNT, interestsData.getUser().getInvite_count());
-				//PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.ANNOUCEMENT_URL, interestsData.getUser().get_Annoucement_url());
+					stateId = interestsData.getUser().getState();
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.WALLET_ID_KEY, interestsData.getUser().getWalletid());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.USERNAME_KEY, interestsData.getUser().getUsername());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.MOBILE_KEY, interestsData.getUser().getMobile());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.INVITE_MESSAGE, interestsData.getUser().getInvite_message());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.INVITE_TOP_MESSAGE, interestsData.getUser().getInvite_top_message());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.INVITE_SMS, interestsData.getUser().getInvite_sms());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.PROMO_MESSAGE, interestsData.getUser().getPromo_message());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.PROMO_TOP_MESSAGE, interestsData.getUser().getPromo_top_message());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.PROMO_BOTTOM_MESSAGE, interestsData.getUser().getPromo_bottom_message());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.EMAIL_KEY, interestsData.getUser().getEmailid());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.USER_STATE, interestsData.getUser().getState()); //commented 11022015
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.USER_CITY, interestsData.getUser().getCity());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.PIN_KEY, interestsData.getUser().getPIN());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.INVITE_COUNT, interestsData.getUser().getInvite_count());
+					//PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.ANNOUCEMENT_URL, interestsData.getUser().get_Annoucement_url());
 
-				QuopnConstants.CONTACT_US = interestsData.getUser().getCustomer_care_number();
+					QuopnConstants.CONTACT_US = interestsData.getUser().getCustomer_care_number();
 
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_URL, interestsData.getFlash_file().getImagepath());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME, interestsData.getFlash_file().getImagename());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_TYPE, interestsData.getFlash_file().getImagetype());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_START_DATE, interestsData.getFlash_file().getStartdate());
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_END_DATE, interestsData.getFlash_file().getEnddate());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_URL, interestsData.getFlash_file().getImagepath());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME, interestsData.getFlash_file().getImagename());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_TYPE, interestsData.getFlash_file().getImagetype());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_START_DATE, interestsData.getFlash_file().getStartdate());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_END_DATE, interestsData.getFlash_file().getEnddate());
 
-				PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.NOTITY_STAUS_KEY, interestsData.getUser().getNotification());
-				String splashScreenLocalFilePath = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH);
-				String splashScreenLocalFileName = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME);
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.NOTITY_STAUS_KEY, interestsData.getUser().getNotification());
+					String splashScreenLocalFilePath = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH);
+					String splashScreenLocalFileName = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME);
 
 
-				String splashScreenUrl = interestsData.getFlash_file().getImagepath();
-				final String splashScreenNameServer = interestsData.getFlash_file().getImagename();
-				String splashScreenType = interestsData.getFlash_file().getImagetype();
+					String splashScreenUrl = interestsData.getFlash_file().getImagepath();
+					final String splashScreenNameServer = interestsData.getFlash_file().getImagename();
+					String splashScreenType = interestsData.getFlash_file().getImagetype();
+
 //                String annouceMent_url =interestsData.getUser().get_Annoucement_url();
 //                Intent annouceMent = new Intent(MainActivity.this,AnnoucementActivity.class);
 //                if(annouceMent_url!=null) {
 //                    annouceMent.putExtra("url", annouceMent_url);
 //                    startActivity(annouceMent);
 //                }
-				//Download Splash screen in background 
+					//Download Splash screen in background
 
-				if (splashScreenLocalFilePath == null || (!splashScreenLocalFileName.equalsIgnoreCase(splashScreenNameServer))) {
+					if (splashScreenLocalFilePath == null || (!splashScreenLocalFileName.equalsIgnoreCase(splashScreenNameServer))) {
 
-					if (splashScreenUrl != null && splashScreenUrl.length() > 0) {
+						if (splashScreenUrl != null && splashScreenUrl.length() > 0) {
 
-						if (splashScreenType.equalsIgnoreCase("png") || splashScreenType.equalsIgnoreCase("jpg")) {
+							if (splashScreenType.equalsIgnoreCase("png") || splashScreenType.equalsIgnoreCase("jpg")) {
 
-							RequestQueue rq = Volley.newRequestQueue(MainActivity.this);
+								RequestQueue rq = Volley.newRequestQueue(MainActivity.this);
 
-							ImageRequest ir = new ImageRequest(splashScreenUrl, new Listener<Bitmap>() {
-								@Override
-								public void onResponse(Bitmap response) {
-									saveImage(response, splashScreenNameServer, MainActivity.this);
+								ImageRequest ir = new ImageRequest(splashScreenUrl, new Listener<Bitmap>() {
+									@Override
+									public void onResponse(Bitmap response) {
+										saveImage(response, splashScreenNameServer, MainActivity.this);
+									}
+
+								}, 0, 0, null, null);
+
+								rq.add(ir);
+							} else if (splashScreenType.equalsIgnoreCase("gif")) {
+								try {
+
+									String localFilePath = Environment.getExternalStorageDirectory() + File.separator + splashScreenNameServer;
+									//String localFilePath=getDataDir()+ File.separator +splashScreenNameServer;
+									new GifDownloader().execute(new String[]{splashScreenUrl, localFilePath});
+								} catch (Exception e) {
+									e.printStackTrace();
 								}
-
-							}, 0, 0, null, null);
-
-							rq.add(ir);
-						} else if (splashScreenType.equalsIgnoreCase("gif")) {
-							try {
-
-								String localFilePath = Environment.getExternalStorageDirectory() + File.separator + splashScreenNameServer;
-								//String localFilePath=getDataDir()+ File.separator +splashScreenNameServer;
-								new GifDownloader().execute(new String[]{splashScreenUrl, localFilePath});
-							} catch (Exception e) {
-								e.printStackTrace();
 							}
 						}
 					}
+
 				}
 
-			}
-
-		} else if (response instanceof NotifyStatusData) {
-			NotifyStatusData cityList = (NotifyStatusData) response;
-			if (cityList.isError() == true) {
-				// dont store gcm in the shared pref...
-			} else {
+			} else if (response instanceof NotifyStatusData) {
+				NotifyStatusData cityList = (NotifyStatusData) response;
+				if (cityList.isError() == true) {
+					// dont store gcm in the shared pref...
+				} else {
 //				{
-				// store gcm in the shared pref....
-				storeRegistrationId(context, regId);
-			}
-		} else if (response instanceof VersionCheckData) {
-			VersionCheckData versionCheckData = (VersionCheckData) response;
-			//Log.v(TAG,"Version check response called");
-			if (versionCheckData.getError() == true) {
-
-			} else {
-				//QuopnConstants.versionCode=13;//cheat
-//				Log.v(TAG,"Version Code is: "+versionCheckData.getCurrent_version());
-				if ((versionCheckData.getCurrent_version() > QuopnConstants.versionCode) && QuopnConstants.versionCode != (-1)) {
-					//updateflag is true
-					//forcefully upgrade the app
-					//Upgrade and Quit button
-
-					//updateflag is false
-					//Not force to upgrade the app
-					//Upgrade and Close button
-
-					Intent upgradeIntent = new Intent(this, UpdateScreen.class);
-					upgradeIntent.putExtra(QuopnConstants.UPDATE_FLAG, versionCheckData.getUpdate_action());
-					upgradeIntent.putExtra(QuopnConstants.UPDATION_LINK, versionCheckData.getLink());
-					upgradeIntent.putExtra(QuopnConstants.UPDATION_MESSAGE, versionCheckData.getMessage());
-					startActivityForResult(upgradeIntent, QuopnConstants.VERSION_CHECK_REQUESTCODE);
+					// store gcm in the shared pref....
+					storeRegistrationId(context, regId);
 				}
-			}
-		} else if (response instanceof RequestPinData) {
-			RequestPinData requestpindata = (RequestPinData) response;
-			PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.PIN_KEY, requestpindata.getPin());
-			QuopnUtils.setDefaultWalletInAppAndPref(requestpindata.getDefaultWallet(), getApplicationContext());
-			//requestpindata.getPin();
+			} else if (response instanceof VersionCheckData) {
+				VersionCheckData versionCheckData = (VersionCheckData) response;
+				//Log.v(TAG,"Version check response called");
+				if (versionCheckData.getError() == true) {
 
+				} else {
+					//QuopnConstants.versionCode=13;//cheat
+//				Log.v(TAG,"Version Code is: "+versionCheckData.getCurrent_version());
+					if ((versionCheckData.getCurrent_version() > QuopnConstants.versionCode) && QuopnConstants.versionCode != (-1)) {
+						//updateflag is true
+						//forcefully upgrade the app
+						//Upgrade and Quit button
+
+						//updateflag is false
+						//Not force to upgrade the app
+						//Upgrade and Close button
+						QuopnConstants.isUpdateTrue_ForAnnouncement = true;
+						QuopnConstants.isUpdateTrue_ForWallet = true;
+
+						Intent upgradeIntent = new Intent(this, UpdateScreen.class);
+						upgradeIntent.putExtra(QuopnConstants.UPDATE_FLAG, versionCheckData.getUpdate_action());
+						upgradeIntent.putExtra(QuopnConstants.UPDATION_LINK, versionCheckData.getLink());
+						upgradeIntent.putExtra(QuopnConstants.UPDATION_MESSAGE, versionCheckData.getMessage());
+						startActivityForResult(upgradeIntent, QuopnConstants.VERSION_CHECK_REQUESTCODE);
+					}
+				}
+			} else if (response instanceof RequestPinData) {
+				RequestPinData requestpindata = (RequestPinData) response;
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.PIN_KEY, requestpindata.getPin());
+				QuopnUtils.setDefaultWalletInAppAndPref(requestpindata.getDefaultWallet(), getApplicationContext());
 //                if (requestpindata.getError() == false) {
 //                    Dialog dialog = new Dialog(mSlidingFragActivity,R.string.dialog_title_change_pin,requestpindata.getMessage());
 //                    dialog.setOnAcceptButtonClickListener(new OnClickListener() {
@@ -1128,110 +1239,117 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 //
 //                    }
 //                }
-		} else if (response instanceof ShmartVoucherListData) {
-			ShmartVoucherListData shmartvoucherlistdata = (ShmartVoucherListData) response;
-			if (shmartvoucherlistdata.getStatus().equalsIgnoreCase("success")) {
-				List<VoucherList> voucherList = shmartvoucherlistdata.getVoucherList();
-				for (VoucherList voucher : voucherList) {
-					populateVoucherDB(voucher);
-
+			} else if (response instanceof ShmartVoucherListData) {
+				ShmartVoucherListData shmartvoucherlistdata = (ShmartVoucherListData) response;
+				if (shmartvoucherlistdata.getStatus().equalsIgnoreCase("success")) {
+					List<VoucherList> voucherList = shmartvoucherlistdata.getVoucherList();
+					for (VoucherList voucher : voucherList) {
+						populateVoucherDB(voucher);
+					}
+				} else {
 				}
-			} else {
 
-			}
-
-		} else if (response instanceof RefreshSessionData) {
-			RefreshSessionData refreshSessionResp = (RefreshSessionData) response;
-			String error = refreshSessionResp.getError();
-			String message = refreshSessionResp.getMessage();
-			if (error.equals(QuopnConstants.FALSE)) {
-				if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
+			} else if (response instanceof RefreshSessionData) {
+				RefreshSessionData refreshSessionResp = (RefreshSessionData) response;
+				String error = refreshSessionResp.getError();
+				String message = refreshSessionResp.getMessage();
+				if (error.equals(QuopnConstants.FALSE)) {
+//				if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
 //						((MainMenuFragment) mMenuFragment).logoutApi();
+//				}
+					QuopnApplication quopnApp = (QuopnApplication) getApplication();
+					quopnApp.saveSessionId();
+				} else {
 				}
-				QuopnApplication quopnApp = (QuopnApplication) getApplication();
-				quopnApp.saveSessionId();
-			} else {
-			}
-		} else if (response instanceof LogoutData) {
-			LogoutData logoutData = (LogoutData) response;
-			String error = logoutData.getError();
-			String message = logoutData.getMessage();
-			if (error.equals(QuopnConstants.TRUE)) {
+			} else if (response instanceof LogoutData) {
+				LogoutData logoutData = (LogoutData) response;
+				String error = logoutData.getError();
+				String message = logoutData.getMessage();
+				if (error.equals(QuopnConstants.TRUE)) {
 
-			} else {
-				if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
-					((MainMenuFragment) mMenuFragment).logoutCleanUp();
+				} else {
+					if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
+						((MainMenuFragment) mMenuFragment).logoutCleanUp();
+					}
 				}
-			}
-		} else if (response instanceof AnnouncementData) {
-			AnnouncementData announcementData = (AnnouncementData) response;
-			String annouceMent_image = announcementData.getImage();//"http://goldprice.org/goldprice/img/menu-gold-coin.jpg";
-			String announcement_url = announcementData.getUrl();//"quopn://allquopns/10";
-			//mCustomProgressDialog.dismiss();
-			PreferenceUtil prefUtil = PreferenceUtil.getInstance(this);
-			if (prefUtil.hasContainedPreferenceKey(SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN)) {
+			} else if (response instanceof AnnouncementData) {
+				if (!QuopnConstants.isUpdateTrue_ForAnnouncement) {
+
+					AnnouncementData announcementData = (AnnouncementData) response;
+					String annouceMent_image = announcementData.getImage();//"http://goldprice.org/goldprice/img/menu-gold-coin.jpg";
+					String announcement_url = announcementData.getUrl();//"quopn://allquopns/10";
+					//mCustomProgressDialog.dismiss();
+					PreferenceUtil prefUtil = PreferenceUtil.getInstance(getApplicationContext());
+					if (prefUtil.hasContainedPreferenceKey(SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN)) {
+
+
 //				prefUtil.setPreference(SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, true);
-				Intent annouceMent = new Intent(MainActivity.this, AnnoucementActivity.class);
-				if (annouceMent_image != null || announcement_url != null) {
-					annouceMent.putExtra("image", annouceMent_image);
-					annouceMent.putExtra("url", announcement_url);
-					startActivity(annouceMent);
+						Intent annouceMent = new Intent(MainActivity.this, AnnoucementActivity.class);
+						if (annouceMent_image != null || announcement_url != null) {
+							annouceMent.putExtra("image", annouceMent_image);
+							annouceMent.putExtra("url", announcement_url);
+							startActivity(annouceMent);
+						}
+					}
+				} else {
+					QuopnConstants.isUpdateTrue_ForAnnouncement = false;
 				}
-			}
-		} else if (response instanceof ShmartCheckStatusData) {
-			ShmartCheckStatusData shmartCreateUserData = (ShmartCheckStatusData) response;
-			String errorCode = shmartCreateUserData.getError_code();
+			} else if (response instanceof ShmartCheckStatusData) {
+				ShmartCheckStatusData shmartCreateUserData = (ShmartCheckStatusData) response;
+				String errorCode = shmartCreateUserData.getError_code();
+
 //				errorCode="104";
-			String consumerId = shmartCreateUserData.getConsumer_id();
-			String message = shmartCreateUserData.getMessage();
+				String consumerId = shmartCreateUserData.getConsumer_id();
+				String message = shmartCreateUserData.getMessage();
 
-			ProfileData profileData = (ProfileData) gson.fromJson(QuopnConstants.PROFILE_DATA, ProfileData.class);
-			User user = profileData.getUser();
+				ProfileData profileData = (ProfileData) gson.fromJson(QuopnConstants.PROFILE_DATA, ProfileData.class);
+				User user = profileData.getUser();
 
-			PreferenceUtil.getInstance(this).setPreference(SHARED_PREF_KEYS.SHMART_STATUS, errorCode);
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SHMART_STATUS, errorCode);
 
-			if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_READY)) {//000
-				showShmartWallet();
-			} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.TRANS_PWD_BLANK)) {//001
-				sendRequestOTP(user.getApi_key(), user.getWalletid());
-			} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_NOT_EXIST)) {//11
-				showRegnDemoScreen();
-			} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.OTP_ACTIVATION_PENDING)) {//100//Shmart registered but not activated
-				sendGenerateOTP(user.getApi_key(), user.getWalletid());
+				if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_READY)) {//000
+					showShmartWallet();
+				} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.TRANS_PWD_BLANK)) {//001
+					sendRequestOTP(user.getApi_key(), user.getWalletid());
+				} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_NOT_EXIST)) {//11
+					showRegnDemoScreen();
+				} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.OTP_ACTIVATION_PENDING)) {//100//Shmart registered but not activated
+					sendGenerateOTP(user.getApi_key(), user.getWalletid());
+
 //				} else if(errorCode.equals(QuopnApi.SHMART_ERROR_CODES.MOBILE_NUM_EXISTS)) {//101
 //					showOTPScreenAndGenerateOTP();
-			} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_DOES_NOT_EXIST)) {//104
-				showRegnDemoScreen();
-			} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.ACTIVATION_PENDING)) {//106
-				Log.d(TAG, "error code - 106");
+				} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_DOES_NOT_EXIST)) {//104
+					showRegnDemoScreen();
+				} else if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.ACTIVATION_PENDING)) {//106
+					Log.d(TAG, "error code - 106");
 //					showOTPScreenAndRequestOTP();
-			} else {
-				Log.d(TAG, "error code - " + errorCode);
+				} else {
+					Log.d(TAG, "error code - " + errorCode);
 //					showRegnDemoScreen();
 //					showError(message);
-			}
-		} else if (response instanceof ShmartGenerateOTPData) {
-			ShmartGenerateOTPData shmartCreateUserData = (ShmartGenerateOTPData) response;
-			String errorCode = shmartCreateUserData.getError_code();
-			String message = shmartCreateUserData.getMessage();
+				}
+			} else if (response instanceof ShmartGenerateOTPData) {
+				ShmartGenerateOTPData shmartCreateUserData = (ShmartGenerateOTPData) response;
+				String errorCode = shmartCreateUserData.getError_code();
+				String message = shmartCreateUserData.getMessage();
 
-			if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_READY)) {//000
-				showOTPScreenAndVerifyOTP();
-			} else {
-				Log.d(TAG, "error code - " + errorCode + ", error_message: " + message);
-			}
-		} else if (response instanceof ShmartRequestOTPData) {
-			ShmartRequestOTPData shmartRequestOTPData = (ShmartRequestOTPData) response;
-			String errorCode = shmartRequestOTPData.getError_code();
-			String message = shmartRequestOTPData.getMessage();
+				if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_READY)) {//000
+					showOTPScreenAndVerifyOTP();
+				} else {
+					Log.d(TAG, "error code - " + errorCode + ", error_message: " + message);
+				}
+			} else if (response instanceof ShmartRequestOTPData) {
+				ShmartRequestOTPData shmartRequestOTPData = (ShmartRequestOTPData) response;
+				String errorCode = shmartRequestOTPData.getError_code();
+				String message = shmartRequestOTPData.getMessage();
 
-			if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_READY)) {//000
-				showOTPScreenAndChangeTransPwd();
-			} else {
-				Log.d(TAG, "error code - " + errorCode + ", error_message: " + message);
+				if (errorCode.equals(QuopnApi.SHMART_ERROR_CODES.CUSTOMER_READY)) {//000
+					showOTPScreenAndChangeTransPwd();
+				} else {
+					Log.d(TAG, "error code - " + errorCode + ", error_message: " + message);
+				}
 			}
 		}
-
 	}
 
 	public void showOTPScreenAndVerifyOTP() {
@@ -1269,7 +1387,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	}
 
 	public void sendGenerateOTP(String argAuthKey, String argWalletId) {
-		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY))) {
+		if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY))) {
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put(QuopnApi.ParamKey.AUTHORIZATION, argAuthKey);
 
@@ -1493,32 +1611,32 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void closeSearchBar() {
-		if (!mSearchView.isIconified()) {
-			mSearchView.setQuery("", true);
-			mSearchView.setIconified(true);
-			mSearchView.invalidate();
-		}
-	}
+//	public void closeSearchBar() {
+//		if (!mSearchView.isIconified()) {
+//			mSearchView.setQuery("", true);
+//			mSearchView.setIconified(true);
+//			mSearchView.invalidate();
+//		}
+//	}
+//
+//	public void openSearchBar() {
+//		if (mSearchView.isIconified()) {
+//			mSearchView.setIconified(false);
+//			mSearchView.invalidate();
+//			mSearchView.setQuery(searchText, true);
+//		}
+//	}
+//
+//	public void openSearchBarFromSerachNow() {
+//		if (mSearchView.isIconified()) {
+//			mSearchView.setIconified(false);
+//			mSearchView.invalidate();
+//		}
+//	}
 
-	public void openSearchBar() {
-		if (mSearchView.isIconified()) {
-			mSearchView.setIconified(false);
-			mSearchView.invalidate();
-			mSearchView.setQuery(searchText, true);
-		}
-	}
-
-	public void openSearchBarFromSerachNow() {
-		if (mSearchView.isIconified()) {
-			mSearchView.setIconified(false);
-			mSearchView.invalidate();
-		}
-	}
-
-	public void clearSearchView() {
-		mSearchView.setQuery("", false);
-	}
+//	public void clearSearchView() {
+//		mSearchView.setQuery("", false);
+//	}
 
 
 	// GCM Content 
@@ -1602,13 +1720,13 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	private void sendNotificationID(String regID) {
 
 		if (QuopnUtils.isInternetAvailable(this)) {
-			// if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY))) {
+			// if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY))) {
 			//Map<String, String> headerParams = new HashMap<String, String>();
-			//headerParams.put("Authorization",PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
+			//headerParams.put("Authorization",PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
 			//headerParams.put(QuopnApi.ParamKey.x_session,((QuopnApplication)getApplicationContext()).getSessionId());
 
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("userid", PreferenceUtil.getInstance(this)
+			params.put("userid", PreferenceUtil.getInstance(getApplicationContext())
 					.getPreference(SHARED_PREF_KEYS.USER_ID));
 			params.put("gcm_id", regID);
 			ConnectionFactory connectionFactory = new ConnectionFactory(this, this);
@@ -1657,7 +1775,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 					PullToRefreshFunction(true);
 
 				}
-//				getAuthKeyVerify();
+//				getCategoryListing();
 				if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment)
 					((MainMenuFragment) mMenuFragment).updateCounters();
 				isNotFromBroadCast = true;
@@ -1674,11 +1792,11 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 //			mCustomProgressDialog.show();
 				isNotFromBroadCast = false;
 				PullToRefreshFunction(false);
-//                getAuthKeyVerify();
+//                getCategoryListing();
 				if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment)
 					((MainMenuFragment) mMenuFragment).updateCounters();
 			}
-			QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+			QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 			mAddtoCard_Counter_tv.setText("" + QuopnConstants.MY_CART_COUNT);
 			if (QuopnConstants.MY_CART_COUNT <= 0) {
 				mAddtoCard_Counter_tv.setVisibility(View.INVISIBLE);
@@ -1693,7 +1811,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT);
+			QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT);
 			Log.i(TAG, "In BroadcastReceiver notificationcounter: " + QuopnConstants.NOTIFICATION_COUNT);
 			if (QuopnConstants.NOTIFICATION_COUNT <= 0) {
 				mNotification_Counter_tv.setVisibility(View.INVISIBLE);
@@ -1750,7 +1868,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	};
 
 	private void sendChangeSessId(String argSessIdOld, String argSessIdNew) {
-		String api_key = PreferenceUtil.getInstance(this).getPreference(SHARED_PREF_KEYS.API_KEY);
+		String api_key = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.API_KEY);
 		if (QuopnUtils.isInternetAvailable(this)) {
 			if (!TextUtils.isEmpty(api_key)) {
 				Map<String, String> headerParams = new HashMap<String, String>();
@@ -1777,7 +1895,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+			QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 			mAddtoCard_Counter_tv.setText("" + (QuopnConstants.MY_CART_COUNT));
 			if (QuopnConstants.MY_CART_COUNT <= 0) {
 				mAddtoCard_Counter_tv.setVisibility(View.INVISIBLE);
@@ -1793,7 +1911,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+			QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 			mAddtoCard_Counter_tv.setText("" + (QuopnConstants.MY_CART_COUNT));
 			if (QuopnConstants.MY_CART_COUNT <= 0) {
 				mAddtoCard_Counter_tv.setVisibility(View.INVISIBLE);
@@ -1875,6 +1993,12 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverLogoutInvalidSession);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverParseDeepLinks);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverParseNotifActivityLinks);
+
+//		unregisterReceiver(mSmsListener);
+		if (isSMSLISTNERREGISTERED) {
+			unregisterReceiver(mSmsListener);
+			isSMSLISTNERREGISTERED = false;
+		}
 	}
 
 	public void saveImage(Bitmap bmp, String name, Context c) {
@@ -1890,8 +2014,8 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			fos.write(bytes.toByteArray());
 			fos.close();
 			if (file.length() > 0) {
-				PreferenceUtil.getInstance(MainActivity.this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH, file.getAbsolutePath());
-				PreferenceUtil.getInstance(MainActivity.this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME, name);
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH, file.getAbsolutePath());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME, name);
 			}
 		} catch (FileNotFoundException e) {
 		} catch (IOException e) {
@@ -1924,8 +2048,8 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 				fos.flush();
 				fos.close();
 				if (outputFile.length() > 0) {
-					PreferenceUtil.getInstance(MainActivity.this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH, outputFile.getAbsolutePath());
-					PreferenceUtil.getInstance(MainActivity.this).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME, urls[1]);
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_LOCAL_PATH, outputFile.getAbsolutePath());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(SHARED_PREF_KEYS.SPLASH_SCREEN_FILE_NAME, urls[1]);
 				}
 			} catch (FileNotFoundException e) {
 				return null; // swallow a 404
@@ -1953,7 +2077,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			Dialog dialog = new Dialog(MainActivity.this, R.string.dialog_title_success, webissueresponse);
 			dialog.show();
 		}
-		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 		mAddtoCard_Counter_tv.setText("" + (QuopnConstants.MY_CART_COUNT));
 		if (QuopnConstants.MY_CART_COUNT <= 0) {
 			mAddtoCard_Counter_tv.setVisibility(View.INVISIBLE);
@@ -1962,12 +2086,18 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			mAddtoCard_Counter_tv.startAnimation(m_increaseAnimation);
 		}
 		mProdCatFragment.notifyAddToCartCounterChanged();
-		if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment)
+//		mProdCatFragment.notifySearchTextChanged(
+//				searchText, MainActivity.this);
+		if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
 			((MainMenuFragment) mMenuFragment).updateCounters();
+		}
+		// TODO: ankur
+		Logger.d("searchText " + searchText + "; SEARCHTEXT: " + QuopnConstants.SEARCHTEXT);
+//		System.out.println("======SearchText==onQuopnIssued===" + searchText);
 	}
 
 	public void AllCartCounterRefreshed() {
-		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 		mAddtoCard_Counter_tv.setText("" + (QuopnConstants.MY_CART_COUNT));
 		if (QuopnConstants.MY_CART_COUNT <= 0) {
 			mAddtoCard_Counter_tv.setVisibility(View.INVISIBLE);
@@ -1981,7 +2111,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	}
 
 	public void AllCartCounterRefreshed_FromCategory() {
-		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(MainActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
 		mAddtoCard_Counter_tv.setText("" + (QuopnConstants.MY_CART_COUNT));
 		if (QuopnConstants.MY_CART_COUNT <= 0) {
 			mAddtoCard_Counter_tv.setVisibility(View.INVISIBLE);
@@ -2070,10 +2200,9 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 
 					} else {
 
-						QuopnConstants.MY_CART_COUNT = PreferenceUtil
-								.getInstance(context).getPreference_int(
+						QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(getApplicationContext()).getPreference_int(
 										SHARED_PREF_KEYS.MYCARTCOUNT) + 1;
-						PreferenceUtil.getInstance(context).setPreference(
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(
 								SHARED_PREF_KEYS.MYCARTCOUNT,
 								QuopnConstants.MY_CART_COUNT);
 
@@ -2337,68 +2466,83 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 	}
 
 	public void callCitrus() {
-		Logger.d("");
-		if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
-			PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, true);
-			((MainMenuFragment) mMenuFragment).callCitrus();
+		if (!QuopnConstants.isUpdateTrue_ForWallet) {
+			Logger.d("QuopnConstants.isUpdateTrue_ForWallet: " + QuopnConstants.isUpdateTrue_ForWallet);
+			if (mMenuFragment != null && mMenuFragment instanceof MainMenuFragment) {
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, true);
+				((MainMenuFragment) mMenuFragment).callCitrus();
+			}
 		} else {
+			QuopnConstants.isUpdateTrue_ForWallet = false;
 		}
 	}
 
 	public void walletCitrusStatus() {
-		PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, true);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, true);
 
-		mCitrusClient.isUserSignedIn(new Callback<Boolean>() {
-			@Override
-			public void success(Boolean isUserLoggedIn) {
-				if (isUserLoggedIn) {
-					//QuopnConstants.showToast(mContext, mCitrusClient.getUserEmailId());
-					//mCitrusClient.init(Constants.SIGNUP_ID, Constants.SIGNUP_SECRET, Constants.SIGNIN_ID, Constants.SIGNIN_SECRET, Constants.VANITY, Constants.environment);
+		if (mCitrusClient != null) {
+			mCitrusClient.isUserSignedIn(new Callback<Boolean>() {
+				@Override
+				public void success(Boolean isUserLoggedIn) {
+					if (isUserLoggedIn) {
+						//QuopnConstants.showToast(mContext, mCitrusClient.getUserEmailId());
+						//mCitrusClient.init(Constants.SIGNUP_ID, Constants.SIGNUP_SECRET, Constants.SIGNIN_ID, Constants.SIGNIN_SECRET, Constants.VANITY, Constants.environment);
 //					Logger.d("mCitrusClient.isUserSignedIn success loggedin for email %s", mCitrusClient.getCitrusUser().getEmailId());
-					showCustomProgress();
-					showShmartWallet();// launch citrus
-				} else {
-					// is citrus activated
-					final String mobileWallets = PreferenceUtil.getInstance(mContext).getPreference(SHARED_PREF_KEYS.MOBILE_WALLETS_KEY);
-					Logger.d("mCitrusClient.isUserSignedIn success not logged in, mobileWallets %s", mobileWallets);
-					if (mobileWallets.isEmpty()) {
-						// launch citrus
+
+//					showCustomProgress();
+						showShmartWallet();// launch citrus
+						stopCustomProgress();
 					} else {
-						if (mobileWallets.equalsIgnoreCase("2") || mobileWallets.equalsIgnoreCase("2|1") || mobileWallets.equalsIgnoreCase("1|2")) {
-							// existing user
-							Logger.d("mCitrusClient.isUserSignedIn linkUserExtended start for email %s mobile %S", PreferenceUtil.getInstance(mContext).getPreference(SHARED_PREF_KEYS.CITRUS_EMAIL_KEY), PreferenceUtil.getInstance(mContext).getPreference(SHARED_PREF_KEYS.MOBILE_KEY));
-							CitrusClient.getInstance(getApplicationContext()).linkUserExtended(PreferenceUtil.getInstance(mContext).getPreference(SHARED_PREF_KEYS.CITRUS_EMAIL_KEY), PreferenceUtil.getInstance(mContext).getPreference(SHARED_PREF_KEYS.MOBILE_KEY), new Callback<LinkUserExtendedResponse>() {
-								@Override
-								public void success(LinkUserExtendedResponse linkUserExtendedResponse) {
-									Logger.d("mCitrusClient.isUserSignedIn linkUserExtendedResponse %s", linkUserExtendedResponse.getJSON());
-									if (QuopnUtils.isActivityRunningForContext(mContext)) {
-										linkUserExtended = linkUserExtendedResponse;
-										onCitrusOTPDialogShow();
-									}
-								}
-
-								@Override
-								public void error(CitrusError citrusError) {
-									Logger.d("mCitrusClient.isUserSignedIn error %s", citrusError.getMessage());
-								}
-							});
+						// is citrus activated
+						final String mobileWallets = PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.MOBILE_WALLETS_KEY);
+						Logger.d("mCitrusClient.isUserSignedIn success not logged in, mobileWallets %s", mobileWallets);
+						if (mobileWallets.isEmpty()) {
+							// launch citrus
 						} else {
-							// new user// citrus inactivated
-							Intent intent = new Intent(MainActivity.this, CitrusRegn.class);
-							startActivity(intent);
+							if (mobileWallets.equalsIgnoreCase("2") || mobileWallets.equalsIgnoreCase("2|1") || mobileWallets.equalsIgnoreCase("1|2")) {
+								// existing user
+								Logger.d("mCitrusClient.isUserSignedIn linkUserExtended start for email %s mobile %S", PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.CITRUS_EMAIL_KEY), PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.MOBILE_KEY));
+								CitrusClient.getInstance(getApplicationContext()).linkUserExtended(PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.CITRUS_EMAIL_KEY), PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.MOBILE_KEY), new Callback<LinkUserExtendedResponse>() {
+								@Override
+									public void success(LinkUserExtendedResponse linkUserExtendedResponse) {
+										Logger.d("mCitrusClient.isUserSignedIn linkUserExtendedResponse %s", linkUserExtendedResponse.getJSON());
+										if (QuopnUtils.isActivityRunningForContext(mContext)) {
+											linkUserExtended = linkUserExtendedResponse;
+											onCitrusOTPDialogShow();
+										} else {
+											stopCustomProgress();
+										}
+									}
+
+									@Override
+									public void error(CitrusError citrusError) {
+										QuopnUtils.showDialog(mContext,R.string.dialog_title,getApplicationContext().getResources().getString(R.string.citrus_tiny_error) );
+										citrusLogWalletStatsForRefreshToken_Dump(citrusError);
+									}
+								});
+							} else {
+								// new user// citrus inactivated
+								Intent intent = new Intent(MainActivity.this, CitrusRegn.class);
+								startActivity(intent);
+							}
 						}
+
 					}
-
 				}
-			}
 
-			@Override
-			public void error(CitrusError error) {
-				//textMessage.setText(error.getMessage());
-				//Logger.e(error.getMessage());
-				//QuopnConstants.showToast(mContext, error.getMessage());
-			}
-		});
+				@Override
+				public void error(CitrusError error) {
+					stopCustomProgress();
+					// todo refresh error dump
+					// todo message for retry
+					//textMessage.setText(error.getMessage());
+					//Logger.e(error.getMessage());
+					//QuopnConstants.showToast(mContext, error.getMessage());
+				}
+			});
+		} else {
+			stopCustomProgress();
+		}
 	}
 
 	private void showCitrusLoginMessage(final boolean isSuccess, final String message) {
@@ -2431,13 +2575,19 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 			@Override
 			public void run() {
 
-				final android.app.Dialog dialog = new android.app.Dialog(MainActivity.this, R.style.DialogTheme);
-				dialog.setContentView(R.layout.custom_dialog);
-				final EditText dialogEditOtpText = (EditText) dialog.findViewById(R.id.editOtpText);
-				Button dialogButtonConfirm = (Button) dialog.findViewById(R.id.dialogButtonConfirm);
-				Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-				Button dialogButtonResend = (Button) dialog.findViewById(R.id.dialogButtonResend);
+				if (citrusOTPDialog != null && citrusOTPDialog.isShowing()) {
+					citrusOTPDialog.dismiss();
+				}
 
+//				final android.app.Dialog dialog = new android.app.Dialog(MainActivity.this, R.style.DialogTheme);
+				citrusOTPDialog = new android.app.Dialog(MainActivity.this, R.style.DialogTheme);
+				citrusOTPDialog.setContentView(R.layout.custom_dialog);
+				dialogEditOtpText = (EditText) citrusOTPDialog.findViewById(R.id.editOtpText);
+				Button dialogButtonConfirm = (Button) citrusOTPDialog.findViewById(R.id.dialogButtonConfirm);
+				Button dialogButtonCancel = (Button) citrusOTPDialog.findViewById(R.id.dialogButtonCancel);
+				Button dialogButtonResend = (Button) citrusOTPDialog.findViewById(R.id.dialogButtonResend);
+				registerReceiver(mSmsListener, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+				isSMSLISTNERREGISTERED = true;
 				// if button is clicked, close the custom dialog
 				dialogButtonConfirm.setOnClickListener(new OnClickListener() {
 					@Override
@@ -2455,10 +2605,11 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 									Logger.d(citrusResponse.getMessage());
 									showShmartWallet();
 									stopCustomProgress();
-									CitrusClient.getInstance(mContext.getApplicationContext()).getPrepaidToken(new Callback<AccessToken>() {
+									CitrusClient.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPrepaidToken(new Callback<AccessToken>() {
 										@Override
 										public void error(CitrusError citrusError) {
-											Logger.d(citrusError.getMessage());
+											citrusLogWalletStatsForRefreshToken_Dump(citrusError);
+											// sending the user inside nonetheless
 										}
 
 										@Override
@@ -2471,20 +2622,12 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 
 								@Override
 								public void error(CitrusError error) {
-									showCitrusLoginMessage(false, error.getMessage());
-//								if (TextUtils.isEmpty(editOtpText)) {
-//									//Validations.CustomErrorMessage(getApplicationContext(), R.string.blank_otp_validation, dialogEditOtpText, null, 0);
-//									QuopnUtils.showDialog(MainActivity.this, R.string.dialog_title, getApplicationContext().getResources().getString(R.string.blank_otp_validation));
-//									return;
-//								} else {
-//									dialogEditOtpText.setText("");
-//									QuopnUtils.showDialog(MainActivity.this, R.string.dialog_title, getApplicationContext().getResources().getString(R.string.citrus_dialog_otp_validation));
-//								}
+									showCitrusLoginMessage(false, Validations.getCitrusOTPErrorForMessage(error.getMessage()));
 								}
 							});
-							dialog.dismiss();
+							citrusOTPDialog.dismiss();
 						} else {
-							dialog.dismiss();
+							citrusOTPDialog.dismiss();
 							showCitrusLoginMessage(false, getApplicationContext().getResources().getString(R.string.citrus_dialog_otp_validation));
 						}
 					}
@@ -2494,7 +2637,7 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 					public void onClick(View v) {
 						showCustomProgress();
 						dialogEditOtpText.setText("");
-						CitrusClient.getInstance(getApplicationContext()).linkUserExtended(PreferenceUtil.getInstance(mContext).getPreference(SHARED_PREF_KEYS.CITRUS_EMAIL_KEY), PreferenceUtil.getInstance(mContext).getPreference(SHARED_PREF_KEYS.MOBILE_KEY), new Callback<LinkUserExtendedResponse>() {
+						CitrusClient.getInstance(getApplicationContext()).linkUserExtended(PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.CITRUS_EMAIL_KEY), PreferenceUtil.getInstance(getApplicationContext()).getPreference(SHARED_PREF_KEYS.MOBILE_KEY), new Callback<LinkUserExtendedResponse>() {
 							@Override
 							public void success(LinkUserExtendedResponse linkUserExtendedResponse) {
 								Logger.d("mCitrusClient.isUserSignedIn linkUserExtendedResponse %s", linkUserExtendedResponse.getJSON());
@@ -2507,8 +2650,9 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 
 							@Override
 							public void error(CitrusError citrusError) {
-								dialog.dismiss();
-								showCitrusLoginMessage(false, citrusError.getMessage());
+								citrusOTPDialog.dismiss();
+								showCitrusLoginMessage(false, getApplicationContext().getResources().getString(R.string.citrus_tiny_error));
+								citrusLogWalletStatsForRefreshToken_Dump(citrusError);
 							}
 						});
 					}
@@ -2516,20 +2660,48 @@ public class MainActivity extends BaseActivity implements ConnectionListener, Qu
 				dialogButtonCancel.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						dialog.cancel();
+						citrusOTPDialog.cancel();
 					}
 				});
 
-				dialog.show();
+				citrusOTPDialog.show();
+				stopCustomProgress();
 			}
 
 		});
 	}
 
-	public void finishAll() {
-		finish();
+	public void citrusLogWalletStatsForRefreshToken_Dump(CitrusError error) {
 
+		if (QuopnApplication.getAccessToken() != null) {
+			Map<String, String> params = new HashMap<String, String>();
+			params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+			params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
+			params.put(QuopnApi.ParamKey.APINAME, QuopnApi.ParamKey.REFRESHACCESSTOKEN);
+			params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_D);
+
+			JSONObject mergedObj = new JSONObject();
+			try {
+				mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORMESSAGE, error.getMessage());
+				if (error.getStatus() != null) {
+					mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORSTATUS, error.getStatus().name());
+				}
+				params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
+				params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
+				ConnectionFactory connectionFactory = new ConnectionFactory(this, this);
+				connectionFactory.setPostParams(params);
+
+				connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
+				QuopnApplication.setAccessToken(null);
+			} catch (JSONException e) {
+			}
+		}
 	}
+
+//	public void finishAll() {
+//		finish();
+//
+//	}
 
 	public void stopCustomProgress() {
 		if (mCustomProgressDialog != null && mCustomProgressDialog.isShowing()) {

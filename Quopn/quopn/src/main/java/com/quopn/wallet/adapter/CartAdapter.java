@@ -242,9 +242,8 @@ public class CartAdapter extends ArrayAdapter<CartListData> {
 		//Remove this current quopn from mycart list and saving value is minus from Total approx saving value and set into database.
 		//Added this quopn in Quopn listing database.
 		
-		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(
-				context).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT)  - 1;
-		PreferenceUtil.getInstance(context).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
+		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT)  - 1;
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
 		
 		Intent intent = new Intent(QuopnConstants.BROADCAST_UPDATE_MYCARTCOUNTER);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -310,7 +309,7 @@ public class CartAdapter extends ArrayAdapter<CartListData> {
 	private void getRemoveFromCart(Context context, ConnectionListener connectionListener,int cartid) {
 
 		if (QuopnUtils.isInternetAvailable(context)) {
-			String api_key = PreferenceUtil.getInstance(context).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
+			String api_key = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
 			if (!TextUtils.isEmpty(api_key)) {
 				mAnalysisManager.send(AnalysisEvents.REMOVE_FROM_CART,""+cartid);
 				Map<String, String> params = new HashMap<String, String>();

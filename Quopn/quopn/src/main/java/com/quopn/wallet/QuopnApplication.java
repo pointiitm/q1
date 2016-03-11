@@ -105,7 +105,7 @@ public class QuopnApplication extends Application {
 	}
 
 	public void generateSessionId(){
-		String storedSessId = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID);
+		String storedSessId = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID);
 		if(TextUtils.isEmpty(storedSessId)){
 			sessionId = createSessionId();
 			saveSessionId(); // ankur
@@ -216,8 +216,8 @@ public class QuopnApplication extends Application {
 	}
 
 	public void saveSessionId(){
-		PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID, sessionId);
-		Log.d("QuopnApplication", "PreferenceUtil SESSION_ID "+PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID, sessionId);
+		Log.d("QuopnApplication", "PreferenceUtil SESSION_ID "+PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
 	}
 
 	public void downloadBitmaps(HashMap<Integer, String> storeTypeHashMap) {

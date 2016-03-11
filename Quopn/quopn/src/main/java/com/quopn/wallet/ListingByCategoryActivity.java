@@ -194,7 +194,7 @@ public class ListingByCategoryActivity extends ActionBarActivity implements Quop
 						QuopnConstants.MY_CART_COUNT = PreferenceUtil
 								.getInstance(context).getPreference_int(
 										PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT) + 1;
-						PreferenceUtil.getInstance(context).setPreference(
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(
 								PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT,
 								QuopnConstants.MY_CART_COUNT);
 

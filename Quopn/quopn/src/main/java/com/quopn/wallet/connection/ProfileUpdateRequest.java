@@ -45,9 +45,9 @@ public class ProfileUpdateRequest extends ConnectRequest implements Connector, R
 		requestTimer.setListener(this);
 //		mProgressDialog = new CustomProgressDialog(mContext);
 
-		mHeaderParams.put("Authorization", PreferenceUtil.getInstance(mContext).getPreference(
+		mHeaderParams.put("Authorization", PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
 				PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
-		mHeaderParams.put("x-session", PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
+		mHeaderParams.put("x-session", PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
 	}
 
 	@Override

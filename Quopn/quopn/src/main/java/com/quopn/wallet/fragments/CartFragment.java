@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+import com.quopn.wallet.QuopnApplication;
 import com.quopn.wallet.R;
 import com.quopn.wallet.adapter.CartAdapter;
 import com.quopn.wallet.connection.ConnectRequest;
@@ -224,7 +225,7 @@ public class CartFragment extends Fragment implements OnItemClickListener, OnCli
 								cursor1 = mSlidingFragActivity.getContentResolver().query(ConProvider.CONTENT_URI_MYCART,null,null,null,ITableData.TABLE_MYCART.COLUMN_CARTID + " desc");
 								//Log.i(TAG, ""+cursor1.getCount());
 								QuopnConstants.MY_CART_COUNT=cursor1.getCount();
-								PreferenceUtil.getInstance(mSlidingFragActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
+								PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
 								if(cursor1 == null || cursor1.getCount() == 0){
 									cursor1.moveToFirst();
 //									mSaving_text2.setText(""+mTotalSaving);
@@ -335,7 +336,7 @@ public class CartFragment extends Fragment implements OnItemClickListener, OnCli
 							cursor1 = mSlidingFragActivity.getContentResolver().query(ConProvider.CONTENT_URI_MYCART,null,null,null,ITableData.TABLE_MYCART.COLUMN_CARTID + " desc");
 							//Log.i(TAG, ""+cursor1.getCount());
 							QuopnConstants.MY_CART_COUNT=cursor1.getCount();
-							PreferenceUtil.getInstance(mSlidingFragActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
+							PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
 							if(cursor1 == null || cursor1.getCount() == 0){
 								cursor1.moveToFirst();
 //								mSaving_text2.setText(""+mTotalSaving);

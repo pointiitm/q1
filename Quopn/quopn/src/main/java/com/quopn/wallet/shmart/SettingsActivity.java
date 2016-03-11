@@ -48,6 +48,7 @@ public class SettingsActivity extends ActionBarActivity {
     private MyCountDownTimer countDownTimer = new MyCountDownTimer(30000, 1000);
     private final int RESPONSE_SUCCESS_MESSAGE = 100;
     private SmsListener mSmsListener = new SmsListener();
+    private boolean isSMSLISTNERREGISTERED = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +156,7 @@ public class SettingsActivity extends ActionBarActivity {
 
         countDownTimer.start();
         registerReceiver(mSmsListener, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+        isSMSLISTNERREGISTERED = true;
 
         if(QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.SHMART)) {
 
@@ -237,7 +239,11 @@ public class SettingsActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         ShmartFlow.getInstance().onSettingsActivityDestroyed();
-        unregisterReceiver(mSmsListener);
+//        unregisterReceiver(mSmsListener);
+        if (isSMSLISTNERREGISTERED) {
+            unregisterReceiver(mSmsListener);
+            isSMSLISTNERREGISTERED = false;
+        }
         super.onDestroy();
     }
 
@@ -265,7 +271,7 @@ public class SettingsActivity extends ActionBarActivity {
             public void run() {
                 String proMessage = message;
                 if (isSuccess) {
-                    String mobileWallets = PreferenceUtil.getInstance(SettingsActivity.this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_WALLETS_KEY);
+                    String mobileWallets = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_WALLETS_KEY);
                     if (!mobileWallets.isEmpty()) {
                         if (mobileWallets.equalsIgnoreCase("2|1") || mobileWallets.equalsIgnoreCase("1|2")) {
                             proMessage = getApplicationContext().getResources().getString(R.string.txnpin_changed_successfully_citrus_udio);

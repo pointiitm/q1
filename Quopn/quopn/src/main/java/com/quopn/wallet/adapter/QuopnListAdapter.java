@@ -5,17 +5,21 @@ package com.quopn.wallet.adapter;
  */
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.text.Html;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -26,6 +30,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.orhanobut.logger.Logger;
 import com.quopn.wallet.ListingByCategoryActivity;
 import com.quopn.wallet.MainActivity;
 import com.quopn.wallet.QuopnApplication;
@@ -50,34 +56,34 @@ import java.util.List;
 public class QuopnListAdapter extends ArrayAdapter<ListQuopnContainer> {
 
     private LayoutInflater mLayoutInflater;
-    private DisplayImageOptions mDisplayImageOptions;
-    private String mQuopnId;
-    private ImageLoader mImageLoader;
-    private Animation mAnimationPushLeftIn = null;
-    private Animation mAnimationHyperspaceOut = null;
-    private Animation mFadeIn = null;
-    private Animation mPushRightIn = null;
-    private Animation mPushRightOut = null;
-    private Animation mPushLeftOut = null;
+    private static DisplayImageOptions mDisplayImageOptions;
+//    private String mQuopnId;
+    private static ImageLoader mImageLoader;
+//    private Animation mAnimationPushLeftIn = null;
+//    private Animation mAnimationHyperspaceOut = null;
+//    private Animation mFadeIn = null;
+//    private Animation mPushRightIn = null;
+//    private Animation mPushRightOut = null;
+//    private Animation mPushLeftOut = null;
     private final int QUOPN_OPEN_STATE = 0;
     private final int QUOPN_CLOSE_STATE = 1;
     private final int QUOPN_NORMAL_STATE = 2;
     private QuopnSelectedListener quopnSelectedListener;
     private QuopnDetailAddToCartListener mQuopnDetailAddToCartListener;
     private Context mContext;
-    private ConnectionListener call_connectionlistener;
-    private ConnectionListener sms_connectionlistener;
-    private ConnectionListener video_connectionlistener;
-    private ConnectionListener webissue_connectionlistener;
-    private ConnectionListener ucn_connectionlistener;
+//    private ConnectionListener call_connectionlistener;
+//    private ConnectionListener sms_connectionlistener;
+//    private ConnectionListener video_connectionlistener;
+//    private ConnectionListener webissue_connectionlistener;
+//    private ConnectionListener ucn_connectionlistener;
 
     private AnalysisManager mAnalysisManager;
     private int counter1;
-    private int counter2;
-    private String lastselectedquopnid = "";
+//    private int counter2;
+//    private String lastselectedquopnid = "";
     private String TAG = "Quopn/QuopnList";
-    private Bitmap bitmap;
-    private Uri uri;
+//    private Bitmap bitmap;
+//    private Uri uri;
     private ViewHolderItem viewHolder;
     private static ArrayList<String> listAddToCartCampaignId = new ArrayList<String>();
 
@@ -96,16 +102,35 @@ public class QuopnListAdapter extends ArrayAdapter<ListQuopnContainer> {
         this.quopnSelectedListener = quopnSelectedListener;
         this.mQuopnDetailAddToCartListener = quopnDetailAddToCartListener;
         mImageLoader = ImageLoader.getInstance();
-        mImageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
+        // todo ankur
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        Log.d("ankur","size: "+size.x+"  "+size.y);
+        int width = (size.x)/100;
+        int height = (size.y)/100;
         mDisplayImageOptions = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.placeholder_prodlisting)
+                .showImageOnFail(R.drawable.placeholder_prodlisting)
+                .showImageOnLoading(R.drawable.placeholder_prodlisting)
                 .showStubImage(R.drawable.placeholder_prodlisting)
                 .cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
+        mImageLoader.init(new ImageLoaderConfiguration.Builder(context)
+//                .threadPoolSize(3)
+                .memoryCacheExtraOptions(width, height)
+                .diskCacheExtraOptions(width, height, null)
+                .defaultDisplayImageOptions(mDisplayImageOptions)
+                .build());
+//        mImageLoader.init(ImageLoaderConfiguration.createDefault(context));
     }
 
     static class ViewHolderItem implements QuopnOperationsListener {
-        String quopnid;
+//        String quopnid;
         TextView productname1;
         //		TextView productname2;
         ImageView mImage1;
@@ -193,8 +218,10 @@ public class QuopnListAdapter extends ArrayAdapter<ListQuopnContainer> {
         AnimationDrawable animation = (AnimationDrawable) mprogressbar.getDrawable();
         animation.start();
 
-        mImageLoader.displayImage(item.getQuopnData1().getThumb_icon(),
-                viewHolder.mImage1, mDisplayImageOptions, null);
+        // todo ankur
+//        mImageLoader.displayImage(item.getQuopnData1().getThumb_icon(),
+//                viewHolder.mImage1, mDisplayImageOptions, null);
+        mImageLoader.displayImage(item.getQuopnData1().getThumb_icon(), viewHolder.mImage1);
 
         viewHolder.productname1.setText(item.getQuopnData1().getBrand()/*getProductname()*/.toUpperCase());
         //viewHolder.mRowText1.setText(item.getQuopnData1().getShort_desc());

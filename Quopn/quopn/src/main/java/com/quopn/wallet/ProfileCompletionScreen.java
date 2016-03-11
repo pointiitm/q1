@@ -169,6 +169,7 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 	private int selectedStateId;
 
 	private SmsListener mSmsListener = new SmsListener();
+	private boolean isSMSLISTNERREGISTERED = false;
 	private static final int RESPONSE_SUCCESS_MESSAGE = 100;
 	private CountDownTimer mCountDownTimer;
 	private final long mStartTime = 30 * 1000;
@@ -217,7 +218,7 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 		}
 		mAnalysisManager = ((QuopnApplication) getApplicationContext()).getAnalysisManager();
 
-		mPersonalVideoUrl = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
+		mPersonalVideoUrl = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
 
 		context = getApplicationContext();
 		aContext = this;
@@ -250,6 +251,8 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 
 		registerReceiver(mSmsListener, new IntentFilter(
 				"android.provider.Telephony.SMS_RECEIVED"));
+		isSMSLISTNERREGISTERED = true;
+
 
 //		LocalBroadcastManager.getInstance(this).registerReceiver(mStateCityListener,
 //				new IntentFilter(QuopnConstants.BROADCAST_UPDATE_STATE_CITY));
@@ -1155,12 +1158,12 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 
 					} else {
 						mAnalysisManager.send(AnalysisEvents.OTP_VERIFIED);
-						String apiKey = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
+						String apiKey = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
 						Gson gson = new GsonBuilder().serializeNulls().create();
 						QuopnConstants.PROFILE_DATA = gson.toJson(response);
 				
 				/* Save the returned profile data if not saved already */
-						PreferenceUtil.getInstance(this).saveProfileIfNull(QuopnConstants.PROFILE_DATA);
+						PreferenceUtil.getInstance(getApplicationContext()).saveProfileIfNull(QuopnConstants.PROFILE_DATA);
 				/* End: Save returned profile */
 
 						if (interestsData.getUser().getState() != null) {
@@ -1176,13 +1179,13 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 
 
 						if (apiKey == null) {
-							PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY, interestsData.getUser().getApi_key());
-							PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, mMobileNo);
-							PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*interestsData.getUser().getVideo()*/);
-							PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_NAME, interestsData.getUser().getSender_name());
-							PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_PIC, interestsData.getUser().getSender_pic());
-							PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, interestsData.getUser().getNotification());
-							PreferenceUtil.getInstance(this).setPreference(MainMenuFragment.TUTORIAL_USER_STATUS, interestsData.getUser().getTutorial());
+							PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY, interestsData.getUser().getApi_key());
+							PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, mMobileNo);
+							PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*interestsData.getUser().getVideo()*/);
+							PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_NAME, interestsData.getUser().getSender_name());
+							PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_PIC, interestsData.getUser().getSender_pic());
+							PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, interestsData.getUser().getNotification());
+							PreferenceUtil.getInstance(getApplicationContext()).setPreference(MainMenuFragment.TUTORIAL_USER_STATUS, interestsData.getUser().getTutorial());
 
 							if (interestsData.getUser().getTutorial() != null && interestsData.getUser().getTutorial().equals("1")) {
 								makeTutsOn();
@@ -1191,15 +1194,15 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 							}
 						}
 
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, interestsData.getUser().getNotification());
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*interestsData.getUser().getVideo()*/);
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_COUNT, interestsData.getUser().getInvite_count());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, interestsData.getUser().getNotification());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*interestsData.getUser().getVideo()*/);
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_COUNT, interestsData.getUser().getInvite_count());
 
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, interestsData.getUser().getWalletid());
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USERNAME_KEY, interestsData.getUser().getUsername());
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, interestsData.getUser().getMobile());
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.EMAIL_KEY, interestsData.getUser().getEmailid());
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY, interestsData.getUser().getPIN());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, interestsData.getUser().getWalletid());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USERNAME_KEY, interestsData.getUser().getUsername());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, interestsData.getUser().getMobile());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.EMAIL_KEY, interestsData.getUser().getEmailid());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY, interestsData.getUser().getPIN());
 
 						if (gender == null || dob == null || stateId == null || cityId == null ||
 								listInterests == null || listInterests.size() == 0) {
@@ -1253,8 +1256,8 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 						com.gc.materialdesign.widgets.Dialog dialog = new com.gc.materialdesign.widgets.Dialog(ProfileCompletionScreen.this, R.string.dialog_title_error, R.string.pin_validation);
 						dialog.show();
 					} else {
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY, otpResponse.getUser().getApi_key());
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, otpResponse.getUser().getWalletid());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY, otpResponse.getUser().getApi_key());
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, otpResponse.getUser().getWalletid());
 						mEditTextOtp.setEnabled(false);
 						mImgViewTick.setTag(PinVerificationTags.Success);
 						mImgViewTick.setImageResource(R.drawable.ic_tick);
@@ -1277,37 +1280,37 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 	}
 
 	private void makeTutsOn() {
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_ON);
 		/*
 		 * two new keys added for start on and of (N for all tuts are not seen by user and 0 is the count of tuts at first)
 		 * Y will denote that all seven tuts are seen by user.
 		 * At present we have 7 tuts so we will increase the tuts count as user sees the tuts.
 		*/
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "N");
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "0");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "N");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "0");
 	}
 
 	private void makeTutsOff() {
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_OFF);
 		/*
 		 * two new keys added for start on and of (N for all tuts are not seen by user and 0 is the count of tuts at first)
 		 * Y will denote that all seven tuts are seen by user.
 		 * At present we have 7 tuts so we will increase the tuts count as user sees the tuts.
 		*/
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "Y");
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "6");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "Y");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "6");
 	}
 
 	public boolean updateLocationOnUI() {
@@ -1467,7 +1470,10 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(mSmsListener);
+		if (isSMSLISTNERREGISTERED) {
+			unregisterReceiver(mSmsListener);
+			isSMSLISTNERREGISTERED = false;
+		}
 		if (mAnalysisManager != null) {
 			mAnalysisManager.close();
 		}
@@ -1539,10 +1545,10 @@ public class ProfileCompletionScreen extends FragmentActivity implements
 			params.put("userid", mUserId);
 			params.put("pin", mEditTextOtp.getText().toString());
 			params.put("mobileno", mMobileNo);
-			params.put("utm_source", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_SOURCE) + "");
-			params.put("utm_content", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CONTENT) + "");
-			params.put("x-session", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID) + "");
-			params.put("utm_campaign", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CAMPAIGN) + "");
+			params.put("utm_source", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_SOURCE) + "");
+			params.put("utm_content", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CONTENT) + "");
+			params.put("x-session", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID) + "");
+			params.put("utm_campaign", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CAMPAIGN) + "");
 			params.put("device_id", QuopnConstants.android_id);
 			params.put("version_name", QuopnConstants.versionName);
 			params.put("version_code", "" + QuopnConstants.versionCode);

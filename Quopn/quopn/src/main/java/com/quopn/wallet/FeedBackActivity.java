@@ -187,14 +187,14 @@ public class FeedBackActivity extends ActionBarActivity implements ConnectionLis
 			Map<String, String> headerParams;
 
 			headerParams = new HashMap<String, String>();
-			headerParams.put("Authorization", PreferenceUtil.getInstance(this).getPreference(
+			headerParams.put("Authorization", PreferenceUtil.getInstance(getApplicationContext()).getPreference(
 					PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
-			Log.d(TAG,"AUTH KEY "+ PreferenceUtil.getInstance(this).getPreference(
+			Log.d(TAG,"AUTH KEY "+ PreferenceUtil.getInstance(getApplicationContext()).getPreference(
 					PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
 			params = new HashMap<String, String>();
-			params.put("walletid", PreferenceUtil.getInstance(this)
+			params.put("walletid", PreferenceUtil.getInstance(getApplicationContext())
 					.getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
-			Log.d(TAG, "wallet id "+  PreferenceUtil.getInstance(this)
+			Log.d(TAG, "wallet id "+  PreferenceUtil.getInstance(getApplicationContext())
 					.getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
 			
 			params.put("easy_use", mEase_of_use_feedback_description_ui_component.getUserProvidedFeedbackValue());
@@ -241,11 +241,11 @@ public class FeedBackActivity extends ActionBarActivity implements ConnectionLis
 			Map<String, String> headerParams;
 
 			headerParams = new HashMap<String, String>();
-			headerParams.put("Authorization", PreferenceUtil.getInstance(this).getPreference(
+			headerParams.put("Authorization", PreferenceUtil.getInstance(getApplicationContext()).getPreference(
 					PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
 
 			params = new HashMap<String, String>();
-			params.put("walletid", PreferenceUtil.getInstance(this)
+			params.put("walletid", PreferenceUtil.getInstance(getApplicationContext())
 					.getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
 
 			ConnectionFactory mConnectionFactory = new ConnectionFactory(this,

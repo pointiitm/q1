@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citrus.sdk.CitrusClient;
-import com.citrus.sdk.classes.AccessToken;
 import com.gc.materialdesign.widgets.Dialog;
 import com.orhanobut.logger.Logger;
 import com.quopn.errorhandling.ExceptionHandler;
@@ -21,18 +20,11 @@ import com.quopn.wallet.R;
 import com.quopn.wallet.adapter.ShmartOperationsAdapter;
 import com.quopn.wallet.analysis.AnalysisEvents;
 import com.quopn.wallet.analysis.AnalysisManager;
-import com.quopn.wallet.connection.ConnectionFactory;
 import com.quopn.wallet.data.model.shmart.FeaturesResponse;
-import com.quopn.wallet.utils.QuopnApi;
 import com.quopn.wallet.utils.QuopnConstants;
-import com.quopn.wallet.utils.QuopnUtils;
 import com.quopn.wallet.views.CustomProgressDialog;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
-import java.util.Map;
 
 public class ShmartHomeActivity extends ActionBarActivity {
     private CustomProgressDialog progressDialog;
@@ -44,6 +36,7 @@ public class ShmartHomeActivity extends ActionBarActivity {
     private List<FeaturesResponse.Feature> features;
     private CitrusClient mCitrusClient = null;
     private Context mContext = this;
+    private ImageView imgVRefresh;
 
     private AdapterView.OnItemClickListener itemClickListener
             = new AdapterView.OnItemClickListener() {
@@ -119,6 +112,8 @@ public class ShmartHomeActivity extends ActionBarActivity {
             Logger.e("features for wallet none");
         }
 
+        this.shmartFlow = ShmartFlow.getInstance();
+
         if (this.features!= null && !this.features.isEmpty()) {
             adapter = new ShmartOperationsAdapter(this);
             adapter.setFeatureListResponseInOps(features); // ankur
@@ -130,19 +125,21 @@ public class ShmartHomeActivity extends ActionBarActivity {
             //TextView tvCurrBal = (TextView) findViewById(R.id.tvCurrBal);
             //tvCurrBal.setTypeface(null, Typeface.BOLD);
 
-            this.shmartFlow = ShmartFlow.getInstance();
+//            this.shmartFlow = ShmartFlow.getInstance();
             shmartFlow.onShmartHomeCreated(this);
             shmartFlow.citrusLogWalletStatsForRefreshToken();
         } else {
 //            TODO: inform server
         }
 
-        ImageView imgRefresh = (ImageView)findViewById(R.id.imgRefresh);
-        imgRefresh.setOnClickListener(new View.OnClickListener(){
+        imgVRefresh = (ImageView)findViewById(R.id.imgRefresh);
+        imgVRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showCustomProgress();
-               shmartFlow.fetchBalance();
+                if (shmartFlow != null) {
+                    shmartFlow.fetchBalance();
+                }
             }
         });
 
@@ -244,7 +241,7 @@ public class ShmartHomeActivity extends ActionBarActivity {
             }
         };
         runOnUiThread(runnable);
-     progressDialog.show();
+//     progressDialog.show();
     }
 
     public void hideCustomProgress() {
@@ -255,6 +252,6 @@ public class ShmartHomeActivity extends ActionBarActivity {
             }
         };
         runOnUiThread(runnable);
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
     }
 }

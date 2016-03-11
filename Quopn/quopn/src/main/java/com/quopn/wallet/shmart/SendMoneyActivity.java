@@ -390,7 +390,7 @@ public class SendMoneyActivity extends ActionBarActivity implements ConnectionLi
                             , etSendMoneyAmount, null, 0);
                     return;
                 }
-            }else if(QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.CITRUS)){
+            } else if(QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.CITRUS)){
 
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 ProfileData response = (ProfileData) gson.fromJson(QuopnConstants.PROFILE_DATA, ProfileData.class);
@@ -551,7 +551,7 @@ public class SendMoneyActivity extends ActionBarActivity implements ConnectionLi
                     }
                 }
             }
-        }else
+        } else
             super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -566,26 +566,28 @@ public class SendMoneyActivity extends ActionBarActivity implements ConnectionLi
     }
 
     public void showMessage(final boolean isSuccess, final String message) {
-        final DialogInterface.OnDismissListener dismissListener
-                = new DialogInterface.OnDismissListener() {
+        if (QuopnUtils.isActivityRunningForContext(SendMoneyActivity.this)) {
+            final DialogInterface.OnDismissListener dismissListener
+                    = new DialogInterface.OnDismissListener() {
 
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                if (isSuccess) { SendMoneyActivity.this.finish(); }
-            }
-        };
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-//                String title = "Success";
-//                if (!isSuccess) { title = "Failure"; }
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (isSuccess) {
+                        SendMoneyActivity.this.finish();
+                    }
+                }
+            };
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
 
-                Dialog dialog = new Dialog(SendMoneyActivity.this, R.string.dialog_title_success, message);
-                dialog.setOnDismissListener(dismissListener);
-                dialog.show();
-            }
-        };
-        runOnUiThread(runnable);
+                    Dialog dialog = new Dialog(SendMoneyActivity.this, R.string.dialog_title_success, message);
+                    dialog.setOnDismissListener(dismissListener);
+                    dialog.show();
+                }
+            };
+            runOnUiThread(runnable);
+        }
     }
 
     public void showCustomProgress() {
@@ -611,65 +613,97 @@ public class SendMoneyActivity extends ActionBarActivity implements ConnectionLi
     }
 
     private void sendMoneyCitrus() {
-        mCitrusClient.sendMoneyToMoblieNo(new Amount(Double.toString(amount)), etSendMoneyMobile.getText().toString(), etSendMoneyMessage.getText().toString(), new Callback<PaymentResponse>() {
-            @Override
-            public void success(PaymentResponse paymentResponse) {
-                showMessage(true, getApplicationContext().getString(R.string.citrus_sendmoney_success));
-                ShmartFlow.getInstance().setBalance(paymentResponse.getBalanceAmount().getValueAsDouble());
+        if (QuopnUtils.isInternetAvailable(SendMoneyActivity.this)) {
+            mCitrusClient.sendMoneyToMoblieNo(new Amount(Double.toString(amount)), etSendMoneyMobile.getText().toString(), etSendMoneyMessage.getText().toString(), new Callback<PaymentResponse>() {
+                @Override
+                public void success(PaymentResponse paymentResponse) {
+                    showMessage(true, getApplicationContext().getString(R.string.citrus_sendmoney_success));
+                    ShmartFlow.getInstance().setBalance(paymentResponse.getBalanceAmount().getValueAsDouble());
 
-                if (QuopnUtils.isInternetAvailable(mContext)) {
-                    Logger.d("sendMoneyToMoblieNo success");
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(),PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
-                    params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
-                    params.put(QuopnApi.ParamKey.APINAME,QuopnApi.ParamKey.WALLETTOWALLETTRANSFER );
-                    params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_P);
-                    JSONObject mergedObj = new JSONObject();
-                    try {
-                        mergedObj.put("id",QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionId()));
-                        mergedObj.put("customer",QuopnUtils.sendNonNullValueForString(paymentResponse.getCustomer()));
-                        mergedObj.put("mobile",etSendMoneyMobile.getText().toString());
-                        mergedObj.put("merchant",QuopnUtils.sendNonNullValueForString(paymentResponse.getMerchantName()));
-                        mergedObj.put("type","Transfer");
-                        mergedObj.put("date",QuopnUtils.sendNonNullValueForString(paymentResponse.getDate()));
-                        JSONObject log_Amount = new JSONObject();
-                        {
-                            log_Amount.put("value",QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionAmount().getValue()));
-                            log_Amount.put("currency","INR");
+                    if (QuopnUtils.isInternetAvailable(getApplicationContext())) {
+                        Logger.d("sendMoneyToMoblieNo success");
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+                        params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
+                        params.put(QuopnApi.ParamKey.APINAME, QuopnApi.ParamKey.WALLETTOWALLETTRANSFER);
+                        params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_P);
+                        JSONObject mergedObj = new JSONObject();
+                        try {
+                            mergedObj.put("id", QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionId()));
+                            mergedObj.put("customer", QuopnUtils.sendNonNullValueForString(paymentResponse.getCustomer()));
+                            mergedObj.put("mobile", etSendMoneyMobile.getText().toString());
+                            mergedObj.put("merchant", QuopnUtils.sendNonNullValueForString(paymentResponse.getMerchantName()));
+                            mergedObj.put("type", "Transfer");
+                            mergedObj.put("date", QuopnUtils.sendNonNullValueForString(paymentResponse.getDate()));
+                            JSONObject log_Amount = new JSONObject();
+                            {
+                                log_Amount.put("value", QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionAmount().getValue()));
+                                log_Amount.put("currency", "INR");
+                            }
+                            mergedObj.put("amount", log_Amount);
+                            mergedObj.put("status", QuopnUtils.sendNonNullValueForString(paymentResponse.getStatus().toString()));
+                            mergedObj.put("reason", QuopnUtils.sendNonNullValueForString(paymentResponse.getMessage()));
+                            JSONObject log_Balance = new JSONObject();
+                            {
+                                log_Balance.put("value", QuopnUtils.sendNonNullValueForString(paymentResponse.getBalanceAmount().getValue()));
+                                log_Balance.put("currency", "INR");
+                            }
+                            mergedObj.put("balance", log_Balance);
+                            mergedObj.put("ref", QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionId()));
+                            mergedObj.put("transaction_pwd", etSendMoneyTxnPwd.getText().toString());
+                            mergedObj.put("transaction_id", QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionId()));
+
+                            params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
+                            params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
+                            ConnectionFactory connectionFactory = new ConnectionFactory(SendMoneyActivity.this, SendMoneyActivity.this);
+                            connectionFactory.setPostParams(params);
+                            connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
+                        } catch (JSONException e) {
+
                         }
-                        mergedObj.put("amount",log_Amount);
-                        mergedObj.put("status", QuopnUtils.sendNonNullValueForString(paymentResponse.getStatus().toString()));
-                        mergedObj.put("reason",QuopnUtils.sendNonNullValueForString(paymentResponse.getMessage()));
-                        JSONObject log_Balance = new JSONObject();
-                        {
-                            log_Balance.put("value",QuopnUtils.sendNonNullValueForString(paymentResponse.getBalanceAmount().getValue()));
-                            log_Balance.put("currency","INR");
-                        }
-                        mergedObj.put("balance",log_Balance);
-                        mergedObj.put("ref",QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionId()));
-                        mergedObj.put("transaction_pwd",etSendMoneyTxnPwd.getText().toString());
-                        mergedObj.put("transaction_id",QuopnUtils.sendNonNullValueForString(paymentResponse.getTransactionId()));
-
-                        params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
-                        params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
-                        ConnectionFactory connectionFactory = new ConnectionFactory(SendMoneyActivity.this,SendMoneyActivity.this);
-                        connectionFactory.setPostParams(params);
-                        connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
-                    } catch (JSONException e) {
-
                     }
                 }
-            }
 
-            @Override
-            public void error(CitrusError error) {
-                // TODO: logwalletstats for failure
-//                            QuopnConstants.showToast(SendMoneyActivity.this, error.getMessage());
-                showMessage(false,"empty message- "+error.getMessage());
-                // todo: message for timeout
-                clearTextfield();
+                @Override
+                public void error(CitrusError error) {
+                    showMessage(false, getApplicationContext().getResources().getString(R.string.citrus_tiny_error));
+//                clearTextfield();
+                    sendMoneyCitrusDump(error);
+                }
+            });
+        } else {
+            Dialog dialog = new Dialog(SendMoneyActivity.this, R.string.dialog_title_no_internet, R.string.please_connect_to_internet);
+            dialog.show();
+        }
+    }
+
+    private void sendMoneyCitrusDump(CitrusError error) {
+        if (QuopnUtils.isInternetAvailable(mContext)) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+            params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
+            params.put(QuopnApi.ParamKey.APINAME, QuopnApi.ParamKey.WALLETTOWALLETTRANSFER);
+            params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_D);
+            JSONObject mergedObj = new JSONObject();
+            try {
+                if (error != null) {
+                    mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORMESSAGE, error.getMessage());
+                    if (error.getStatus() != null) {
+                        mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORSTATUS, error.getStatus().name());
+                    }
+                }
+                mergedObj.put("mobile", etSendMoneyMobile.getText().toString());
+                mergedObj.put("amount", amount);
+
+                params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
+                params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
+                ConnectionFactory connectionFactory = new ConnectionFactory(SendMoneyActivity.this, SendMoneyActivity.this);
+                connectionFactory.setPostParams(params);
+                connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
+            } catch (JSONException e) {
+
             }
-        });
+        }
     }
 
     @Override

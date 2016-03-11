@@ -104,7 +104,7 @@ public class QuopnOperations {
 						QuopnConstants.MY_CART_COUNT = PreferenceUtil
 								.getInstance(context).getPreference_int(
 										SHARED_PREF_KEYS.MYCARTCOUNT) + 1;
-						PreferenceUtil.getInstance(context).setPreference(
+						PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 								SHARED_PREF_KEYS.MYCARTCOUNT,
 								QuopnConstants.MY_CART_COUNT);
 
@@ -302,7 +302,7 @@ public class QuopnOperations {
 						QuopnConstants.MY_CART_COUNT = PreferenceUtil
 								.getInstance(context).getPreference_int(
 										SHARED_PREF_KEYS.MYCARTCOUNT) + 1;
-						PreferenceUtil.getInstance(context).setPreference(
+						PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 								PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT,
 								QuopnConstants.MY_CART_COUNT);
 						
@@ -544,8 +544,8 @@ public class QuopnOperations {
 						dialog.show();
 						
 					}else{
-						QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(context).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT)  + 1;
-						PreferenceUtil.getInstance(context).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
+						QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT)  + 1;
+						PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
 								
 						SingleCartDetails singleCartDetails=videoIssueData.getSingleCart_details();
 						Cursor cursor1=null;

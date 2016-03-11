@@ -422,17 +422,15 @@ public class LoadWalletActivity extends ActionBarActivity implements WalletFragm
             JSONObject mergedObj = new JSONObject();
             try {
                 JSONObject log_Amount = new JSONObject();
-                {
-                    log_Amount.put(QuopnApi.CITRUS_PARAMS.VALUE,QuopnUtils.sendNonNullValueForString(etAmount.getText().toString()));
-                    log_Amount.put(QuopnApi.CITRUS_PARAMS.CURRENCY,QuopnApi.CITRUS_PARAMS.INR);
-                }
-                mergedObj.put(QuopnApi.CITRUS_PARAMS.AMOUNT,log_Amount);
+                log_Amount.put(QuopnApi.CITRUS_PARAMS.VALUE, QuopnUtils.sendNonNullValueForString(etAmount.getText().toString()));
+                log_Amount.put(QuopnApi.CITRUS_PARAMS.CURRENCY, QuopnApi.CITRUS_PARAMS.INR);
+                mergedObj.put(QuopnApi.CITRUS_PARAMS.AMOUNT, log_Amount);
                 mergedObj.put(QuopnApi.CITRUS_PARAMS.DESCRIPTION, QuopnApi.CITRUS_PARAMS.LOAD_MONEY);
-                mergedObj.put(QuopnApi.CITRUS_PARAMS.TXMSG,QuopnUtils.sendNonNullValueForString(error.getMessage()));
-                mergedObj.put(QuopnApi.CITRUS_PARAMS.TRANSACTIONSTATUS,QuopnUtils.sendNonNullValueForString(error.getStatus().name()));
+                mergedObj.put(QuopnApi.CITRUS_PARAMS.TXMSG, QuopnUtils.sendNonNullValueForString(error.getMessage()));
+                mergedObj.put(QuopnApi.CITRUS_PARAMS.TRANSACTIONSTATUS, QuopnUtils.sendNonNullValueForString(error.getStatus().name()));
                 params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
                 params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
-                ConnectionFactory connectionFactory = new ConnectionFactory(LoadWalletActivity.this,LoadWalletActivity.this);
+                ConnectionFactory connectionFactory = new ConnectionFactory(LoadWalletActivity.this, LoadWalletActivity.this);
                 connectionFactory.setPostParams(params);
                 connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
             } catch (JSONException e) {

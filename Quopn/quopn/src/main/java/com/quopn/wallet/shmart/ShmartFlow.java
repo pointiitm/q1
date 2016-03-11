@@ -399,7 +399,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             ConnectionFactory factory = new ConnectionFactory(context, shmartResponseListener);
             Map<String, String> params = new TreeMap<String, String>();
             params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(activity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                     PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName()
                     , QuopnApi.EWalletDefault.MOBILE_WALLET_SHMART_ID);
@@ -575,7 +575,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
                 = new ConnectionFactory(loadWalletActivity, shmartResponseListener);
         Map<String, String> map = new TreeMap<String, String>();
         map.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                , PreferenceUtil.getInstance(sendMoneyActivity).getPreference(
+                , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                 PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
         map.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName()
                 , QuopnApi.EWalletDefault.MOBILE_WALLET_SHMART_ID);
@@ -740,7 +740,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
 
             Map<String, String> map = new TreeMap<String, String>();
             map.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(sendMoneyActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                     PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             map.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName()
                     , QuopnApi.EWalletDefault.MOBILE_WALLET_SHMART_ID);
@@ -758,54 +758,6 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
 //        factory.createConnection(QuopnApi.EWalletApi.TRANSFER_TO_MOBILE.getApiCode());
             RequestManager requestManager = (RequestManager) factory.createConnection(QuopnApi.EWalletApi.TRANSFER_TO_MOBILE.getApiCode());
             requestManager.setListener(this);
-        } else if (QuopnApplication.getInstance().getCurrentWalletMode() == QuopnConstants.WalletType.CITRUS) {
-
-//            Map<String, String> params = new TreeMap<String, String>();
-//            params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
-//            params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(),QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
-//            params.put(QuopnApi.ParamKey.APINAME, QuopnApi.ParamKey.WALLETTOWALLETTRANSFER);
-//            params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_P);
-//
-//            JSONObject mergedObj = new JSONObject();
-//            try {
-//                mergedObj.put("id", "id");
-//                mergedObj.put("customer", number);
-//                mergedObj.put("mobile", type);
-//                mergedObj.put("merchant", );
-//                mergedObj.put("type", );
-//                mergedObj.put("date", );
-//                mergedObj.put("amount", );
-//                mergedObj.put("value", );
-//                mergedObj.put("currency", );
-//
-//                mergedObj.put("status", );
-//                mergedObj.put("reason", );
-//                mergedObj.put("balance", );
-//                mergedObj.put("value", );
-//                mergedObj.put("currency", );
-//
-//                mergedObj.put("ref", );
-//                mergedObj.put("transaction_pwd", "");
-//                mergedObj.put("transaction_id", );
-//
-//
-//                mergedObj.put(QuopnApi.EWalletRequestParam.PAYEE_ADDR.getName(), branch);
-//                mergedObj.put(QuopnApi.EWalletRequestParam.PAYEE_IFSC.getName(), ifsc);
-//                mergedObj.put(QuopnApi.EWalletRequestParam.PAYEE_MOBILE.getName(), mobile);
-//                mergedObj.put(QuopnApi.EWalletRequestParam.TXN_PWD.getName(), txnPwd);
-//            } catch (JSONException e) {
-//            }
-//
-//            params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
-//            params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
-//
-////            ConnectionFactory connectionFactory = new ConnectionFactory(this,this);
-//            ConnectionFactory connectionFactory
-//                    = new ConnectionFactory(bankAccountActivity, shmartResponseListener);
-//            connectionFactory.setPostParams(params);
-//            Logger.d(params.toString());
-//            connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
-
         }
     }
 
@@ -822,13 +774,13 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
         if (QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.SHMART)) {
             sendMoneyActivity.hideCustomProgress();
             sendMoneyActivity.showMessage(true, message);
-            mAnalysisManager = ((QuopnApplication) sendMoneyActivity.getApplicationContext()).getAnalysisManager();
+            mAnalysisManager = ((QuopnApplication) QuopnApplication.getInstance().getApplicationContext()).getAnalysisManager();
             mAnalysisManager.send(AnalysisEvents.SENT_MONEY);
             fetchBalance();
         } else if (QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.CITRUS)) {
             sendMoneyActivity.hideCustomProgress();
             sendMoneyActivity.showMessage(true, message);
-            // mAnalysisManager = ((QuopnApplication) sendMoneyActivity.getApplicationContext()).getAnalysisManager();
+            // mAnalysisManager = ((QuopnApplication) QuopnApplication.getInstance().getApplicationContext()).getAnalysisManager();
             //mAnalysisManager.send(AnalysisEvents.SENT_MONEY);
             fetchBalance();
         }
@@ -845,14 +797,14 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             sendMoneyActivity.hideCustomProgress();
             sendMoneyActivity.showMessage(false, message);
             sendMoneyActivity.clearTextfield();
-            mAnalysisManager = ((QuopnApplication) sendMoneyActivity.getApplicationContext()).getAnalysisManager();
+            mAnalysisManager = ((QuopnApplication) QuopnApplication.getInstance().getApplicationContext()).getAnalysisManager();
             mAnalysisManager.send(AnalysisEvents.SCREEN_WALLET_UNABLE_TO_SENDMONEY);
         } else if (QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.CITRUS)) {
 
             sendMoneyActivity.hideCustomProgress();
             sendMoneyActivity.showMessage(false, message);
             sendMoneyActivity.clearTextfield();
-            //mAnalysisManager = ((QuopnApplication) sendMoneyActivity.getApplicationContext()).getAnalysisManager();
+            //mAnalysisManager = ((QuopnApplication) QuopnApplication.getInstance().getApplicationContext()).getAnalysisManager();
             //mAnalysisManager.send(AnalysisEvents.SCREEN_WALLET_UNABLE_TO_SENDMONEY);
         }
     }
@@ -883,7 +835,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
         ConnectionFactory factory = new ConnectionFactory(activity, shmartResponseListener);
         Map<String, String> map = new TreeMap<String, String>();
         map.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                , PreferenceUtil.getInstance(activity).getPreference(
+                , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                 PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
         String mobileWalledId = QuopnApi.QUOPN_CITRUS_LOGWALLETSTATS;
         if (QuopnApplication.getInstance().getCurrentWalletMode() == QuopnConstants.WalletType.SHMART) {
@@ -949,7 +901,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
         ConnectionFactory factory = new ConnectionFactory(useQuopnActivity, shmartResponseListener);
         Map<String, String> map = new TreeMap<String, String>();
         map.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                , PreferenceUtil.getInstance(activity).getPreference(
+                , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                 PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
         if (QuopnApplication.getInstance().getCurrentWalletMode() == QuopnConstants.WalletType.SHMART) {
             map.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName()
@@ -1011,7 +963,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             ConnectionFactory factory = new ConnectionFactory(activity, shmartResponseListener);
             Map<String, String> map = new TreeMap<String, String>();
             map.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(activity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                     PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             map.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName()
                     , QuopnApi.EWalletDefault.MOBILE_WALLET_SHMART_ID);
@@ -1124,7 +1076,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
 
             Map<String, String> mapPost = new TreeMap<String, String>();
             mapPost.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(bankAccountActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                     PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             mapPost.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName()
                     , QuopnApi.EWalletDefault.MOBILE_WALLET_SHMART_ID);
@@ -1191,13 +1143,13 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
 //        if(QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.SHMART)) {
         bankAccountActivity.stopProgress();
         bankAccountActivity.showMessage(true, message);
-        mAnalysisManager = ((QuopnApplication) bankAccountActivity.getApplicationContext()).getAnalysisManager();
+        mAnalysisManager = ((QuopnApplication) QuopnApplication.getInstance().getApplicationContext()).getAnalysisManager();
         mAnalysisManager.send(AnalysisEvents.ADDED_BENIFICIARY);
         fetchBeneficiaries();
 //        }else if(QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.CITRUS)){
 //            bankAccountActivity.stopProgress();
 //            bankAccountActivity.showMessage(true, message);
-//            //mAnalysisManager = ((QuopnApplication) bankAccountActivity.getApplicationContext()).getAnalysisManager();
+//            //mAnalysisManager = ((QuopnApplication) QuopnApplication.getInstance().getApplicationContext()).getAnalysisManager();
 //            //mAnalysisManager.send(AnalysisEvents.ADDED_BENIFICIARY);
 //            fetchBeneficiaries();
 //        }
@@ -1253,7 +1205,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             Map<String, String> params = new TreeMap<String, String>();
             params.put(
                     QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(bankActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                             PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_SHMART_ID);
             params.put(QuopnApi.EWalletRequestParam.BENEFICIARY_CODE.getName(), beneficiaryCode_shmart);
@@ -1299,7 +1251,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
         bankActivity.showMessage(true, message);
         bankActivity.removeBeneficiary();
         bankActivity.restoreViewState();
-        mAnalysisManager = ((QuopnApplication) bankActivity.getApplicationContext()).getAnalysisManager();
+        mAnalysisManager = ((QuopnApplication) QuopnApplication.getInstance().getApplicationContext()).getAnalysisManager();
         mAnalysisManager.send(AnalysisEvents.DELETED_BENIFICIARY);
     }
 
@@ -1336,10 +1288,8 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
 
             ConnectionFactory factory = new ConnectionFactory(bankActivity, shmartResponseListener);
             Map<String, String> params = new TreeMap<String, String>();
-            params.put(
-                    QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(bankActivity).getPreference(
-                            PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+            params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName()
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), "1");
             params.put(QuopnApi.EWalletRequestParam.BENEFICIARY.getName(), beneficiaryCode_shmart);
             params.put(QuopnApi.EWalletRequestParam.AMOUNT.getName(), "" + amount);
@@ -1347,31 +1297,6 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             factory.setPostParams(params);
             RequestManager requestManager = (RequestManager) factory.createConnection(QuopnApi.EWalletApi.TRANSFER_TO_BENEFICIARY.getApiCode());
             requestManager.setListener(this);
-        } else if (QuopnApplication.getInstance().getCurrentWalletMode().equals(QuopnConstants.WalletType.CITRUS)) {
-
-//            Map<String, String> params = new TreeMap<String, String>();
-//            params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
-//            params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), String.valueOf(QuopnConstants.WalletType.CITRUS.ordinal()));
-//            params.put(QuopnApi.ParamKey.APINAME, QuopnApi.ParamKey.TRANSFERTOBANK);
-//            params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_P);
-//
-//            JSONObject mergedObj = new JSONObject();
-//            try {
-//                mergedObj.put(QuopnApi.EWalletRequestParam.BENEFICIARY_CODE.getName(), beneficiaryCode_citrus);
-//                mergedObj.put(QuopnApi.EWalletRequestParam.AMOUNT.getName(), "" + amount);
-//
-//            } catch (JSONException e) {
-//            }
-//
-//            params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
-//            params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
-//
-////            ConnectionFactory connectionFactory = new ConnectionFactory(this,this);
-//            ConnectionFactory connectionFactory
-//                    = new ConnectionFactory(bankAccountActivity, shmartResponseListener);
-//            connectionFactory.setPostParams(params);
-//            Logger.d(params.toString());
-//            connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
         }
     }
 
@@ -1383,7 +1308,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
         Map<String, String> params = new TreeMap<String, String>();
         params.put(
                 QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                , PreferenceUtil.getInstance(bankActivity).getPreference(
+                , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                         PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
         params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), "1");
         factory.setPostParams(params);
@@ -1399,7 +1324,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             Map<String, String> params = new TreeMap<String, String>();
             params.put(
                     QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(bankActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                             PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), "1");
             factory.setPostParams(params);
@@ -1410,7 +1335,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             Map<String, String> params = new TreeMap<String, String>();
             params.put(
                     QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(bankActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                             PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), "2");
             factory.setPostParams(params);
@@ -1479,7 +1404,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             Map<String, String> params = new TreeMap<String, String>();
             params.put(
                     QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(bankActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                             PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), "1");
             params.put(QuopnApi.EWalletRequestParam.TXN_PWD.getName(), txnPwd);
@@ -1494,7 +1419,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             Map<String, String> params = new TreeMap<String, String>();
             params.put(
                     QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(bankActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                             PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), "2");
             params.put(QuopnApi.EWalletRequestParam.TXN_PWD.getName(), txnPwd);
@@ -1564,7 +1489,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             Map<String, String> params = new TreeMap<String, String>();
             params.put(
                     QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(transactionsActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                             PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_SHMART_ID);
             factory.setPostParams(params);
@@ -1576,7 +1501,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
             Map<String, String> params = new TreeMap<String, String>();
             params.put(
                     QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                    , PreferenceUtil.getInstance(transactionsActivity).getPreference(
+                    , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                             PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
             factory.setPostParams(params);
@@ -1609,7 +1534,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
         Map<String, String> params = new TreeMap<String, String>();
         params.put(
                 QuopnApi.EWalletRequestParam.WALLET_ID.getName()
-                , PreferenceUtil.getInstance(transactionsActivity).getPreference(
+                , PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(
                         PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
         params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), "1");
         factory.setPostParams(params);
@@ -1760,7 +1685,15 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
      * @param otpResponse
      */
     public void onLocalOtp(LocalOtp otpResponse) {
-        settingsActivity.showMessage("OTP Sent", otpResponse.getMessage());
+        boolean sent = false;
+        if (QuopnUtils.isActivityRunningForContext(settingsActivity)) {
+            settingsActivity.showMessage("OTP Sent", otpResponse.getMessage());
+            sent = true;
+        }
+        if (QuopnUtils.isActivityRunningForContext(bankActivity) && !sent) {
+            bankActivity.showMessage(false, otpResponse.getMessage());
+            sent = true;
+        }
     }
 
 
@@ -1778,7 +1711,7 @@ public class ShmartFlow implements RequestManager.OntimeOutListner,ConnectionLis
 
         if (QuopnApplication.getAccessToken() != null) {
             Map<String, String> params = new HashMap<String, String>();
-            params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(activity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+            params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
             params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
             params.put(QuopnApi.ParamKey.APINAME, QuopnApi.ParamKey.REFRESHACCESSTOKEN);
             params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_P);

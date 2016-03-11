@@ -96,6 +96,8 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
     private MyCountDownTimer countDownTimer = new MyCountDownTimer(30000, 1000);
     private final int RESPONSE_SUCCESS_MESSAGE = 100;
     private SmsListener mSmsListener = new SmsListener();
+    private boolean isSMSLISTNERREGISTERED = false;
+    private CountDownTimer countDownTimerHack;
     String transPass;
     String reEnterTransPass;
     String otpPassword;
@@ -564,7 +566,7 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
 //        argEmailID = "vishal.nema@gmail.com";
 //        argMobileNo = "9323915104";
         argEmailID = mEditEmail.getText().toString();
-        argMobileNo = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY);
+        argMobileNo = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY);
 
         if (TextUtils.isEmpty(argEmailID)) {
             Validations.CustomErrorMessage(getApplicationContext(), R.string.emailid_validation, mEditEmail, null, 0);
@@ -584,17 +586,26 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
                     stopProgress();
                     countDownTimer.start();
                     registerReceiver(mSmsListener, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+                    isSMSLISTNERREGISTERED = true;
                     linkUserExtended = linkUserExtendedResponse;
 
-                    // TODO check email and mobile deviations
-                    if (QuopnUtils.areMobileNosSame(argMobileNo, linkUserExtended.getLinkUserMobile())) {
-                        if (argEmailID.equalsIgnoreCase(linkUserExtended.getLinkUserEmail())) {
+                    // email and mobile deviations
+                    logWalletStatsForSignIn(null, linkUserExtendedResponse);
+                    if (QuopnUtils.areMobileNosSame(argMobileNo, linkUserExtended.getLinkUserMobile()) || linkUserExtended.getLinkUserMobile().isEmpty()) {
+                        if (argEmailID.equalsIgnoreCase(linkUserExtended.getLinkUserEmail()) || linkUserExtended.getLinkUserEmail().isEmpty()) {
                             // success
                             QuopnUtils.showDialog(mContext, R.string.dialog_title, getApplicationContext().getResources().getString(R.string.blank_otp_validation));
                         } else {
                             // msg about updating email and sucess
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mEditEmail.setText(linkUserExtended.getLinkUserEmail());
+                                }
+                            });
+
                             argEmailID = linkUserExtended.getLinkUserEmail();
-                            String message = getApplicationContext().getResources().getString(R.string.citrus_email_updated) + "\n" + linkUserExtended.getLinkUserEmail();
+                            String message = getApplicationContext().getResources().getString(R.string.citrus_email_updated1) + " " + argMobileNo + " " + getApplicationContext().getResources().getString(R.string.citrus_email_updated2) + linkUserExtended.getLinkUserEmail();
                             QuopnUtils.showDialog(mContext, R.string.dialog_title, message);
                         }
                         relLayCitOtp.setVisibility(View.VISIBLE);
@@ -609,6 +620,7 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
             @Override
             public void error(CitrusError error) {
                 showMessage(false, getApplicationContext().getResources().getString(R.string.citrus_registration_error));
+                logWalletStatsForSignIn(error, null);
             }
         });
     }
@@ -621,14 +633,17 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
                 if (linkUserExtendedResponse != null) {
                     stopProgress();
                     countDownTimer.start();
-                    registerReceiver(mSmsListener, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+                    if (!isSMSLISTNERREGISTERED) {
+                        registerReceiver(mSmsListener, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+                    }
                     linkUserExtended = linkUserExtendedResponse;
                 }
             }
 
             @Override
             public void error(CitrusError error) {
-                showMessage(false, error.getMessage());
+                showMessage(false, getApplicationContext().getResources().getString(R.string.citrus_tiny_error));
+                logWalletStatsForSignIn(error, null);
             }
         });
     }
@@ -652,7 +667,7 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
                             msgs[i] = SmsMessage
                                     .createFromPdu((byte[]) pdus[i]);
                             msg_from = msgs[i].getOriginatingAddress();
-                            if (msg_from.contains("mQUOPN") || msg_from.contains("SHMART")) {
+                            if (msg_from.contains("mQUOPN")){
                                 String msgBody = msgs[i].getMessageBody();
                                 Message msg = Message.obtain();
                                 msgBody = msgBody.replaceAll("[^-?0-9]+", "");
@@ -664,6 +679,21 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
                                     messagehandler.sendMessage(msg);
                                     break;
                                 }
+                            }else if (msg_from.contains("CITRUS")) {
+                                String msgBody = msgs[i].getMessageBody();
+                                Message msg = Message.obtain();
+                                String citrusOTP = Validations.getCitrusOTPFromString(msgBody);
+//								msgBody = msgBody.replaceAll("[^-?0-9]+", "");
+                                if (citrusOTP != null && citrusOTP.length()>0) {
+                                    msg.what = RESPONSE_SUCCESS_MESSAGE;
+                                    Bundle b = new Bundle();
+                                    b.putString("message", citrusOTP);
+                                    msg.setData(b);
+                                    messagehandler.sendMessage(msg);
+                                    break;
+                                }
+//								if (msgBody.length() > 3) {
+//								}
                             }
                         }
                     } catch (Exception e) {
@@ -681,13 +711,27 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
         if (Validations.isValidOTP(linkUserPassword)) {
             LinkUserPasswordType linkUserPasswordType = LinkUserPasswordType.Otp;
             showProgress();
+            countDownTimerHack = new CountDownTimer(25000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    logWalletStatsForSignIn(null,null);
+                    showMessage(false, getApplicationContext().getResources().getString(R.string.citrus_tiny_error));
+                }
+            }.start();
             citrusClient.linkUserExtendedSignIn(linkUserExtended, linkUserPasswordType, linkUserPassword, new Callback<CitrusResponse>() {
                 @Override
                 public void success(CitrusResponse citrusResponse) {
-                    CitrusClient.getInstance(mContext.getApplicationContext()).getPrepaidToken(new com.citrus.sdk.Callback<AccessToken>() {
+                    countDownTimerHack.cancel();
+                    CitrusClient.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPrepaidToken(new com.citrus.sdk.Callback<AccessToken>() {
                         @Override
                         public void error(CitrusError citrusError) {
-                            showMessage(false, citrusError.getMessage());
+                            showMessage(false, getApplicationContext().getResources().getString(R.string.citrus_tiny_error));
+                            logWalletStatsForSignIn(citrusError, null);
                         }
 
                         @Override
@@ -715,7 +759,9 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
 
                 @Override
                 public void error(CitrusError error) {
-                    showMessage(false, error.getMessage());
+                    showMessage(false, Validations.getCitrusOTPErrorForMessage(error.getMessage()));
+                    countDownTimerHack.cancel();
+                    logWalletStatsForSignIn(error, null);
                 }
             });
         } else {
@@ -728,6 +774,17 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
         ShmartFlow.getInstance().setContext(this);
         ShmartFlow.getInstance().start();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        unregisterReceiver(mSmsListener);
+        if (countDownTimerHack != null) {countDownTimerHack.cancel();}
+        if (isSMSLISTNERREGISTERED) {
+            unregisterReceiver(mSmsListener);
+            isSMSLISTNERREGISTERED = false;
+        }
     }
 
     private void showMessage(final boolean isSuccess, final String message) {
@@ -763,7 +820,6 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
     }
 
     private void logWalletStatsForSignIn (AccessToken accessToken) {
-//        String api_key = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
         showProgress();
         if (QuopnUtils.isInternetAvailable(mContext)) {
             Map<String, String> params = new HashMap<String, String>();
@@ -774,8 +830,6 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
 
             JSONObject mergedObj = new JSONObject();
             try {
-//                requestJsonObj = linkUserExtended.getJSON();
-
                 Iterator i1 = accessToken.getJSON().keys();
                 Iterator i2 = linkUserExtended.getJSON().keys();
                 String tmp_key;
@@ -787,12 +841,12 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
                     tmp_key = (String) i2.next();
                     mergedObj.put(tmp_key, linkUserExtended.getJSON().get(tmp_key));
                 }
-                mergedObj.put(QuopnApi.ParamKey.CONSUMER_TYPE,"N"); // TODO: get from linkeduserdata
+                mergedObj.put(QuopnApi.ParamKey.CONSUMER_TYPE,"N");
                 mergedObj.put(QuopnApi.ParamKey.EMAIL,linkUserExtended.getLinkUserEmail());
                 mergedObj.put(QuopnApi.ParamKey.FIRSTNAME,"");
                 mergedObj.put(QuopnApi.ParamKey.LASTNAME,"");
                 mergedObj.put(QuopnApi.ParamKey.UUID,linkUserExtended.getLinkUserUUID());
-                mergedObj.put(QuopnApi.ParamKey.TRANSACTION_PIN,reEnterTransPass); // TODO trasaction pin
+                mergedObj.put(QuopnApi.ParamKey.TRANSACTION_PIN,reEnterTransPass);
                 params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
                 params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
                 ConnectionFactory connectionFactory = new ConnectionFactory(this,this);
@@ -803,9 +857,40 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
                 showMessage(false, getApplicationContext().getResources().getString(R.string.citrus_registration_error));
             }
         } else {
-            stopProgress();
             showMessage(false, getApplicationContext().getResources().getString(R.string.please_connect_to_internet));
             resetUI();
+        }
+    }
+
+    public void logWalletStatsForSignIn(CitrusError error, LinkUserExtendedResponse linkUserExtendedResponse) {
+
+        if (QuopnUtils.isInternetAvailable(getApplicationContext())) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put(QuopnApi.EWalletRequestParam.WALLET_ID.getName(), PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+            params.put(QuopnApi.EWalletRequestParam.MOBILE_WALLET_ID.getName(), QuopnApi.EWalletDefault.MOBILE_WALLET_CITRUS_ID);
+            params.put(QuopnApi.ParamKey.APINAME,QuopnApi.ParamKey.CREATEUSER);
+            params.put(QuopnApi.ParamKey.APITYPE, QuopnApi.ParamKey.APITYPE_D);
+            JSONObject mergedObj = new JSONObject();
+            try {
+                mergedObj.put(QuopnApi.CITRUS_PARAMS.REQUESTEDEMAIL, argEmailID);
+                if (error != null) {
+                    mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORMESSAGE, error.getMessage());
+                    if (error.getStatus() != null) {
+                        mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORSTATUS, error.getStatus().name());
+                    }
+                } else if (linkUserExtendedResponse != null) {
+                    mergedObj.put(QuopnApi.CITRUS_PARAMS.LINKUSEREMAIL, linkUserExtendedResponse.getLinkUserEmail());
+                    mergedObj.put(QuopnApi.CITRUS_PARAMS.LINKUSERMOBILE, linkUserExtendedResponse.getLinkUserMobile());
+                }
+
+                params.put(QuopnApi.ParamKey.REQUESTPARAMS, mergedObj.toString());
+                params.put(QuopnApi.ParamKey.RESPONSEPARAMS, "");
+                ConnectionFactory connectionFactory = new ConnectionFactory(this, this);
+                connectionFactory.setPostParams(params);
+                connectionFactory.createConnection(QuopnConstants.QUOPN_CITRUS_LOGWALLETSTATS);
+            } catch (JSONException e) {
+
+            }
         }
     }
 
@@ -830,7 +915,8 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
             if (response instanceof CitrusLogWalletStats) {
                 CitrusLogWalletStats citrusLogwalletStats = (CitrusLogWalletStats) response;
                 if (citrusLogwalletStats.isSuccess()) {
-                    if (!citrusLogwalletStats.getDefaultWallet().isEmpty()) {
+                    if (citrusLogwalletStats.getDefaultWallet() != null && !citrusLogwalletStats.getDefaultWallet().isEmpty()) {
+
                         // setting prefs
                         String mobileWallets = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_WALLETS_KEY);
                         if (mobileWallets.equalsIgnoreCase("0")) {
@@ -843,11 +929,15 @@ public class CitrusRegn extends ActionBarActivity implements ConnectionListener 
                         showMessage(true, citrusLogwalletStats.getMessage());
                     }
                 } else {
-                    showMessage(false, citrusLogwalletStats.getMessage());
+                    // failure
+                    if (QuopnUtils.isActivityRunningForContext(mContext)) {
+                        stopProgress();
+                    }
+                    if (citrusLogwalletStats.getMessage() != null && citrusLogwalletStats.getMessage().contains("User already present")) {
+                        showMessage(false, citrusLogwalletStats.getMessage());
+                    }
                 }
             }
-        } else {
-            showMessage(false, getApplicationContext().getResources().getString(R.string.citrus_registration_error));
         }
     }
 

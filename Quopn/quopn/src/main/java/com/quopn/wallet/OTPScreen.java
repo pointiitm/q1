@@ -56,7 +56,8 @@ import java.util.Map;
 
 public class OTPScreen extends Activity implements ConnectionListener {
 	private static final String TAG="OTPScreen";
-	
+
+	public boolean isSMSLISTNERREGISTERED = false;
 	protected CustomProgressDialog mProgressDialog;
 	private TextView mBtnLogin;
 	private EditText mEditTextOtp;
@@ -75,7 +76,7 @@ public class OTPScreen extends Activity implements ConnectionListener {
 	private String cityId;
 	private Context context;
 	private Context aContext; // activity
-	private static final int RESPONSE_SUCCESS_MESSAGE=100; 
+	private static final int RESPONSE_SUCCESS_MESSAGE=100;
 	private AnalysisManager mAnalysisManager;
 
 	private Handler messagehandler = new Handler() {
@@ -129,14 +130,14 @@ public class OTPScreen extends Activity implements ConnectionListener {
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 		context=getApplicationContext();
 		aContext = this;
-		
+
 		mAnalysisManager = ((QuopnApplication)getApplicationContext()).getAnalysisManager();
-		
+
 		mProgressDialog = new CustomProgressDialog(this);
 		Bundle bundle = getIntent().getExtras();
 		mUserId = bundle.getString(QuopnConstants.INTENT_EXTRA_USERID);
 		mMobileNo = bundle.getString(QuopnConstants.INTENT_EXTRA_MOBILE_NO);
-		
+
 		mOtp = bundle.getString(QuopnConstants.INTENT_EXTRA_OTP_NO);
 
 		//mTextViewOtp = (TextView) findViewById(R.id.otp_text);
@@ -146,21 +147,21 @@ public class OTPScreen extends Activity implements ConnectionListener {
 
 		mEditTextOtp = (EditText) findViewById(R.id.editOTP);
 		mEditTextOtp.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				mEditTextOtp.setError(null);	
+				mEditTextOtp.setError(null);
 			}
 		});
-		
+
 		mEditTextOtp.setOnEditorActionListener(new OnEditorActionListener() {
-		    @Override
-		    public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
-		        if (arg1 == EditorInfo.IME_ACTION_GO) {
-		        	getVerify();
-		        }
-		        return false;
-		    }
+			@Override
+			public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2) {
+				if (arg1 == EditorInfo.IME_ACTION_GO) {
+					getVerify();
+				}
+				return false;
+			}
 		});
 		mBtnLogin = (TextView) findViewById(R.id.btn_login);
 		mBtnLogin.setOnClickListener(new OnClickListener() {
@@ -173,6 +174,7 @@ public class OTPScreen extends Activity implements ConnectionListener {
 
 		registerReceiver(mSmsListener, new IntentFilter(
 				"android.provider.Telephony.SMS_RECEIVED"));
+		isSMSLISTNERREGISTERED = true;
 
 		mTextViewResendOtp.setOnClickListener(new OnClickListener() {
 
@@ -208,10 +210,10 @@ public class OTPScreen extends Activity implements ConnectionListener {
 			params.put("userid", mUserId);
 			params.put("pin", mEditTextOtp.getText().toString());
 			params.put("mobileno", mMobileNo);
-			params.put("utm_source", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_SOURCE) + "");
-			params.put("utm_content", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CONTENT) + "");
-			params.put("x-session", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID) + "");
-			params.put("utm_campaign", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CAMPAIGN) + "");
+			params.put("utm_source", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_SOURCE) + "");
+			params.put("utm_content", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CONTENT) + "");
+			params.put("x-session", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID) + "");
+			params.put("utm_campaign", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CAMPAIGN) + "");
 			params.put("device_id", QuopnConstants.android_id);
 			params.put("version_name", QuopnConstants.versionName);
 			params.put("version_code", "" + QuopnConstants.versionCode);
@@ -252,7 +254,10 @@ public class OTPScreen extends Activity implements ConnectionListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(mSmsListener);
+		if (isSMSLISTNERREGISTERED) {
+			unregisterReceiver(mSmsListener);
+			isSMSLISTNERREGISTERED = false;
+		}
 	}
 
 	// handle the server response for registration
@@ -266,53 +271,53 @@ public class OTPScreen extends Activity implements ConnectionListener {
 		case RESPONSE_OK :
 		if (response instanceof OTPData) {
 			OTPData registerResponse = (OTPData) response;
-			
+
 			if (registerResponse.isError() == true) {
 				mCountDownTimer.start();
-				Dialog dialog=new Dialog(this, R.string.dialog_title_error,registerResponse.getMessage()); 
+				Dialog dialog=new Dialog(this, R.string.dialog_title_error,registerResponse.getMessage());
 				dialog.show();
 				mAnalysisManager.send(AnalysisEvents.OTP_FAILED);
-								
+
 			} else {
 
 				mAnalysisManager.send(AnalysisEvents.OTP_VERIFIED);
 				mProgressDialog.cancel();
-				String apiKey = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
+				String apiKey = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
 				Gson gson = new GsonBuilder().serializeNulls().create();
 				QuopnConstants.PROFILE_DATA = gson.toJson(response);
 				
 				/* Save the returned profile data if not saved already */
-				PreferenceUtil.getInstance(this).saveProfileIfNull(QuopnConstants.PROFILE_DATA);
+				PreferenceUtil.getInstance(getApplicationContext()).saveProfileIfNull(QuopnConstants.PROFILE_DATA);
 				/* End: Save returned profile */
-				
+
 				if(registerResponse.getUser().getState() != null){
 					stateId = registerResponse.getUser().getState();
 					cityId = registerResponse.getUser().getCity();
 				}
-				
+
 				String gender = registerResponse.getUser().getGender();
 				String dob = registerResponse.getUser().getDob();
 				String email = registerResponse.getUser().getEmailid();
 				List listInterests = registerResponse.getUser().getInterestedid();
 				if(apiKey == null){
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY,registerResponse.getUser().getApi_key());
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, mMobileNo);
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*registerResponse.getUser().getVideo()*/);
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_NAME, registerResponse.getUser().getSender_name());
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_PIC, registerResponse.getUser().getSender_pic());
-					PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, registerResponse.getUser().getNotification());
-					PreferenceUtil.getInstance(this).setPreference(MainMenuFragment.TUTORIAL_USER_STATUS, registerResponse.getUser().getTutorial());
-					
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY,registerResponse.getUser().getApi_key());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, mMobileNo);
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*registerResponse.getUser().getVideo()*/);
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_NAME, registerResponse.getUser().getSender_name());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_PIC, registerResponse.getUser().getSender_pic());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, registerResponse.getUser().getNotification());
+					PreferenceUtil.getInstance(getApplicationContext()).setPreference(MainMenuFragment.TUTORIAL_USER_STATUS, registerResponse.getUser().getTutorial());
+
 					if(registerResponse.getUser().getTutorial()!=null &&  registerResponse.getUser().getTutorial().equals("1")){
 						makeTutsOn();
 					}else{
 						makeTutsOff();
 					}
-				} 
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, registerResponse.getUser().getWalletid());
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, registerResponse.getUser().getNotification());
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*registerResponse.getUser().getVideo()*/);
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_COUNT, registerResponse.getUser().getInvite_count());
+				}
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, registerResponse.getUser().getWalletid());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.NOTITY_STAUS_KEY, registerResponse.getUser().getNotification());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL, ""/*registerResponse.getUser().getVideo()*/);
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_COUNT, registerResponse.getUser().getInvite_count());
 
 
 				if(gender == null  || dob == null || stateId == null || cityId == null ||
@@ -328,25 +333,25 @@ public class OTPScreen extends Activity implements ConnectionListener {
 					Intent intent = new Intent(this, MainActivity.class);
 					// handling pre-register case, launch wallet after home
 					if (!registerResponse.getUser().getPre_registered().isEmpty() && (registerResponse.getUser().getPre_registered().equalsIgnoreCase("true") || registerResponse.getUser().getPre_registered().equalsIgnoreCase("1"))) {
-						PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, false);
+						PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, false);
 					}
 					startActivity(intent);
 					finish();
 				}
 
-				
+
 			}
 		} else if (response instanceof ResendOTPData) {
 			ResendOTPData registerResponse = (ResendOTPData) response;
 			if (registerResponse.isError() == true) {
 				mSmsAttempt = mSmsAttempt + 1;
-				Dialog dialog=new Dialog(this, R.string.dialog_title_error,registerResponse.getMessage()); 
+				Dialog dialog=new Dialog(this, R.string.dialog_title_error,registerResponse.getMessage());
 				dialog.show();
 			} else {
 				mSmsAttempt = mSmsAttempt + 1;
-				Dialog dialog=new Dialog(this, R.string.dialog_title_resend_pin,registerResponse.getMessage()); 
+				Dialog dialog=new Dialog(this, R.string.dialog_title_resend_pin,registerResponse.getMessage());
 				dialog.show();
-				
+
 				// make resend button invisible on click of it and show waiting for sms for 2mins
 //				mTextViewResendOtp.setVisibility(View.GONE);
 				mSmswaitProgress.setVisibility(View.VISIBLE);
@@ -361,28 +366,28 @@ public class OTPScreen extends Activity implements ConnectionListener {
 			ProfileData interestsData = (ProfileData) response;
 
 			if (interestsData.isError() == true) {
-				Dialog dialog=new Dialog(this, R.string.dialog_title_error,interestsData.getMessage()); 
+				Dialog dialog=new Dialog(this, R.string.dialog_title_error,interestsData.getMessage());
 				dialog.show();
 			} else {
 				stateId = interestsData.getUser().getState();
 				cityId = interestsData.getUser().getCity();
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, interestsData.getUser().getWalletid());
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USERNAME_KEY, interestsData.getUser().getUsername());
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, interestsData.getUser().getMobile());
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.EMAIL_KEY, interestsData.getUser().getEmailid());
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY, interestsData.getUser().getPIN());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY, interestsData.getUser().getWalletid());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USERNAME_KEY, interestsData.getUser().getUsername());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY, interestsData.getUser().getMobile());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.EMAIL_KEY, interestsData.getUser().getEmailid());
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY, interestsData.getUser().getPIN());
 			}
-		} 
+		}
 		break;
 		case CONNECTION_ERROR :
 
-			Dialog dialog=new Dialog(this, R.string.server_error_title,R.string.server_error); 
+			Dialog dialog=new Dialog(this, R.string.server_error_title,R.string.server_error);
 			dialog.show();
 
 			break;
 		case PARSE_ERR0R :
 
-			Dialog dialog1=new Dialog(this, R.string.server_error_title,R.string.server_error); 
+			Dialog dialog1=new Dialog(this, R.string.server_error_title,R.string.server_error);
 			dialog1.show();
 			break;
 		}
@@ -393,7 +398,7 @@ public class OTPScreen extends Activity implements ConnectionListener {
 		content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 		mTextViewResendOtp.setText(content);
 	}
-	
+
 	class SmsListener extends BroadcastReceiver {
 
 		@Override
@@ -416,7 +421,7 @@ public class OTPScreen extends Activity implements ConnectionListener {
 							if(msg_from.contains("mQUOPN")){
 								String msgBody = msgs[i].getMessageBody();
 								Message msg = Message.obtain();
-								msgBody = msgBody.replaceAll("[^-?0-9]+", "");  
+								msgBody = msgBody.replaceAll("[^-?0-9]+", "");
 								if(msgBody.length()==4){
 									msg.what=RESPONSE_SUCCESS_MESSAGE;
 									Bundle b = new Bundle();
@@ -437,37 +442,37 @@ public class OTPScreen extends Activity implements ConnectionListener {
 	}
 
 	private void makeTutsOn(){
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_ON);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_ON);
 		/*
 		 * two new keys added for start on and of (N for all tuts are not seen by user and 0 is the count of tuts at first)
 		 * Y will denote that all seven tuts are seen by user.
 		 * At present we have 7 tuts so we will increase the tuts count as user sees the tuts.
 		*/
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "N");
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "0");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "N");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "0");
 	}
-	
+
 	private void makeTutsOff(){
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_DETAILS, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_LISTING, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_MYQUOPNS, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_GIFTING, QuopnConstants.TUTORIAL_OFF);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_OFF);
 		/*
 		 * two new keys added for start on and of (N for all tuts are not seen by user and 0 is the count of tuts at first)
 		 * Y will denote that all seven tuts are seen by user.
 		 * At present we have 7 tuts so we will increase the tuts count as user sees the tuts.
 		*/
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "Y");
-		PreferenceUtil.getInstance(this).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "6");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_SEEN, "Y");
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(QuopnConstants.PREF_ALL_TUTS_COUNT, "6");
 }
 
 	@Override
@@ -487,7 +492,7 @@ public class OTPScreen extends Activity implements ConnectionListener {
 				}
 			}
 		});
-		
+
 	}
 
 	@Override

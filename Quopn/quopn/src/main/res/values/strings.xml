@@ -28,10 +28,10 @@
     <string name="message_is_not_available">Message is not available</string>
     <string name="video_is_not_available">Video is not available</string>
     <string name="store_id_is_pressed">Store id is pressed</string>
-    <string name="lable_app_upgrade">Upgrade to the new app and\nearn Cashback...</string>
+    <string name="lable_app_upgrade">Now get more with your Quopn Wallet! Update to earn Cashback on your shopping via Quopn</string>
     <string name="message_forcefully_upgrade">All our Quopns have moved to the newer version. You need to upgrade your app to access them</string>
     <string name="message_not_forcefully_upgrade">Our Quopns eagerly want you to try out the new version. Don\'t leave them hanging</string>
-     <string name="caption_button_upgrade">Update</string>
+     <string name="caption_button_upgrade">Upgrade</string>
     <string name="caption_button_quit">Exit</string>
     <string name="caption_button_continue">Continue</string>
      <string name="caption_savings_approx">MINIMUM SAVINGS</string>
@@ -365,13 +365,15 @@
     <string name="resend_btn_text">Resend</string>
 
     <!-- added for version 3.4 -->
-    <string name="citrus_email_alreadyRegistered">Email already registered. Please change</string>
-    <string name="citrus_email_updated">Please enter OTP sent via SMS to confirm. We have updated your email as registered with citrus to</string>
+    <string name="citrus_email_alreadyRegistered">Email ID is already registered with another number. Please enter another email ID</string>
+    <string name="citrus_email_updated1">Please enter OTP sent on</string>
+    <string name="citrus_email_updated2">to sign in. Your Citrus Account email ID has been updated to\n</string>
     <string name="citrus_sendmoney_success">Yay! Your money transfer request has been initiated</string>
     <string name="citrus_loadwallet_failure">Oops! The Quopn Add money request has failed. Please try again</string>
     <string name="txnpin_incorrect">Oops! Your transaction pin is incorrect. Please re-enter the correct pin and try again</string>
     <string name="dialog_otp_validation">Please enter OTP sent\nvia SMS to confirm</string>
-    <string name="citrus_dialog_otp_validation">Oh no! The OTP is invalid Please check again and re-enter</string>
+    <string name="citrus_dialog_otp_validation">Oops! The OTP is invalid. Please check again and re-enter</string>
+    <string name="citrus_dialog_otp_attempts">. Remaining attempts left: </string>
     <string name="citrus_tranfer_to_bank_success">Yay! Your transfer request has been initiated</string>
     <string name="citrus_wallet_default_message">The money from your selected wallet will be redeemed the next time you shop at a Quopn store. For more information visit FAQs</string>
     <string name="cvv_incorrect">Please enter a valid CVV</string>
@@ -381,4 +383,6 @@
     <string name="quopn_merchant_redemption_updated_udio">Your Udio Wallet will be debited the next time you make a purchase at a Quopn store</string>
     <string name="quopn_merchant_redemption_updated_noselection">Payment setting has been turned off. Kindly activate an option to pay through your wallet at a Quopn store</string>
     <string name="citrus_registration_error">Your Citrus Wallet registration failed. Please try again</string>
+    <string name="citrus_tiny_error">Oops! There was a tiny error. Please try again.</string>
+    <string name="citrus_otp_dialog">Please enter Citrus OTP sent via SMS to log into your wallet</string>
 </resources>

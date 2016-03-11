@@ -432,23 +432,23 @@ public class QuopnStoreList extends ActionBarActivity {
 		if (QuopnUtils.isInternetAvailable(this)) {
 
 			String city = "", state = "";
-			if(PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY) != null
-					&& PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE) != null){
+			if(PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY) != null
+					&& PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE) != null){
 
-				Cursor city_cursor=getContentResolver().query(ConProvider.CONTENT_URI_CITIES, null, ITableData.TABLE_CITIES.COLUMN_CITY_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY)},null);
+				Cursor city_cursor=getContentResolver().query(ConProvider.CONTENT_URI_CITIES, null, ITableData.TABLE_CITIES.COLUMN_CITY_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY)},null);
 				city_cursor.moveToFirst();
-				Cursor state_cursor=getContentResolver().query(ConProvider.CONTENT_URI_STATES, null, ITableData.TABLE_STATES.COLUMN_STATE_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE)},null);
+				Cursor state_cursor=getContentResolver().query(ConProvider.CONTENT_URI_STATES, null, ITableData.TABLE_STATES.COLUMN_STATE_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE)},null);
 				state_cursor.moveToFirst();
-				city=city_cursor.getString(city_cursor.getColumnIndex(ITableData.TABLE_CITIES.COLUMN_CITY_NAME));
-				state=state_cursor.getString(state_cursor.getColumnIndex(ITableData.TABLE_STATES.COLUMN_STATE_NAME));
+//				city=city_cursor.getString(city_cursor.getColumnIndex(ITableData.TABLE_CITIES.COLUMN_CITY_NAME));
+//				state=state_cursor.getString(state_cursor.getColumnIndex(ITableData.TABLE_STATES.COLUMN_STATE_NAME));
 
-				city = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY);
-				state = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE);
+				city = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY);
+				state = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE);
 
 			}
 
 			Map<String, String> params = new HashMap<String, String>();
-//			params.put("walletid", PreferenceUtil.getInstance(this)
+//			params.put("walletid", PreferenceUtil.getInstance(getApplicationContext())
 //					.getPreference(QuopnConstants.WALLET_ID_KEY));
 //			params.put("devid", QuopnConstants.android_id);
 			params.put("lat", lat);
@@ -475,23 +475,23 @@ public class QuopnStoreList extends ActionBarActivity {
 		if (QuopnUtils.isInternetAvailable(this)) {
 
 			String city = "", state = "";
-			if(PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY) != null
-					&& PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE) != null){
+			if(PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY) != null
+					&& PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE) != null){
 
-				Cursor city_cursor=getContentResolver().query(ConProvider.CONTENT_URI_CITIES, null, ITableData.TABLE_CITIES.COLUMN_CITY_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY)},null);
+				Cursor city_cursor=getContentResolver().query(ConProvider.CONTENT_URI_CITIES, null, ITableData.TABLE_CITIES.COLUMN_CITY_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY)},null);
 				city_cursor.moveToFirst();
-				Cursor state_cursor=getContentResolver().query(ConProvider.CONTENT_URI_STATES, null, ITableData.TABLE_STATES.COLUMN_STATE_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE)},null);
+				Cursor state_cursor=getContentResolver().query(ConProvider.CONTENT_URI_STATES, null, ITableData.TABLE_STATES.COLUMN_STATE_ID + " = ? "  , new String[]{PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE)},null);
 				state_cursor.moveToFirst();
 				city=city_cursor.getString(city_cursor.getColumnIndex(ITableData.TABLE_CITIES.COLUMN_CITY_NAME));
 				state=state_cursor.getString(state_cursor.getColumnIndex(ITableData.TABLE_STATES.COLUMN_STATE_NAME));
 
-				city = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY);
-				state = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE);
+				city = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY);
+				state = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE);
 
 			}
 
 			Map<String, String> params = new HashMap<String, String>();
-//			params.put("walletid", PreferenceUtil.getInstance(this)
+//			params.put("walletid", PreferenceUtil.getInstance(getApplicationContext())
 //					.getPreference(QuopnConstants.WALLET_ID_KEY));
 //			params.put("devid", QuopnConstants.android_id);
 			params.put("lat", lat);

@@ -88,8 +88,8 @@ public class TourActivity extends Activity {
 			}
 		});
 		mAnalysisManager=((QuopnApplication)getApplicationContext()).getAnalysisManager();
-		PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.TOUR_REACHED, true);
-		mPersonalVideoUrl = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.TOUR_REACHED, true);
+		mPersonalVideoUrl = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
 		
 		
 		

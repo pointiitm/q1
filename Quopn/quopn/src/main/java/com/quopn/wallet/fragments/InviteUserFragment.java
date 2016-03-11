@@ -36,6 +36,7 @@ import com.gc.materialdesign.widgets.Dialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.quopn.wallet.InviteUserActivity;
+import com.quopn.wallet.QuopnApplication;
 import com.quopn.wallet.R;
 import com.quopn.wallet.connection.ConnectRequest;
 import com.quopn.wallet.connection.ConnectionFactory;
@@ -122,9 +123,9 @@ ConnectionListener{
 			Bundle savedInstanceState) {
 		View inviteView = inflater.inflate(R.layout.invite_user, null);
 		
-		userMobileNo=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY);
-		String leagaltext=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_MESSAGE);
-		String invitetoptext=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_TOP_MESSAGE);
+		userMobileNo=PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY);
+		String leagaltext=PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_MESSAGE);
+		String invitetoptext=PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_TOP_MESSAGE);
 		
 		mSelectFromContact = (LinearLayout) inviteView.findViewById(R.id.selectFromContact);
 		//mImageSelectFromContact = (ImageView) inviteView.findViewById(R.id.imgSelectContact);
@@ -476,7 +477,7 @@ public void onClick(View view){
 private boolean checkValidateion(){
 	final String tempInviteName = mInviteName.getText().toString();
 	final String tempInviteMobileNo = mInviteMobileNumber.getText().toString();
-	String userMobileNo=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY);
+	String userMobileNo=PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.MOBILE_KEY);
 	
 	if(!QuopnUtils.isInternetAvailable(mInviteUserActivity)){
 		 Dialog dialog=new Dialog(mInviteUserActivity, R.string.dialog_title_no_internet,R.string.please_connect_to_internet);
@@ -545,20 +546,20 @@ private boolean checkValidateion(){
 	}
 	return true;
 }
-private void sendInvitation(String inviteName,String inviteMobileNo){
+private void sendInvitation(String inviteName,String inviteMobileNo) {
 //	String UserId=PreferenceUtil.getInstance(getActivity()).getPreference(QuopnConstants.USER_ID);
 //	if(mMale.isChecked()){
 //		new SendingInvitationTask().execute(UserId,inviteName,inviteMobileNo,"M");	
 //	}else{
 //		new SendingInvitationTask().execute(UserId,inviteName,inviteMobileNo,"F");
 //	}
-	
+
 	//new code
-String UserId=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_ID);
-	if(mImgGender.equals(tagMale)){
-		new SendingInvitationTask().execute(UserId,inviteName,inviteMobileNo,"M");	
-	}else{
-		new SendingInvitationTask().execute(UserId,inviteName,inviteMobileNo,"F");
+	String UserId = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_ID);
+	if (mImgGender.equals(tagMale)) {
+		new SendingInvitationTask().execute(UserId, inviteName, inviteMobileNo, "M");
+	} else {
+		new SendingInvitationTask().execute(UserId, inviteName, inviteMobileNo, "F");
 	}
 }
 
@@ -632,20 +633,20 @@ String UserId=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(Pref
 	}
 	
 	private void showInviteSucessfullyRegisteredDialogue(final InviteData inviteDataResponse) {
-		
-		OnClickListener cancelClickListener=new OnClickListener() {
+
+		OnClickListener cancelClickListener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 //				if(AlertManager.mDialog.isShowing()){
 //					AlertManager.mDialog.dismiss();
 //				}
 				mInviteUserFragment.mInviteUserActivity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
-				
+
 			}
 		};
-		
-		OnClickListener confirmClickListener=new OnClickListener() {
+
+		OnClickListener confirmClickListener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				try {
@@ -653,20 +654,20 @@ String UserId=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(Pref
 					mInviteUserActivity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
 
 					// TODO add +91 before sending it to the sms
-					String inviteMobileNo=mInviteMobileNumber.getText().toString();
-					Intent sendIntent = new Intent(Intent.ACTION_VIEW,Uri.fromParts("sms", inviteMobileNo, null));
+					String inviteMobileNo = mInviteMobileNumber.getText().toString();
+					Intent sendIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", inviteMobileNo, null));
 					sendIntent.setType("vnd.android-dir/mms-sms");
 					sendIntent.putExtra("address", inviteMobileNo);
 
-					String invitesmstext=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_SMS);
-					if(invitesmstext!=null) {
+					String invitesmstext = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_SMS);
+					if (invitesmstext != null) {
 						sendIntent.putExtra("sms_body", invitesmstext);
 					} else {
 						sendIntent.putExtra("sms_body", getString(R.string.invite_user_suuceesfull_sms_txt) + " " + QuopnApi.PLAY_STORE_ULR + " " + getString(R.string.to_download));
 					}
 
-					PreferenceUtil.getInstance(mInviteUserActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_COUNT, inviteDataResponse.getInvite_count());
-					    
+					PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.INVITE_COUNT, inviteDataResponse.getInvite_count());
+
 					if (sendIntent.resolveActivity(mInviteUserActivity.getPackageManager()) == null) {
 						Toast.makeText(
 								mInviteUserActivity,
@@ -675,16 +676,16 @@ String UserId=PreferenceUtil.getInstance(mInviteUserActivity).getPreference(Pref
 					} else {
 						mInviteUserActivity.startActivity(sendIntent);
 					}
-					    
-					} catch (android.content.ActivityNotFoundException ex) {
-					    Toast.makeText(mInviteUserActivity, "There are no message clients installed.", Toast.LENGTH_SHORT).show();
-					}		
-				
+
+				} catch (android.content.ActivityNotFoundException ex) {
+					Toast.makeText(mInviteUserActivity, "There are no message clients installed.", Toast.LENGTH_SHORT).show();
+				}
+
 			}
 		};
-		 Dialog dialog=new Dialog(mInviteUserActivity, R.string.dialog_title_send_invite,inviteDataResponse.getMessage());
-		 dialog.setOnAcceptButtonClickListener(confirmClickListener);
-		 dialog.show();
+		Dialog dialog = new Dialog(mInviteUserActivity, R.string.dialog_title_send_invite, inviteDataResponse.getMessage());
+		dialog.setOnAcceptButtonClickListener(confirmClickListener);
+		dialog.show();
 //		reset(); // ankur
 	}
 

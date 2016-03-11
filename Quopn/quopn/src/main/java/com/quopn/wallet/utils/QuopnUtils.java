@@ -10,6 +10,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -985,6 +987,46 @@ public class QuopnUtils {
             return QuopnConstants.WalletType.NONE;
         }
         return type;
+    }
+
+    public static int getAppVersionCode ()
+    {
+        try {
+            if (QuopnConstants.versionCode == -1) {
+                PackageInfo packageInfo = null;
+                try {
+                    packageInfo = QuopnApplication.getInstance().getApplicationContext().getPackageManager().getPackageInfo(QuopnApplication.getInstance().getApplicationContext().getPackageName(), 0);
+                } catch (PackageManager.NameNotFoundException e2) {
+                }
+                if (packageInfo != null) {
+                    QuopnConstants.versionCode = packageInfo.versionCode;
+                    QuopnConstants.versionName = packageInfo.versionName;
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("QuopnUtils", "app version issue in versionCheck, ex.getLocalizedMessage: " + ex.getLocalizedMessage());
+        }
+        return QuopnConstants.versionCode;
+    }
+
+    public static String getAppVersionCode_Name ()
+    {
+        try {
+            if (QuopnConstants.versionCode == -1) {
+                PackageInfo packageInfo = null;
+                try {
+                    packageInfo = QuopnApplication.getInstance().getApplicationContext().getPackageManager().getPackageInfo(QuopnApplication.getInstance().getApplicationContext().getPackageName(), 0);
+                } catch (PackageManager.NameNotFoundException e2) {
+                }
+                if (packageInfo != null) {
+                    QuopnConstants.versionCode = packageInfo.versionCode;
+                    QuopnConstants.versionName = packageInfo.versionName;
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("QuopnUtils", "app version issue in versionCheck, ex.getLocalizedMessage: " + ex.getLocalizedMessage());
+        }
+        return QuopnConstants.versionName;
     }
 
     /**

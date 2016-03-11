@@ -3,6 +3,7 @@ package com.quopn.wallet.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.quopn.wallet.QuopnApplication;
 import com.quopn.wallet.data.model.CityData;
 import com.quopn.wallet.data.model.StateData;
 
@@ -48,6 +49,7 @@ public class QuopnConstants {
 	public static String CAMPAIGNID="";
 	public static int AVAILABLEQUOPN=-1;
 	public static int ALREADYISSUED=-1;
+//	public static boolean isSMSLISTNERREGISTERED = false;
 
 
 	// directory name to store captured images and videos
@@ -253,6 +255,11 @@ public class QuopnConstants {
 	public static final String TRUE = "true";
 	public static final String FALSE = "false";
 
+	// upgrade popup control
+
+	public static boolean isUpdateTrue_ForWallet = false;
+	public static boolean isUpdateTrue_ForAnnouncement = false;
+
 	public interface CONN_PARAMS{
 		public static final String walletId = "walletId";
 		public static final String mobileWalletId = "mobileWalletId";
@@ -319,6 +326,9 @@ public class QuopnConstants {
 	}
 
 	public static void showToast(Context context, String message) {
+		if (context == null) {
+			context = QuopnApplication.getInstance().getApplicationContext();
+		}
 		Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 	}
 

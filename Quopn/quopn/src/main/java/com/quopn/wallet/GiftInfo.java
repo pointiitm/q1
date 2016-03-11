@@ -48,10 +48,10 @@ public class GiftInfo extends ActionBarActivity implements OnClickListener,
 				.cacheInMemory(true).cacheOnDisc(true).considerExifParams(true)
 				.displayer(new RoundedBitmapDisplayer(130)).build();
 
-		mPersonalVideoUrl = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
-		mPersonalSenderPic = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_PIC);
-		mPersonalSenderName = PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_NAME);
-		mQuopnDownloadManager = new QuopnDownloadManager(this,mPersonalVideoUrl, this);
+		mPersonalVideoUrl = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
+		mPersonalSenderPic = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_PIC);
+		mPersonalSenderName = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_SENDER_NAME);
+		mQuopnDownloadManager = new QuopnDownloadManager(getApplicationContext(),mPersonalVideoUrl, this);
 
 		sender_image = (ImageView) findViewById(R.id.sender_image);
 		giftHeaderMessage = (TextView) findViewById(R.id.giftHeaderMessage);
@@ -119,7 +119,7 @@ public class GiftInfo extends ActionBarActivity implements OnClickListener,
 		((TextView) findViewById(R.id.nextGiftVideo)).setVisibility(View.VISIBLE);
 		
 //		Log.i(TAG,"filePath in GiftInfo"+filePath);
-		PreferenceUtil.getInstance(GiftInfo.this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_PATH,filePath);
+		PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_PATH,filePath);
 	}
 	
 	@Override

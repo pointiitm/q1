@@ -46,8 +46,8 @@ public class InviteUserRequest extends ConnectRequest implements Connector,Reque
 		requestTimer = new RequestTimer();
 		requestTimer.setListener(this);
         this.mHeaderParams  = new HashMap<String, String>();
-        this.mHeaderParams.put(QuopnApi.ParamKey.AUTHORIZATION, PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
-        this.mHeaderParams.put(QuopnApi.ParamKey.x_session, PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
+        this.mHeaderParams.put(QuopnApi.ParamKey.AUTHORIZATION, PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
+        this.mHeaderParams.put(QuopnApi.ParamKey.x_session, PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
 	}
 	
 	@Override

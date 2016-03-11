@@ -97,11 +97,11 @@ ConnectionListener{
 								 * in the OTP verification call for referrer purpose
 								 * */
 								if(tempSplitKeyValue[0].equals(UTM_SOURCE)){
-									PreferenceUtil.getInstance(context).setPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_SOURCE, tempSplitKeyValue[1]);
+									PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_SOURCE, tempSplitKeyValue[1]);
 								}else if(tempSplitKeyValue[0].equals(UTM_CONTENT)){
-									PreferenceUtil.getInstance(context).setPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CONTENT, tempSplitKeyValue[1]);
+									PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CONTENT, tempSplitKeyValue[1]);
 								}else if(tempSplitKeyValue[0].equals(UTM_CAMPAIGN)){
-									PreferenceUtil.getInstance(context).setPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CAMPAIGN, tempSplitKeyValue[1]);
+									PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.UTM_CAMPAIGN, tempSplitKeyValue[1]);
 								}
 								
 								
@@ -158,7 +158,7 @@ public void onResponse(int responseResult, Response response) {
 			 Log.v(TAG,"We Got Error in response of Referral Request");
 		}else{
 			if(mContext!=null)
-	        PreferenceUtil.getInstance(mContext).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_FIRSTLAUNCH,true);
+	        PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_FIRSTLAUNCH,true);
 			Log.v(TAG,"Response Message : "+tAddToCartData.getMessage());
 		}
 		}

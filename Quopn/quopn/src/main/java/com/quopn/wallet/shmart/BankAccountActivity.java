@@ -169,20 +169,17 @@ public class BankAccountActivity extends ActionBarActivity {
                 return;
             } else if (etAccountMobile.getText().toString().isEmpty()
                     || !Validations.isValidMobile(etAccountMobile.getText().toString())) {
-                // TODO blank_mobile_no, mobileno_validation
                 Validations.CustomErrorMessage(BankAccountActivity.this
                         , R.string.validation_shmart_mobile
                         , etAccountMobile, null, 0);
                 return;
             } else if (etAccountNumber.getText().toString().isEmpty()
                     || !Validations.isValidAccount(etAccountNumber.getText().toString())) {
-                // TODO
                 Validations.CustomErrorMessage(BankAccountActivity.this
                         , R.string.validation_bank_account_number
                         , etAccountNumber, null, 0);
                 return;
             } else if (!etAccountNumber.getText().toString().equals(etAccountNumberRepeat.getText().toString())) {
-                // TODO blank account no, valid ac no, mismatch
                 Validations.CustomErrorMessage(BankAccountActivity.this
                         , R.string.validation_bank_arcount_number_repeat
                         , etAccountNumberRepeat, null, 0);
@@ -275,7 +272,6 @@ public class BankAccountActivity extends ActionBarActivity {
                 );
 //            } else if (QuopnApplication.getInstance().getCurrentWalletMode() == QuopnConstants.WalletType.CITRUS) {
 //                // citrus flow
-//                // TODO clear flow
 //                ShmartFlow.getInstance().onBankDetailsSubmitted(
 //                        etAccountHolderName.getText().toString()
 //                        , etAccountNumber.getText().toString()

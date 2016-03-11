@@ -176,16 +176,16 @@ public class MainMenuFragment extends BaseFragment implements
 		super.onActivityCreated(savedInstanceState);
 		adapter = new SampleAdapter(mMainActivity);
 
-		invitCount = PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.INVITE_COUNT);
-		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(mMainActivity).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
-		QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(mMainActivity).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT);
+		invitCount = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.INVITE_COUNT);
+		QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT);
+		QuopnConstants.NOTIFICATION_COUNT = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference_int(SHARED_PREF_KEYS.NOTIFICATIONCOUNT);
 
 		for (int i = 0; i < mIDs.length(); i++) {
 			adapter.add(new SampleItem(mIDs.getResourceId(i, 0), mName[i], mIcons.getResourceId(i, 0)));
 		}
 
 		{
-			String mobileWallets = PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.MOBILE_WALLETS_KEY);
+			String mobileWallets = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.MOBILE_WALLETS_KEY);
 			isMultiWalletsEnabled = false;
 			if (!mobileWallets.isEmpty()) {
 				if (mobileWallets.equalsIgnoreCase("1") || mobileWallets.equalsIgnoreCase("2|1") || mobileWallets.equalsIgnoreCase("1|2")) {
@@ -207,19 +207,19 @@ public class MainMenuFragment extends BaseFragment implements
 	public void initSlideMenuHeader() {
 		imgProfilePic = (ImageView) mMainActivity.findViewById(R.id.slidemenu_profile_img);
 		setImage();
-		String userWalletId = PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY);
+		String userWalletId = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY);
 		QuopnTextView walletId = (QuopnTextView) mMainActivity.findViewById(R.id.slidemenu_wallet_id);
 		walletId.setText(getResources().getString(R.string.wallet_id) + " " + userWalletId);
 		walletId.setTypeface(null, Typeface.BOLD);
 
 		if (requestpin != null) {
-			String userPinNo = PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.PIN_KEY);
+			String userPinNo = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.PIN_KEY);
 			requestpin = userPinNo;
 			QuopnTextView pinNo = (QuopnTextView) mMainActivity.findViewById(R.id.slidemenu_pin_no);
 			pinNo.setText(getResources().getString(R.string.pin_no) + " " + requestpin);
 			pinNo.setTypeface(null, Typeface.BOLD);
 		} else {
-			String userPinNo = PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.PIN_KEY);
+			String userPinNo = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.PIN_KEY);
 			QuopnTextView pinNo = (QuopnTextView) mMainActivity.findViewById(R.id.slidemenu_pin_no);
 			pinNo.setText(getResources().getString(R.string.pin_no) + " " + userPinNo);
 			pinNo.setTypeface(null, Typeface.BOLD);
@@ -232,7 +232,7 @@ public class MainMenuFragment extends BaseFragment implements
         if (QuopnUtils.isInternetAvailable(mMainActivity)) {
             //mCustomProgressDialog.show();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("walletid",PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY));
+            params.put("walletid",PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY));
 
             ConnectionFactory connectionFactory = new ConnectionFactory(mMainActivity, this);
             connectionFactory.setPostParams(params);
@@ -266,12 +266,12 @@ public class MainMenuFragment extends BaseFragment implements
 
 
 		if (TextUtils.isEmpty(QuopnConstants.PROFILE_DATA)) {
-			QuopnConstants.PROFILE_DATA = PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.PROFILE_DATA);
+			QuopnConstants.PROFILE_DATA = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.PROFILE_DATA);
 		}
 		ProfileData response = (ProfileData) gson.fromJson(
 				QuopnConstants.PROFILE_DATA, ProfileData.class);
 		String imageUrl =response.getUser().getPic();
-		String imagePath = PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.PROFILE_IMAGE_PATH);
+		String imagePath = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.PROFILE_IMAGE_PATH);
 		if(imageUrl != null || !TextUtils.isEmpty(imageUrl) && QuopnUtils.isInternetAvailable(mMainActivity)){
 			mImageLoader.displayImage(imageUrl,imgProfilePic, mDisplayImageOptions, null);
 		} else if(imagePath != null){
@@ -282,7 +282,8 @@ public class MainMenuFragment extends BaseFragment implements
 
 	private void CheckCitrusWalletList(){
 		if (QuopnUtils.isInternetAvailable(mMainActivity)) {
-			progressBar.setVisibility(View.VISIBLE);
+//			progressBar.setVisibility(View.VISIBLE);
+			mMainActivity.showCustomProgress();
 			Map<String, String> params = new HashMap<String, String>();
 			params.put(QuopnConstants.CONN_PARAMS.mobileWalletId, "2");
 			ConnectionFactory connectionFactory = new ConnectionFactory(mMainActivity, this);
@@ -483,7 +484,7 @@ public class MainMenuFragment extends BaseFragment implements
 				progressBar.setVisibility(View.VISIBLE);
 				if (TextUtils.isEmpty(QuopnConstants.PROFILE_DATA)) {
 					QuopnConstants.PROFILE_DATA = PreferenceUtil.getInstance(
-							mMainActivity).getPreference(
+							QuopnApplication.getInstance().getApplicationContext()).getPreference(
 							SHARED_PREF_KEYS.PROFILE_DATA);
 				}
 
@@ -557,7 +558,8 @@ public class MainMenuFragment extends BaseFragment implements
 				if (!QuopnUtils.isInternetAvailableAndShowDialog(mMainActivity)) {
 					return;
 				}
-				progressBar.setVisibility(View.VISIBLE);
+//				progressBar.setVisibility(View.VISIBLE);
+				mMainActivity.showCustomProgress();
 				callChangePin();
 				break;
 
@@ -762,7 +764,7 @@ public class MainMenuFragment extends BaseFragment implements
 
 
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("user_id", PreferenceUtil.getInstance(mMainActivity)
+			params.put("user_id", PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext())
 					.getPreference(SHARED_PREF_KEYS.USER_ID));
 			params.put("device_id", QuopnConstants.android_id);
 
@@ -780,15 +782,15 @@ public class MainMenuFragment extends BaseFragment implements
 		QuopnApplication.getInstance().setIsCitrusInitiated(false);
 		try {
 
-			String imagePath = PreferenceUtil.getInstance(mMainActivity)
+			String imagePath = PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext())
 					.getPreference(
 							SHARED_PREF_KEYS.PROFILE_IMAGE_PATH);
 			File f = new File(imagePath, QuopnConstants.PROFILE_IMG_NAME);
 			boolean isDeleted = f.delete();
 
 			QuopnConstants.PROFILE_PIC_DATA = null;
-			PreferenceUtil.getInstance(mMainActivity).setPreference(SHARED_PREF_KEYS.API_KEY, "");
-			PreferenceUtil.getInstance(mMainActivity).clearPreference();
+			PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(SHARED_PREF_KEYS.API_KEY, "");
+			PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).clearPreference();
 			mMainActivity.getContentResolver().delete(ConProvider.CONTENT_URI_CATEGORY, null, null);
 //			mMainActivity.getContentResolver().delete(ConProvider.CONTENT_URI_CITIES, null, null);
 			mMainActivity.getContentResolver().delete(ConProvider.CONTENT_URI_QUOPN, null, null);
@@ -839,7 +841,7 @@ public class MainMenuFragment extends BaseFragment implements
 			headers.put(QuopnApi.ParamKey.AUTHORIZATION, user.getApi_key());
 
             Map<String, String> params = new HashMap<String, String>();
-            params.put("walletid", PreferenceUtil.getInstance(mMainActivity).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY));
+            params.put("walletid", PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(SHARED_PREF_KEYS.WALLET_ID_KEY));
 
             ConnectionFactory connectionFactory = new ConnectionFactory(mMainActivity, this);
 			connectionFactory.setHeaderParams(headers);
@@ -856,6 +858,7 @@ public class MainMenuFragment extends BaseFragment implements
 		QuopnApplication.getInstance().setCurrentWalletMode(QuopnConstants.WalletType.CITRUS);
 		if (QuopnApplication.getInstance().getIsCitrusInitiated()) {
 			// skip initiation
+			mMainActivity.showCustomProgress();
 			mMainActivity.walletCitrusStatus();
 		} else {
 			// api call for getting citrus credentials
@@ -870,64 +873,64 @@ public class MainMenuFragment extends BaseFragment implements
 	}
 
 	private void setOnTutorialSetting() {
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_DETAILS,
 				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_LISTING,
 				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_MYQUOPNS,
 				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_GIFTING,
 				QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_ON);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.PREF_ALL_TUTS_SEEN, "N");
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.PREF_ALL_TUTS_COUNT, "0");
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				SHARED_PREF_KEYS.IS_GiftTutShown, false);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				SHARED_PREF_KEYS.IS_CatTutShown, false);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				SHARED_PREF_KEYS.IS_TutShown, false);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				SHARED_PREF_KEYS.IS_ANY_TUT_ON, false);
 	}
 
 	private void setOffTutorialSetting() {
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_CAT, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_DETAILS,
 				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_LISTING,
 				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_CART, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_MYQUOPNS,
 				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_GIFTING,
 				QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.TUTORIAL_PREF_OPEN, QuopnConstants.TUTORIAL_OFF);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				QuopnConstants.PREF_ALL_TUTS_SEEN, "Y");
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				SHARED_PREF_KEYS.IS_GiftTutShown, true);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				SHARED_PREF_KEYS.IS_CatTutShown, true);
-		PreferenceUtil.getInstance(mMainActivity).setPreference(
+		PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(
 				SHARED_PREF_KEYS.IS_TutShown, true);
 	}
 
@@ -963,7 +966,7 @@ public class MainMenuFragment extends BaseFragment implements
 //			mCustomProgressDialog.show();
 
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("userid", PreferenceUtil.getInstance(mMainActivity)
+			params.put("userid", PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext())
 					.getPreference(SHARED_PREF_KEYS.USER_ID));
 			params.put("status", NOTITY_STATUS);
 			ConnectionFactory connectionFactory = new ConnectionFactory(
@@ -1023,6 +1026,7 @@ public class MainMenuFragment extends BaseFragment implements
 					if (progressBar != null) {
 						progressBar.setVisibility(View.GONE);
 					}
+					mMainActivity.stopCustomProgress();// todo remove
 					GeneratePinData data = (GeneratePinData) response;
 
 					if (data.getError() == false) {
@@ -1051,7 +1055,7 @@ public class MainMenuFragment extends BaseFragment implements
 					RequestPinData requestpindata = (RequestPinData) response;
 					if (!requestpindata.getError()) {
 						requestpin = requestpindata.getPin();
-						PreferenceUtil.getInstance(mMainActivity).setPreference(SHARED_PREF_KEYS.PIN_KEY, requestpin);
+						PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).setPreference(SHARED_PREF_KEYS.PIN_KEY, requestpin);
 						QuopnUtils.setDefaultWalletInAppAndPref(requestpindata.getDefaultWallet(), mMainActivity.getApplicationContext());
 						QuopnTextView pinNo = (QuopnTextView) mMainActivity.findViewById(R.id.slidemenu_pin_no);
 						pinNo.setText(getResources().getString(R.string.pin_no) + " " + requestpin);
@@ -1142,6 +1146,7 @@ public class MainMenuFragment extends BaseFragment implements
 						//logoutCleanUp();
 					}
 				} else if (response instanceof CitrusWalletListData) {
+					mMainActivity.stopCustomProgress();
 					CitrusWalletListData citruswalletlistData = (CitrusWalletListData) response;
 					ArrayList<WalletListData> walletListDatas = citruswalletlistData.getWalletList();
 					if (!walletListDatas.isEmpty()) {
@@ -1161,6 +1166,7 @@ public class MainMenuFragment extends BaseFragment implements
 								mCitrusClient.init(signup_id, client_signup_secret, signin_id, client_signin_secret, vanity, environment);
 								QuopnApplication.getInstance().setIsCitrusInitiated(true);
 								// call walletcitrusHome
+								mMainActivity.showCustomProgress();
 								mMainActivity.walletCitrusStatus();
 								return;
 							}

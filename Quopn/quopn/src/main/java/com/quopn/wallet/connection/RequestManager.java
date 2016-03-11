@@ -20,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.gc.materialdesign.widgets.Dialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.quopn.wallet.QuopnApplication;
 import com.quopn.wallet.R;
 import com.quopn.wallet.data.model.AddToCartData;
 import com.quopn.wallet.data.model.CampaignDetailsQuopnData;
@@ -128,13 +129,13 @@ public class RequestManager extends ConnectRequest implements Connector, Request
         requestTimer = new RequestTimer();
         requestTimer.setListener(this);
         this.mHeaderParams = new HashMap<String, String>();
-        this.mHeaderParams.put(QuopnApi.ParamKey.AUTHORIZATION, PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
-        this.mHeaderParams.put(QuopnApi.ParamKey.x_session, PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
+        this.mHeaderParams.put(QuopnApi.ParamKey.AUTHORIZATION, PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
+        this.mHeaderParams.put(QuopnApi.ParamKey.x_session, PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID));
         if (mContext != null) {
-            if (PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID) == null) {
+            if (PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.SESSION_ID) == null) {
                 Log.e(TAG, "session null for API " + requestUrl);
             }
-            if (PreferenceUtil.getInstance(mContext).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY) == null) {
+            if (PreferenceUtil.getInstance(QuopnApplication.getInstance().getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY) == null) {
                 Log.e(TAG, "API null for API " + requestUrl);
             }
         } else {

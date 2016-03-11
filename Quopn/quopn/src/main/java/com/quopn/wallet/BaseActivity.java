@@ -121,11 +121,14 @@ public class BaseActivity extends SlidingFragmentActivity {
 				}
 
                 callRequestPin();
-                String requestPinNo = PreferenceUtil.getInstance(BaseActivity.this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY);
+                String requestPinNo = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY);
                 QuopnTextView pinNo = (QuopnTextView)findViewById(R.id.slidemenu_pin_no);
-                pinNo.setText(getResources().getString(R.string.pin_no) + " " + requestPinNo);
-                pinNo.setTypeface(null, Typeface.BOLD);
-				
+				if (pinNo != null) {
+					pinNo.setText(getResources().getString(R.string.pin_no) + " " + requestPinNo);
+					pinNo.setTypeface(null, Typeface.BOLD);
+				} else {
+
+				}
 				 
 			}
 		});
@@ -137,7 +140,7 @@ public class BaseActivity extends SlidingFragmentActivity {
         if (QuopnUtils.isInternetAvailable(this)) {
             //mCustomProgressDialog.show();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("walletid",PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+            params.put("walletid",PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
 
             ConnectionFactory connectionFactory = new ConnectionFactory(this, (ConnectionListener) this);
             connectionFactory.setPostParams(params);
@@ -230,7 +233,7 @@ public class BaseActivity extends SlidingFragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		if (TextUtils.isEmpty(QuopnConstants.PROFILE_DATA)) {
-			QuopnConstants.PROFILE_DATA = PreferenceUtil.getInstance(BaseActivity.this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_DATA);
+			QuopnConstants.PROFILE_DATA = PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_DATA);
 		}
 	}
 

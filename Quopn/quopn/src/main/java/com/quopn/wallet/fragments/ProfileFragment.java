@@ -215,7 +215,7 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
         };
 
         if (TextUtils.isEmpty(QuopnConstants.PROFILE_DATA)) {
-            QuopnConstants.PROFILE_DATA = PreferenceUtil.getInstance(mMainActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_DATA);
+            QuopnConstants.PROFILE_DATA = PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_DATA);
         }
 
         ProfileData response = (ProfileData) gson.fromJson(
@@ -323,12 +323,12 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
 
         TextView textWalletID = (TextView) rootView
                 .findViewById(R.id.textWalletID);
-        textWalletID.setText(PreferenceUtil.getInstance(mMainActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
+        textWalletID.setText(PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY));
         textWalletID.setTypeface(null, Typeface.BOLD);
 
         TextView textWalletPin = (TextView) rootView
                 .findViewById(R.id.textWalletPin);
-        textWalletPin.setText(" " + PreferenceUtil.getInstance(mMainActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY));
+        textWalletPin.setText(" " + PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY));
         textWalletPin.setTypeface(null, Typeface.BOLD);
 
 //		Log.d(TAG, "VAIBHAV IN ProfileFragment onCreateView() + "
@@ -794,7 +794,7 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
         ProfileData response = (ProfileData) gson.fromJson(
                 QuopnConstants.PROFILE_DATA, ProfileData.class);
         String imageUrl = response.getUser().getPic();
-        String imagePath = PreferenceUtil.getInstance(mMainActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_IMAGE_PATH);
+        String imagePath = PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_IMAGE_PATH);
         if (imageUrl != null || !TextUtils.isEmpty(imageUrl) && QuopnUtils.isInternetAvailable(mMainActivity)) {
             mImageLoader.displayImage(imageUrl, imgProfilePic, mDisplayImageOptions, null);
         } else if (imagePath != null) {
@@ -805,7 +805,7 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
 
     public void getProfile() {
         Log.v(TAG, "*****Getting User Profile Data*****");
-        String api_key = PreferenceUtil.getInstance(mMainActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
+        String api_key = PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY);
         if (!TextUtils.isEmpty(api_key)) {
 
             params = new HashMap<String, String>();
@@ -831,7 +831,7 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
             if (isInternetAvailable()) {
                 Log.v("", "*****Profile Updating*****");
                 User mUser = new User();
-                mUser.setApi_key(PreferenceUtil.getInstance(mMainActivity).getPreference(
+                mUser.setApi_key(PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).getPreference(
                         PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
 //            Log.v("","API Key : "+mUser.getApi_key());
                 headerParams = new HashMap<String, String>();
@@ -898,8 +898,8 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
             } else {
                 saveProfileImagePath(profilePicPath);
                 Toast.makeText(mMainActivity, registerResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                PreferenceUtil.getInstance(mMainActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE, stateId); //commented 11022015
-                PreferenceUtil.getInstance(mMainActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY, cityId);
+                PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_STATE, stateId); //commented 11022015
+                PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.USER_CITY, cityId);
                 getProfile();
             }
         }
@@ -1140,7 +1140,7 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
     }
 
     public void saveProfileImagePath(String argImagePath) {
-        PreferenceUtil.getInstance(mMainActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_IMAGE_PATH, argImagePath);
+        PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_IMAGE_PATH, argImagePath);
     }
 
     private String saveToInternalSorage(Bitmap bitmapImage) {
@@ -1512,7 +1512,7 @@ public class ProfileFragment extends BaseFragment implements ConnectionListener,
                 response.getUser().setCity(String.valueOf(cityId));
                 response.getUser().setState(String.valueOf(stateId));
                 QuopnConstants.PROFILE_DATA = gson.toJson(response);
-                PreferenceUtil.getInstance(mMainActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_DATA, QuopnConstants.PROFILE_DATA);
+                PreferenceUtil.getInstance(mMainActivity.getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PROFILE_DATA, QuopnConstants.PROFILE_DATA);
 
                 updateProfile();
 

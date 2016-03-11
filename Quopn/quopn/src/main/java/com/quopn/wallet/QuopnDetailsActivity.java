@@ -649,9 +649,9 @@ public class QuopnDetailsActivity extends ActionBarActivity implements
     }
     public void getQuopnCampaignDetails(String campaignid) {
 
-        if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY))) {
+        if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY))) {
             headerParams = new HashMap<String, String>();
-            headerParams.put("Authorization",PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
+            headerParams.put("Authorization",PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.API_KEY));
             params=new HashMap<String, String>();
             params.put(QuopnApi.ParamKey.CAMPAIGN_ID,campaignid);
             mConnectionFactory= new ConnectionFactory(this,this);
@@ -687,7 +687,7 @@ public class QuopnDetailsActivity extends ActionBarActivity implements
 							}else{
 								QuopnConstants.MY_CART_COUNT = PreferenceUtil.getInstance(
 										QuopnDetailsActivity.this).getPreference_int(SHARED_PREF_KEYS.MYCARTCOUNT)  + 1;
-								PreferenceUtil.getInstance(QuopnDetailsActivity.this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
+                                PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.MYCARTCOUNT, QuopnConstants.MY_CART_COUNT);
 								Dialog dialog=new Dialog(QuopnDetailsActivity.this, R.string.dialog_title_success,videoIssueData.getMessage()); 
 								dialog.setOnAcceptButtonClickListener(new OnClickListener() {
 									@Override

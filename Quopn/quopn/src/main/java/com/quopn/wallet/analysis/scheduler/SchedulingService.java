@@ -88,7 +88,7 @@ public class SchedulingService extends IntentService implements ConnectionListen
     private void sendAnalysisToServer(String analysisString){
     	if(analysisString != null){
     	Map<String, String> params = new HashMap<String, String>();
-		params.put("walletid", PreferenceUtil.getInstance(this).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY) );
+		params.put("walletid", PreferenceUtil.getInstance(getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.WALLET_ID_KEY) );
 		params.put("jsonstats",analysisString);
 
 		params.put("device_id",QuopnConstants.android_id);//for device id added for stats 04022015
@@ -348,6 +348,15 @@ public class SchedulingService extends IntentService implements ConnectionListen
 						break;
 					case AnalysisEvents.SCREEN_CITRUS_REGTNC :
 						eventValue="screen_citrus_regtnc";
+						break;
+					case AnalysisEvents.INVITE :
+						eventValue="screen_invite";
+						break;
+					case AnalysisEvents.CATEGORY :
+						eventValue="screen_category";
+						break;
+					case AnalysisEvents.NOTIFICATION_CALL_TO_ACTION :
+						eventValue="notification_call_to_action";
 						break;
 
                     default :

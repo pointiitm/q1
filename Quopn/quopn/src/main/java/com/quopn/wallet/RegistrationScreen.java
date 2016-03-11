@@ -661,6 +661,8 @@ public class RegistrationScreen extends Activity implements	ConnectionListener, 
 			params.put("lat", "" + latitude);
 			params.put("long", "" + longitude);
 			params.put("imei",imei);
+			params.put(QuopnApi.ParamKey.APP_VERSION, Integer.toString(QuopnUtils.getAppVersionCode()));
+			params.put(QuopnApi.ParamKey.APP_VERSION_NAME, QuopnUtils.getAppVersionCode_Name());
 			ConnectionFactory connectionFactory = new ConnectionFactory(this,this);
 			connectionFactory.setPostParams(params);
 			connectionFactory.createConnection(QuopnConstants.REGISTRATION_CODE);

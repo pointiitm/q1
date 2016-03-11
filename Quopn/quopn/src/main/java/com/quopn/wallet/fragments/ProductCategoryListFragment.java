@@ -231,7 +231,7 @@ public class ProductCategoryListFragment extends Fragment implements
 	}
 
 	private void callCitrus(){
-		PreferenceUtil prefUtil = PreferenceUtil.getInstance(mParentActivity);
+		PreferenceUtil prefUtil = PreferenceUtil.getInstance(mParentActivity.getApplicationContext());
 		if(!prefUtil.hasContainedPreferenceKey(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN)) {
 //			prefUtil.setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_SHMART_WALLET_SHOWN, true);
 			if(mParentActivity instanceof MainActivity){
@@ -707,7 +707,7 @@ public class ProductCategoryListFragment extends Fragment implements
 			 * Gift Video Related stuff starts 
 			 * 
 			 */
-			personal_message_downloaded=PreferenceUtil.getInstance(mParentActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_PATH);
+			personal_message_downloaded=PreferenceUtil.getInstance(mParentActivity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_PATH);
 			if(personal_message_downloaded!=null){ //video URL available
 //				mfooter_text.setText(getResources().getString(R.string.personal_message));
 //				mfooter_text.setOnClickListener(new OnClickListener() {
@@ -717,7 +717,7 @@ public class ProductCategoryListFragment extends Fragment implements
 //					}
 //				});
 			}else{  //video URL NOT available
-				mPersonalVideoUrl=PreferenceUtil.getInstance(mParentActivity).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
+				mPersonalVideoUrl=PreferenceUtil.getInstance(mParentActivity.getApplicationContext()).getPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_URL);
 				if(mPersonalVideoUrl!=null){
 //					mQuopnDownloadManager=new QuopnDownloadManager(getActivity(), mPersonalVideoUrl,ProductCategoryListFragment.this);
 //					mfooter_text.setText(getResources().getString(R.string.download_message));
@@ -1077,7 +1077,7 @@ public class ProductCategoryListFragment extends Fragment implements
 //				QuopnUtils.sendVideoForGift(personal_message_downloaded/*QuopnConstants.GIFTVIDEO_URL*/,getActivity()); //added video for gift sandeep
 			}
 		});
-		PreferenceUtil.getInstance(mParentActivity).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_PATH, filePath);
+		PreferenceUtil.getInstance(mParentActivity.getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PERSONAL_MESSAGE_DOWNLOADED_PATH, filePath);
 		Toast.makeText(mParentActivity, "Download Complete", Toast.LENGTH_LONG).show();
 	}
 	

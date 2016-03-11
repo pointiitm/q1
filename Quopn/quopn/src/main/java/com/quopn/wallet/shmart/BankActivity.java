@@ -597,7 +597,7 @@ public class BankActivity extends ActionBarActivity implements WalletFragmentLis
             public void error(CitrusError error) {
                 if (mContext != null && (mContext instanceof Activity)) {
                     if (!((Activity) mContext).isFinishing()) {
-                        showMessage(true, error.getMessage());
+                        showMessage(true, getApplicationContext().getResources().getString(R.string.citrus_tiny_error));
                     } else {
                         QuopnConstants.showToast(getApplicationContext(), error.getMessage());
                         return;
@@ -614,6 +614,12 @@ public class BankActivity extends ActionBarActivity implements WalletFragmentLis
                     mergedObj.put(QuopnApi.EWalletRequestParam.BENEFICIARY.getName(), ShmartFlow.getInstance().getBeneficiaryCode_citrus());
                     mergedObj.put(QuopnApi.EWalletRequestParam.AMOUNT.getName(), "" + amount);
                     mergedObj.put("transaction_id", "");
+                    if (error != null) {
+                        mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORMESSAGE, error.getMessage());
+                        if (error.getStatus() != null) {
+                            mergedObj.put(QuopnApi.CITRUS_PARAMS.ERRORSTATUS, error.getStatus().name());
+                        }
+                    }
                     mergedObj.put("txMsg", error.getMessage());
                     mergedObj.put("platform", "android");
 

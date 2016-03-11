@@ -6,6 +6,7 @@ package com.quopn.wallet.utils;
 
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -13,8 +14,10 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.quopn.wallet.QuopnApplication;
 import com.quopn.wallet.R;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -136,6 +139,25 @@ public class Validations {
         return doValidationForRegexArg(regex, arg);
     }
 
+	public static ArrayList<String> extractNumberSequenceFromString (String arg) {
+		Pattern p = Pattern.compile("-?\\d+");
+		Matcher m = p.matcher(arg);
+		ArrayList<String> matches = new ArrayList<>();
+		while (m.find()) {
+			matches.add(m.group());
+		}
+		return matches;
+	}
+
+	public static String getCitrusOTPFromString (String arg) {
+		for (String str: extractNumberSequenceFromString(arg)) {
+			if (isValidOTP(str)) {
+				return str;
+			}
+		}
+		return null;
+	}
+
 	public static final int CVV_MAX=4;
 	public static final int CVV_MIN=0;
 	public static boolean isValidCVV (String arg) {
@@ -170,6 +192,25 @@ public class Validations {
 			return true;
 		}
 		return false;
+	}
+
+
+
+	public static String getCitrusOTPErrorForMessage (String arg) {
+		ArrayList<String> numbers = extractNumberSequenceFromString(arg);
+		String attemptNumber = null;
+		for (String str: numbers) {
+			if (str.length() == 1) {
+				attemptNumber = str;
+				break;
+			}
+		}
+		Resources resources = QuopnApplication.getInstance().getApplicationContext().getResources();
+		String message = resources.getString(R.string.citrus_dialog_otp_validation);
+		if (attemptNumber != null) {
+			message = message + resources.getString(R.string.citrus_dialog_otp_attempts) + attemptNumber;
+		}
+		return message;
 	}
 
 //	public static boolean isValidEmail(String email) {

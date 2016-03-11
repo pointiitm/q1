@@ -344,7 +344,7 @@ public class ShmartOtp extends ActionBarActivity implements ConnectionListener {
         if (QuopnUtils.isInternetAvailableAndShowDialog(this)) {
             Map<String, String> params, headerParams;
 
-            if (!TextUtils.isEmpty(PreferenceUtil.getInstance(this).getPreference(
+            if (!TextUtils.isEmpty(PreferenceUtil.getInstance(getApplicationContext()).getPreference(
                     PreferenceUtil.SHARED_PREF_KEYS.API_KEY))) {
 
                 verifySent = true;

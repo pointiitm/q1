@@ -109,7 +109,7 @@ public class ChangePinActivity extends ActionBarActivity implements
 			
 			if (data.getError() == false) {
 				mCustomProgressDialog.dismiss();
-				PreferenceUtil.getInstance(this).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY, mStringNewPin);
+				PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.PIN_KEY, mStringNewPin);
 				Dialog dialog = new Dialog(this,R.string.dialog_title_change_pin,data.getMessage());
 				dialog.setOnAcceptButtonClickListener(new OnClickListener() {
 					@Override

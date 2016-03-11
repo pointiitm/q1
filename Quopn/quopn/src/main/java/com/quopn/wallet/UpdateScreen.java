@@ -25,7 +25,9 @@ public class UpdateScreen extends Activity {
 		@Override
 		public void onClick(View v) {
 			isButtonClicked = true;
-			proceed(v == btnUpgrade,v == btnQuit);
+			QuopnConstants.isUpdateTrue_ForAnnouncement = false;
+			QuopnConstants.isUpdateTrue_ForWallet = false;
+			proceed(v == btnUpgrade, v == btnQuit);
 		}
 	};
 	 
@@ -54,7 +56,6 @@ public class UpdateScreen extends Activity {
 	}
 	
 	public void proceed(boolean shouldUpgrade,boolean isquitorclose) {
-		
 		if (shouldUpgrade) {
 			PreferenceUtil.getInstance(getApplicationContext()).setPreference(PreferenceUtil.SHARED_PREF_KEYS.IS_UPDATED, true);
 			((QuopnApplication) getApplicationContext()).getAnalysisManager().send(AnalysisEvents.UPGRADE_CLICKED);
